@@ -1,6 +1,7 @@
 name: HeadHunter
 version: @version@
 main: com.neo.headhunter.HeadHunter
+api-version: 1.13
 prefix: HeadHunter
 depend: [Vault]
 authors: [Neo]
