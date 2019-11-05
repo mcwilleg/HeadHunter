@@ -1,0 +1,7 @@
+name: HeadHunter
+version: @version@
+main: com.neo.headhunter.HeadHunter
+prefix: HeadHunter
+depend: [Vault]
+authors: [Neo]
+description: Take the heads of your victims and sell them!
