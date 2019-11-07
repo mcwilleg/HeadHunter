@@ -1,8 +1,15 @@
 name: HeadHunter
-version: @version@
+version: 0.0.3-alpha
 main: com.neo.headhunter.HeadHunter
 api-version: 1.13
 prefix: HeadHunter
 depend: [Vault]
 authors: [Neo]
 description: Take the heads of your victims and sell them!
+commands:
+  hunter:
+    description: Admin controls for HeadHunter.
+  bounty:
+    description: Set and remove bounties on other players.
+  sellhead:
+    description: Sell a stack of heads from your inventory.
