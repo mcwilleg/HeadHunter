@@ -29,7 +29,6 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		economy = connectEconomy();
 		if(economy == null) {
 			getLogger().log(Level.SEVERE, "Could not connect to Vault. Make sure Vault is installed for HeadHunter!");
-			Bukkit.getPluginManager().disablePlugin(this);
 			return;
 		}
 		
@@ -41,12 +40,14 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	}
 	
 	private void registerEvents() {
-		Bukkit.getPluginManager().registerEvents(this, this);
+		if(DEBUG)
+			Bukkit.getPluginManager().registerEvents(this, this);
 		Bukkit.getPluginManager().registerEvents(itemManager, this);
 	}
 	
 	private void registerCommands() {
-		getCommand("hunter").setExecutor(this);
+		if(DEBUG)
+			getCommand("hhdebug").setExecutor(this);
 	}
 	
 	private Economy connectEconomy() {
@@ -62,9 +63,6 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	@EventHandler
 	public void onDebug(PlayerInteractEvent event) {
-		// Debug listener
-		if(!DEBUG) return;
-		
 		if(event.getAction() == Action.RIGHT_CLICK_AIR) {
 			// debug statements here
 		}
@@ -72,16 +70,14 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(DEBUG) {
-			if(sender instanceof Player && args.length == 2) {
-				Player p = (Player) sender;
-				if(args[0].equalsIgnoreCase("save")) {
-					getConfig().set(args[1].toUpperCase(), p.getInventory().getItemInMainHand().clone());
-					saveConfig();
-				} else if(args[0].equalsIgnoreCase("load")) {
-					ItemStack item = getConfig().getItemStack(args[1].toUpperCase());
-					p.getWorld().dropItemNaturally(p.getLocation(), item);
-				}
+		if(sender instanceof Player && args.length == 2) {
+			Player p = (Player) sender;
+			if(args[0].equalsIgnoreCase("save")) {
+				getConfig().set(args[1].toUpperCase(), p.getInventory().getItemInMainHand().clone());
+				saveConfig();
+			} else if(args[0].equalsIgnoreCase("load")) {
+				ItemStack item = getConfig().getItemStack(args[1].toUpperCase());
+				p.getWorld().dropItemNaturally(p.getLocation(), item);
 			}
 		}
 		return false;
