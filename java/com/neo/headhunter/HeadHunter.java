@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,8 +47,13 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	}
 	
 	private void registerCommands() {
-		if(DEBUG)
-			getCommand("hhdebug").setExecutor(this);
+		if(DEBUG) {
+			PluginCommand hhdebugCommand = getCommand("hhdebug");
+			if(hhdebugCommand != null)
+				hhdebugCommand.setExecutor(this);
+			else
+				getLogger().log(Level.SEVERE, "Could not register command: /hhdebug");
+		}
 	}
 	
 	private Economy connectEconomy() {
@@ -77,7 +83,10 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 				saveConfig();
 			} else if(args[0].equalsIgnoreCase("load")) {
 				ItemStack item = getConfig().getItemStack(args[1].toUpperCase());
-				p.getWorld().dropItemNaturally(p.getLocation(), item);
+				if(item != null)
+					p.getWorld().dropItemNaturally(p.getLocation(), item);
+				else
+					p.sendMessage("Attempted item drop with null item.");
 			}
 		}
 		return false;
