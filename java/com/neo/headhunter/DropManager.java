@@ -1,6 +1,7 @@
 package com.neo.headhunter;
 
 import org.bukkit.ChatColor;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -40,6 +41,12 @@ public class DropManager implements Listener {
 	private static final String SAVE_RATE_PERM = "hunter.save-rate";
 	private static final double DEFAULT_SAVE_RATE = 0.0;
 	
+	// the amount each Looting level improves the hunter's collect chance
+	private static final double LOOTING_EFFECT = 0.15;
+	
+	// the amount each Smite level increases the hunter's steal rate
+	private static final double SMITE_EFFECT = 0.05;
+	
 	private HeadHunter plugin;
 	
 	DropManager(HeadHunter plugin) {
@@ -63,14 +70,14 @@ public class DropManager implements Listener {
 		}
 	}
 	
-	private void dropHead(Player hunter, LivingEntity victim) {
-		double headPrice = getHeadPrice(hunter, victim);
-		ItemStack headLoot = createHeadDrop(victim, headPrice);
+	private void dropHead(Player hunter, ItemStack weapon, LivingEntity victim) {
+		double headPrice = getBalance(victim) * getStealRate(hunter, weapon, victim);
+		ItemStack headLoot = createHeadLoot(victim, headPrice);
 		if(headLoot != null)
 			victim.getWorld().dropItemNaturally(victim.getEyeLocation(), headLoot);
 	}
 	
-	private ItemStack createHeadDrop(LivingEntity victim, double headPrice) {
+	private ItemStack createHeadLoot(LivingEntity victim, double headPrice) {
 		ItemStack baseHead = plugin.getMobLibrary().getBaseHead(victim);
 		if(baseHead != null) {
 			SkullMeta meta = (SkullMeta) baseHead.getItemMeta();
@@ -93,37 +100,69 @@ public class DropManager implements Listener {
 		return baseHead;
 	}
 	
-	private double getDropChance(Player hunter, LivingEntity victim) {
-		return 1;
+	// chance (0.0 - 1.0) of 'victim' dropping a head if 'hunter' kills it with 'weapon'
+	private double getDropChance(Player hunter, ItemStack weapon, LivingEntity victim) {
+		double dropChance = getBaseDropChance(hunter);
+		
+		// hunter's weapon's effect
+		if(weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
+			dropChance *= (1 + (LOOTING_EFFECT * weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS)));
+		
+		// victim's protection effect
+		double victimChance;
+		if(victim instanceof Player) {
+			victimChance = 1 - getBaseProtectChance((Player) victim);
+		} else {
+			victimChance = 1;
+			// TODO get protect chance from mobs.yml
+		}
+		
+		return dropChance * victimChance;
 	}
 	
-	private double getHeadPrice(Player hunter, LivingEntity victim) {
-		double stealRate = getStealRate(hunter);
+	// proportion (0.0 - 1.0) of 'victim''s balance being imparted to a head if 'hunter' kills it with 'weapon'
+	private double getStealRate(Player hunter, ItemStack weapon, LivingEntity victim) {
+		double stealRate = getBaseStealRate(hunter);
+		
+		// hunter's weapon's effect
+		if(weapon.containsEnchantment(Enchantment.DAMAGE_UNDEAD))
+			stealRate *= (1 + (SMITE_EFFECT * weapon.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD)));
+		
+		// victim's save effect
+		double victimRate;
 		if(victim instanceof Player) {
-			double victimBalance = plugin.getEconomy().getBalance((Player) victim);
-			return victimBalance * stealRate;
+			victimRate = 1 - getBaseSaveRate((Player) victim);
 		} else {
-			// return total value of the mob * stealRate
+			victimRate = 1;
+			// TODO get save rate from mobs.yml
 		}
+		
+		return stealRate * victimRate;
+	}
+	
+	private double getBalance(LivingEntity victim) {
+		if(victim instanceof Player)
+			return plugin.getEconomy().getBalance((Player) victim);
+		// TODO implement protect chance and balance into mobs.yml
 		return 0;
 	}
 	
-	private double getDropChance(Player hunter) {
+	private double getBaseDropChance(Player hunter) {
 		Double dropChance = getPermissionValue(hunter, DROP_CHANCE_PERM);
 		return dropChance != null ? dropChance : DEFAULT_DROP_CHANCE;
 	}
 	
-	private double getProtectChance(Player victim) {
+	private double getBaseProtectChance(Player victim) {
 		Double protectChance = getPermissionValue(victim, PROTECT_CHANCE_PERM);
 		return protectChance != null ? protectChance : DEFAULT_PROTECT_CHANCE;
 	}
 
-	private double getStealRate(Player hunter) {
+	private double getBaseStealRate(Player hunter) {
 		Double stealRate = getPermissionValue(hunter, STEAL_RATE_PERM);
 		return stealRate != null ? stealRate : DEFAULT_STEAL_RATE;
 	}
 	
-	private double getSaveRate(Player victim) {
+	private double getBaseSaveRate(Player victim) {
 		Double saveRate = getPermissionValue(victim, SAVE_RATE_PERM);
 		return saveRate != null ? saveRate : DEFAULT_SAVE_RATE;
 	}
