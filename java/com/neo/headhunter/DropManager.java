@@ -1,7 +1,6 @@
 package com.neo.headhunter;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -20,32 +19,36 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemManager implements Listener {
+public class DropManager implements Listener {
 	private static final DecimalFormat DF_MONEY = new DecimalFormat("$0.00");
 	private static final String DROP_CHANCE_PERM = "hunter.drop-chance", STEAL_RATE_PERM = "hunter.steal-rate";
 	private static final double DEFAULT_DROP_CHANCE = 1.0, DEFAULT_STEAL_RATE = 0.1;
 	
 	private HeadHunter plugin;
 	
-	ItemManager(HeadHunter plugin) {
+	DropManager(HeadHunter plugin) {
 		this.plugin = plugin;
 	}
 	
-	// Creates a new ItemStack with the specified owner and monetary value
-	public ItemStack createPlayerHead(Player victim, double value) {
-		ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-		if(head.hasItemMeta()) {
-			SkullMeta meta = (SkullMeta) head.getItemMeta();
-			if(meta == null)
-				return head;
-			meta.setOwningPlayer(victim);
-			meta.setDisplayName(ChatColor.DARK_AQUA + victim.getName() + "\'s Head");
-			List<String> lore = new ArrayList<>();
-			lore.add(ChatColor.DARK_GRAY + "Sell Price: " + ChatColor.GOLD + DF_MONEY.format(value));
-			meta.setLore(lore);
-			head.setItemMeta(meta);
+	private ItemStack createHeadDrop(Player hunter, LivingEntity victim) {
+		ItemStack baseHead = plugin.getMobLibrary().getBaseHead(victim);
+		if(baseHead != null) {
+			SkullMeta meta = (SkullMeta) baseHead.getItemMeta();
+			if (meta != null) {
+				// get colors from settings here
+				ChatColor displayNameColor = ChatColor.DARK_AQUA;
+				ChatColor textColor = ChatColor.DARK_GRAY;
+				ChatColor valueColor = ChatColor.GOLD;
+				
+				meta.setDisplayName(displayNameColor + meta.getDisplayName());
+				List<String> lore = new ArrayList<>();
+				double headPrice = getHeadPrice(hunter, victim);
+				lore.add(textColor + "Sell Price: " + valueColor + DF_MONEY.format(headPrice));
+				meta.setLore(lore);
+				baseHead.setItemMeta(meta);
+			}
 		}
-		return head;
+		return baseHead;
 	}
 
 	private double getDropChance(Player hunter) {

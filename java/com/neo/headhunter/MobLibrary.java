@@ -1,10 +1,12 @@
 package com.neo.headhunter;
 
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,34 +17,77 @@ import java.util.Map;
 
 public class MobLibrary {
 	private HeadHunter plugin;
-	private boolean enabled;
 	private Map<String, ItemStack> library;
 	
 	MobLibrary(HeadHunter plugin) {
 		this.plugin = plugin;
-		this.enabled = false;
 		initLibrary();
 	}
 	
+	// returns an ItemStack head object corresponding to the victim LivingEntity
+	// the returned ItemStack will include a colorless display name, and no lore or price
 	public ItemStack getBaseHead(LivingEntity victim) {
 		if(victim != null) {
-			String type = victim.getType().toString();
+			String type = victim.getType().name();
 			if(type.equals("PLAYER")) {
 				Player victimPlayer = (Player) victim;
-				// player head
+				ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+				if(head.hasItemMeta()) {
+					SkullMeta meta = (SkullMeta) head.getItemMeta();
+					if(meta == null)
+						return head;
+					meta.setOwningPlayer(victimPlayer);
+					meta.setDisplayName(victimPlayer.getName() + "\'s Head");
+					head.setItemMeta(meta);
+				}
 			} else if(isVariantMob(type)) {
-				// check variants
-			} else {
-				// return normal mob head
+				String variant = getVariant(victim);
+				if(variant != null)
+					return library.get(type + "." + variant);
+			} else
+				return library.get(type);
+		}
+		return null;
+	}
+	
+	private String getVariant(LivingEntity victim) {
+		if(victim != null) {
+			String type = victim.getType().name();
+			if(isVariantMob(type)) {
+				switch(type) {
+				case "CAT":
+					return ((Cat) victim).getCatType().name();
+				case "FOX":
+					return ((Fox) victim).getFoxType().name();
+				case "HORSE":
+					return ((Horse) victim).getColor().name();
+				case "LLAMA":
+				case "TRADER_LLAMA":
+					return ((Llama) victim).getColor().name();
+				case "MUSHROOM_COW":
+					return ((MushroomCow) victim).getVariant().name();
+				case "PANDA":
+					Panda victimPanda = (Panda) victim;
+					Panda.Gene mainGene = victimPanda.getMainGene();
+					Panda.Gene hiddenGene = victimPanda.getHiddenGene();
+					if(mainGene == Panda.Gene.BROWN && mainGene == hiddenGene)
+						return Panda.Gene.BROWN.name();
+					return Panda.Gene.NORMAL.name();
+				case "PARROT":
+					return ((Parrot) victim).getVariant().name();
+				case "RABBIT":
+					return ((Rabbit) victim).getRabbitType().name();
+				case "VILLAGER":
+					return ((Villager) victim).getVillagerType().name();
+				case "ZOMBIE_VILLAGER":
+					return Villager.Type.PLAINS.name();
+				}
 			}
 		}
 		return null;
 	}
 	
-	public boolean isEnabled() {
-		return enabled;
-	}
-	
+	// caches default mob heads from internal resource
 	private void initLibrary() {
 		library = new HashMap<>();
 		InputStream resource = plugin.getResource("mobs.yml");
@@ -50,7 +95,13 @@ public class MobLibrary {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(new InputStreamReader(resource));
 			for(String key : config.getKeys(false)) {
 				if(isVariantMob(key)) {
-					// check variants
+					ConfigurationSection variantSection = config.getConfigurationSection(key);
+					if(variantSection != null) {
+						for (String variantKey : variantSection.getKeys(false)) {
+							String path = key + "." + variantKey;
+							library.put(path, config.getItemStack(path));
+						}
+					}
 				} else
 					library.put(key, config.getItemStack(key));
 			}
@@ -62,83 +113,17 @@ public class MobLibrary {
 		return VARIANT_MOBS.contains(entityType);
 	}
 	
-	private static final String[] ALL_MOBS = {
-			"BAT",
-			"BLAZE",
-			"CAT",
-			"CAVE_SPIDER",
-			"COD",
-			"COW",
-			"CREEPER",
-			"DOLPHIN",
-			"DONKEY",
-			"DROWNED",
-			"ELDER_GUARDIAN",
-			"ENDER_DRAGON",
-			"ENDERMAN",
-			"ENDERMITE",
-			"EVOKER",
-			"FOX",
-			"GHAST",
-			"GIANT",
-			"GUARDIAN",
-			"HORSE",
-			"HUSK",
-			"ILLUSIONER",
-			"IRON_GOLEM",
-			"LLAMA",
-			"MAGMA_CUBE",
-			"MULE",
-			"MUSHROOM_COW",
-			"OCELOT",
-			"PANDA",
-			"PARROT",
-			"PHANTOM",
-			"PIG",
-			"PIG_ZOMBIE",
-			"PILLAGER",
-			"POLAR_BEAR",
-			"PUFFERFISH",
-			"RABBIT",
-			"RAVAGER",
-			"SALMON",
-			"SHEEP",
-			"SHULKER",
-			"SILVERFISH",
-			"SKELETON",
-			"SKELETON_HORSE",
-			"SLIME",
-			"SNOWMAN",
-			"SPIDER",
-			"SQUID",
-			"STRAY",
-			"TRADER_LLAMA",
-			"TROPICAL_FISH",
-			"TURTLE",
-			"VEX",
-			"VILLAGER",
-			"VINDICATOR",
-			"WANDERING_TRADER",
-			"WITCH",
-			"WITHER",
-			"WITHER_SKELETON",
-			"WOLF",
-			"ZOMBIE",
-			"ZOMBIE_HORSE",
-			"ZOMBIE_VILLAGER",
-	};
-	
 	private static final List<String> VARIANT_MOBS = Arrays.asList(
-			"CAT", // 11**
-			"FOX", // 2**
-			"HORSE", // 7**
-			"LLAMA", // 4**
-			"MUSHROOM_COW", // 2**
-			"PANDA", // 2**
-			"PARROT", // 5**
-			"RABBIT", // 7**
-			"TRADER_LLAMA", // 4**
-			"VILLAGER", // 7*
-			"ZOMBIE_VILLAGER" // 7*
+			"CAT", // 11 types
+			"FOX", // 2 types
+			"HORSE", // 7 types
+			"LLAMA", // 4 types
+			"MUSHROOM_COW", // 2 types
+			"PANDA", // 2 types
+			"PARROT", // 5 types
+			"RABBIT", // 7 types
+			"TRADER_LLAMA", // 4 types
+			"VILLAGER", // 7 types
+			"ZOMBIE_VILLAGER" // 7 types
 	);
 }

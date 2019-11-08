@@ -20,7 +20,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private static final boolean DEBUG = true;
 
 	private Economy economy;
-	private ItemManager itemManager;
+	private DropManager dropManager;
 	private MobLibrary mobLibrary;
 	
 	@Override
@@ -32,7 +32,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			return;
 		}
 		
-		itemManager = new ItemManager(this);
+		dropManager = new DropManager(this);
 		mobLibrary = new MobLibrary(this);
 		saveDefaultConfig();
 		registerEvents();
@@ -42,7 +42,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private void registerEvents() {
 		if(DEBUG)
 			Bukkit.getPluginManager().registerEvents(this, this);
-		Bukkit.getPluginManager().registerEvents(itemManager, this);
+		Bukkit.getPluginManager().registerEvents(dropManager, this);
 	}
 	
 	private void registerCommands() {
@@ -87,7 +87,11 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		return economy;
 	}
 	
-	public ItemManager getItemManager() {
-		return itemManager;
+	public DropManager getDropManager() {
+		return dropManager;
+	}
+	
+	public MobLibrary getMobLibrary() {
+		return mobLibrary;
 	}
 }
