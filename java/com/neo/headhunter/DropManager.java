@@ -105,7 +105,7 @@ public class DropManager implements Listener {
 		double dropChance = getBaseDropChance(hunter);
 		
 		// hunter's weapon's effect
-		if(weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
+		if(weapon != null && weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
 			dropChance *= (1 + (LOOTING_EFFECT * weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS)));
 		
 		// victim's protection effect
@@ -125,7 +125,7 @@ public class DropManager implements Listener {
 		double stealRate = getBaseStealRate(hunter);
 		
 		// hunter's weapon's effect
-		if(weapon.containsEnchantment(Enchantment.DAMAGE_UNDEAD))
+		if(weapon != null && weapon.containsEnchantment(Enchantment.DAMAGE_UNDEAD))
 			stealRate *= (1 + (SMITE_EFFECT * weapon.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD)));
 		
 		// victim's save effect
@@ -169,10 +169,12 @@ public class DropManager implements Listener {
 	
 	// Generic method for checking permissions
 	private Double getPermissionValue(Player p, String checkPermission) {
-		for(PermissionAttachmentInfo pai : p.getEffectivePermissions()) {
-			String regex = "\\Q" + checkPermission + ".\\E";
-			if(pai.getPermission().matches(regex + "\\d+([.]\\d+)?"))
-				return Double.valueOf(pai.getPermission().replaceFirst(checkPermission, ""));
+		if(p != null) {
+			for (PermissionAttachmentInfo pai : p.getEffectivePermissions()) {
+				String regex = "\\Q" + checkPermission + ".\\E";
+				if (pai.getPermission().matches(regex + "\\d+([.]\\d+)?"))
+					return Double.valueOf(pai.getPermission().replaceFirst(checkPermission, ""));
+			}
 		}
 		return null;
 	}
