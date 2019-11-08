@@ -90,7 +90,7 @@ public class MobLibrary {
 	// caches default mob heads from internal resource
 	private void initLibrary() {
 		library = new HashMap<>();
-		InputStream resource = plugin.getResource("mobs.yml");
+		InputStream resource = plugin.getResource("mob_db.yml");
 		if(resource != null) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(new InputStreamReader(resource));
 			for(String key : config.getKeys(false)) {
