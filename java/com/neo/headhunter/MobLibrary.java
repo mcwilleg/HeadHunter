@@ -16,12 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 public class MobLibrary extends ConfigAccessor {
-	private HeadHunter plugin;
 	private Map<String, ItemStack> library;
 	
 	MobLibrary(HeadHunter plugin) {
 		super(plugin, true, "mobs.yml");
-		this.plugin = plugin;
 		initLibrary();
 	}
 	

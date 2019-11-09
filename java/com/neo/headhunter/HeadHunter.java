@@ -23,6 +23,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private Economy economy;
 	private DropManager dropManager;
 	private MobLibrary mobLibrary;
+	private WorldManager worldManager;
 	
 	@Override
 	public void onEnable() {
@@ -33,9 +34,10 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			return;
 		}
 		
+		saveDefaultConfig();
 		dropManager = new DropManager(this);
 		mobLibrary = new MobLibrary(this);
-		saveDefaultConfig();
+		worldManager = new WorldManager(this);
 		
 		// register listeners
 		if(DEBUG)
