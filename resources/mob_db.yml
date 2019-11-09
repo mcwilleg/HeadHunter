@@ -47,6 +47,10 @@ CREEPER:
   ==: org.bukkit.inventory.ItemStack
   v: 1631
   type: CREEPER_HEAD
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    display-name: Creeper Head
 DOLPHIN:
   ==: org.bukkit.inventory.ItemStack
   v: 1631
@@ -87,6 +91,10 @@ ENDER_DRAGON:
   ==: org.bukkit.inventory.ItemStack
   v: 1631
   type: DRAGON_HEAD
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    display-name: Ender Dragon Head
 ENDERMAN:
   ==: org.bukkit.inventory.ItemStack
   v: 1631
@@ -298,6 +306,10 @@ SKELETON:
   ==: org.bukkit.inventory.ItemStack
   v: 1631
   type: SKELETON_SKULL
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    display-name: Skeleton Skull
 SKELETON_HORSE:
   ==: org.bukkit.inventory.ItemStack
   v: 1631
@@ -410,6 +422,10 @@ WITHER_SKELETON:
   ==: org.bukkit.inventory.ItemStack
   v: 1631
   type: WITHER_SKELETON_SKULL
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    display-name: Wither Skeleton Skull
 WOLF:
   ==: org.bukkit.inventory.ItemStack
   v: 1631
@@ -423,6 +439,10 @@ ZOMBIE:
   ==: org.bukkit.inventory.ItemStack
   v: 1631
   type: ZOMBIE_HEAD
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    display-name: Zombie Head
 ZOMBIE_HORSE:
   ==: org.bukkit.inventory.ItemStack
   v: 1631

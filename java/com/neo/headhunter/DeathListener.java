@@ -23,13 +23,15 @@ public class DeathListener implements Listener {
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		LivingEntity victim = event.getEntity();
+		Player hunter = null;
+		ItemStack weapon = null;
 		if(victim.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 			EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) victim.getLastDamageCause();
 			if(damageEvent.getDamager() instanceof Player) {
-				Player hunter = (Player) damageEvent.getDamager();
-				ItemStack weapon = hunter.getInventory().getItemInMainHand();
-				plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
+				hunter = (Player) damageEvent.getDamager();
+				weapon = hunter.getInventory().getItemInMainHand();
 			}
 		}
+		plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
 	}
 }
