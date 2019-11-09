@@ -104,19 +104,16 @@ public class DropManager implements Listener {
 	private double getDropChance(Player hunter, ItemStack weapon, LivingEntity victim) {
 		double dropChance = getBaseDropChance(hunter);
 		
-		// hunter's weapon's effect
+		// hunter's weapon's looting effect
 		if(weapon != null && weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
-			dropChance *= (1 + (LOOTING_EFFECT * weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS)));
+			dropChance += (LOOTING_EFFECT * weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS));
 		
 		// victim's protection effect
 		double victimChance;
-		if(victim instanceof Player) {
+		if(victim instanceof Player)
 			victimChance = 1 - getBaseProtectChance((Player) victim);
-		} else {
-			victimChance = 1;
-			// TODO get protect chance from mobs.yml
-		}
-		
+		else
+			victimChance = 1 - plugin.getMobLibrary().getProtectChance(victim, DEFAULT_PROTECT_CHANCE);
 		return dropChance * victimChance;
 	}
 	
@@ -124,18 +121,14 @@ public class DropManager implements Listener {
 	private double getStealRate(Player hunter, ItemStack weapon, LivingEntity victim) {
 		double stealRate = getBaseStealRate(hunter);
 		
-		// hunter's weapon's effect
+		// hunter's weapon's smite effect
 		if(weapon != null && weapon.containsEnchantment(Enchantment.DAMAGE_UNDEAD))
-			stealRate *= (1 + (SMITE_EFFECT * weapon.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD)));
+			stealRate += (SMITE_EFFECT * weapon.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD));
 		
 		// victim's save effect
-		double victimRate;
-		if(victim instanceof Player) {
+		double victimRate = 1;
+		if(victim instanceof Player)
 			victimRate = 1 - getBaseSaveRate((Player) victim);
-		} else {
-			victimRate = 1;
-			// TODO get save rate from mobs.yml
-		}
 		
 		return stealRate * victimRate;
 	}
@@ -143,8 +136,7 @@ public class DropManager implements Listener {
 	private double getBalance(LivingEntity victim) {
 		if(victim instanceof Player)
 			return plugin.getEconomy().getBalance((Player) victim);
-		// TODO implement protect chance and balance into mobs.yml
-		return 0;
+		return plugin.getMobLibrary().getMaxPrice(victim, 0);
 	}
 	
 	private double getBaseDropChance(Player hunter) {
@@ -167,7 +159,7 @@ public class DropManager implements Listener {
 		return saveRate != null ? saveRate : DEFAULT_SAVE_RATE;
 	}
 	
-	// Generic method for checking permissions
+	// Generic method for checking permissions regardless of op
 	private Double getPermissionValue(Player p, String checkPermission) {
 		if(p != null) {
 			for (PermissionAttachmentInfo pai : p.getEffectivePermissions()) {

@@ -15,21 +15,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MobLibrary {
+public class MobLibrary extends ConfigAccessor {
 	private HeadHunter plugin;
 	private Map<String, ItemStack> library;
 	
 	MobLibrary(HeadHunter plugin) {
+		super(plugin, true, "mobs.yml");
 		this.plugin = plugin;
 		initLibrary();
+	}
+	
+	public double getProtectChance(LivingEntity victim, double def) {
+		String path = getConfigPath(victim);
+		if(path != null)
+			return config.getDouble(path + ".protect-chance", def);
+		return def;
+	}
+	
+	public double getMaxPrice(LivingEntity victim, double def) {
+		String path = getConfigPath(victim);
+		if(path != null)
+			return config.getDouble(path + ".max-price", def);
+		return def;
 	}
 	
 	// returns an ItemStack head object corresponding to the victim LivingEntity
 	// the returned ItemStack will include a colorless display name, and no lore or price
 	public ItemStack getBaseHead(LivingEntity victim) {
-		if(victim != null) {
-			String type = victim.getType().name();
-			if(type.equals("PLAYER")) {
+		String path = getConfigPath(victim);
+		if(path != null) {
+			if(path.equals("PLAYER")) {
 				Player victimPlayer = (Player) victim;
 				ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 				if(head.hasItemMeta()) {
@@ -40,12 +55,21 @@ public class MobLibrary {
 					meta.setDisplayName(victimPlayer.getName() + "\'s Head");
 					head.setItemMeta(meta);
 				}
-			} else if(isVariantMob(type)) {
+			} else
+				return library.get(path);
+		}
+		return null;
+	}
+	
+	private String getConfigPath(LivingEntity victim) {
+		if(victim != null) {
+			String type = victim.getType().name();
+			if(!type.equals("PLAYER")) {
 				String variant = getVariant(victim);
 				if(variant != null)
-					return library.get(type + "." + variant);
-			} else
-				return library.get(type);
+					return type + "." + variant;
+			}
+			return type;
 		}
 		return null;
 	}
