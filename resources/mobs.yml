@@ -1,325 +1,325 @@
 BAT:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 20
 BLAZE:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 110
 CAVE_SPIDER:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 30
 COD:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 5
 COW:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 8
 CREEPER:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 30
 DOLPHIN:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 280
 DONKEY:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 50
 DROWNED:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 70
 ELDER_GUARDIAN:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 4600
 ENDER_DRAGON:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 5400
 ENDERMAN:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 300
 ENDERMITE:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 100
 EVOKER:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 1900
 GHAST:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 320
 GIANT:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 2300
 GUARDIAN:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 450
 HUSK:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 90
 ILLUSIONER:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 1200
 IRON_GOLEM:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 240
 MAGMA_CUBE:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 410
 MULE:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 60
 OCELOT:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 90
 PHANTOM:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 100
 PIG:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 8
 PIG_ZOMBIE:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 40
 PILLAGER:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 220
 POLAR_BEAR:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 250
 PUFFERFISH:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 12
 RAVAGER:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 510
 SALMON:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 5
 SHEEP:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 8
 SHULKER:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 280
 SILVERFISH:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 2
 SKELETON:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 18
 SKELETON_HORSE:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 140
 SLIME:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 230
 SNOWMAN:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 3
 SPIDER:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 30
 SQUID:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 10
 STRAY:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 110
 TROPICAL_FISH:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 5
 TURTLE:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 50
 VEX:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 4
 VINDICATOR:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 270
 WITCH:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 250
 WITHER:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 2200
 WITHER_SKELETON:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 400
 WOLF:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 80
 ZOMBIE:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 15
 ZOMBIE_HORSE:
-  protect-chance: 0
+  drop-chance: 1
   max-price: 140
 CAT:
   ALL_BLACK:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 180
   BLACK:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 100
   BRITISH_SHORTHAIR:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 100
   CALICO:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 100
   JELLIE:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 100
   PERSIAN:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 100
   RAGDOLL:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 100
   RED:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 100
   SIAMESE:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 100
   TABBY:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 100
   WHITE:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 100
 FOX:
   RED:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 240
   SNOW:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 240
 HORSE:
   BLACK:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 70
   BROWN:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 70
   CHESTNUT:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 70
   CREAMY:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 70
   DARK_BROWN:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 70
   GRAY:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 70
   WHITE:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 70
 LLAMA:
   BROWN:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 40
   CREAMY:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 40
   GRAY:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 40
   WHITE:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 40
 MUSHROOM_COW:
   BROWN:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 580
   RED:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 580
 PANDA:
   BROWN:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 290
   NORMAL:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 190
 PARROT:
   BLUE:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 12
   CYAN:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 12
   GRAY:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 12
   GREEN:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 12
   RED:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 12
 RABBIT:
   BLACK:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 15
   BLACK_AND_WHITE:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 15
   BROWN:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 15
   GOLD:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 15
   SALT_AND_PEPPER:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 15
   THE_KILLER_BUNNY:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 15
   WHITE:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 15
 VILLAGER:
   DESERT:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 130
   JUNGLE:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 130
   PLAINS:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 130
   SAVANNA:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 130
   SNOW:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 130
   SWAMP:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 130
   TAIGA:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 130
 ZOMBIE_VILLAGER:
   DESERT:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 40
   JUNGLE:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 40
   PLAINS:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 40
   SAVANNA:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 40
   SNOW:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 40
   SWAMP:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 40
   TAIGA:
-    protect-chance: 0
+    drop-chance: 1
     max-price: 40
