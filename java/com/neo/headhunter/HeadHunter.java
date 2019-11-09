@@ -34,7 +34,6 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			return;
 		}
 		
-		saveDefaultConfig();
 		dropManager = new DropManager(this);
 		mobLibrary = new MobLibrary(this);
 		worldManager = new WorldManager(this);
@@ -108,5 +107,9 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public MobLibrary getMobLibrary() {
 		return mobLibrary;
+	}
+	
+	public WorldManager getWorldManager() {
+		return worldManager;
 	}
 }
