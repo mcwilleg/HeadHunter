@@ -21,6 +21,8 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private static final boolean DEBUG = true;
 
 	private Economy economy;
+	
+	private Settings settings;
 	private DropManager dropManager;
 	private MobLibrary mobLibrary;
 	private WorldManager worldManager;
@@ -35,6 +37,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			return;
 		}
 		
+		settings = new Settings(this);
 		dropManager = new DropManager(this);
 		mobLibrary = new MobLibrary(this);
 		worldManager = new WorldManager(this);
@@ -102,6 +105,10 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public Economy getEconomy() {
 		return economy;
+	}
+	
+	public Settings getSettings() {
+		return settings;
 	}
 	
 	public DropManager getDropManager() {

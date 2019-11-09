@@ -1,3 +1,4 @@
 worlds:
   ignored: true
   valid: []
+player-kills-only: true
