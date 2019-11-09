@@ -25,7 +25,7 @@ public class MobLibrary extends ConfigAccessor {
 		initLibrary();
 	}
 	
-	public double getProtectChance(LivingEntity victim, double def) {
+	public double getDropChance(LivingEntity victim, double def) {
 		String path = getConfigPath(victim);
 		if(path != null)
 			return config.getDouble(path + ".protect-chance", def);

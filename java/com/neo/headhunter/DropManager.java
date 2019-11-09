@@ -22,20 +22,20 @@ public class DropManager implements Listener {
 	private static final DecimalFormat DF_MONEY = new DecimalFormat("$0.00");
 	
 	// chance of a hunter to collect the victim's head when killing
+	private static final String STEAL_CHANCE_PERM = "hunter.steal-chance";
+	private static final double DEFAULT_STEAL_CHANCE = 1.0;
+	
+	// chance of a victim to keep their head when killed
 	private static final String DROP_CHANCE_PERM = "hunter.drop-chance";
 	private static final double DEFAULT_DROP_CHANCE = 1.0;
 	
-	// chance of a victim to keep their head when killed
-	private static final String PROTECT_CHANCE_PERM = "hunter.protect-chance";
-	private static final double DEFAULT_PROTECT_CHANCE = 0.0;
-	
 	// the percentage of money stolen from a victim's balance
-	private static final String STEAL_RATE_PERM = "hunter.steal-rate";
-	private static final double DEFAULT_STEAL_RATE = 0.1;
+	private static final String STEAL_BALANCE_PERM = "hunter.steal-balance";
+	private static final double DEFAULT_STEAL_BALANCE = 0.1;
 	
 	// the percentage of money kept in a victim's balance
-	private static final String SAVE_RATE_PERM = "hunter.save-rate";
-	private static final double DEFAULT_SAVE_RATE = 0.0;
+	private static final String DROP_BALANCE_PERM = "hunter.drop-balance";
+	private static final double DEFAULT_DROP_BALANCE = 1.0;
 	
 	// the amount each Looting level improves the hunter's collect chance
 	private static final double LOOTING_EFFECT = 0.15;
@@ -84,7 +84,7 @@ public class DropManager implements Listener {
 	
 	// chance (0.0 - 1.0) of 'victim' dropping a head if 'hunter' kills it with 'weapon'
 	public double getDropChance(Player hunter, ItemStack weapon, LivingEntity victim) {
-		double dropChance = getBaseDropChance(hunter);
+		double dropChance = getBaseStealChance(hunter);
 		
 		// hunter's weapon's looting effect
 		if(weapon != null && weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
@@ -93,15 +93,15 @@ public class DropManager implements Listener {
 		// victim's protection effect
 		double victimChance;
 		if(victim instanceof Player)
-			victimChance = 1 - getBaseProtectChance((Player) victim);
+			victimChance = getBaseDropChance((Player) victim);
 		else
-			victimChance = 1 - plugin.getMobLibrary().getProtectChance(victim, DEFAULT_PROTECT_CHANCE);
+			victimChance = plugin.getMobLibrary().getDropChance(victim, DEFAULT_DROP_CHANCE);
 		return Math.min(1.0, dropChance * victimChance);
 	}
 	
 	// proportion (0.0 - 1.0) of 'victim''s balance being imparted to a head if 'hunter' kills it with 'weapon'
 	private double getStealRate(Player hunter, ItemStack weapon, LivingEntity victim) {
-		double stealRate = getBaseStealRate(hunter);
+		double stealRate = getBaseStealBalance(hunter);
 		
 		// hunter's weapon's smite effect
 		if(weapon != null && weapon.containsEnchantment(Enchantment.DAMAGE_UNDEAD))
@@ -110,7 +110,7 @@ public class DropManager implements Listener {
 		// victim's save effect
 		double victimRate = 1;
 		if(victim instanceof Player)
-			victimRate = 1 - getBaseSaveRate((Player) victim);
+			victimRate = getBaseDropBalance((Player) victim);
 		
 		return Math.min(1.0, stealRate * victimRate);
 	}
@@ -121,24 +121,24 @@ public class DropManager implements Listener {
 		return plugin.getMobLibrary().getMaxPrice(victim, 0);
 	}
 	
-	private double getBaseDropChance(Player hunter) {
-		Double dropChance = getPermissionValue(hunter, DROP_CHANCE_PERM);
-		return dropChance != null ? dropChance : DEFAULT_DROP_CHANCE;
+	private double getBaseStealChance(Player hunter) {
+		Double dropChance = getPermissionValue(hunter, STEAL_CHANCE_PERM);
+		return dropChance != null ? dropChance : DEFAULT_STEAL_CHANCE;
 	}
 	
-	private double getBaseProtectChance(Player victim) {
-		Double protectChance = getPermissionValue(victim, PROTECT_CHANCE_PERM);
-		return protectChance != null ? protectChance : DEFAULT_PROTECT_CHANCE;
+	private double getBaseDropChance(Player victim) {
+		Double protectChance = getPermissionValue(victim, DROP_CHANCE_PERM);
+		return protectChance != null ? protectChance : DEFAULT_DROP_CHANCE;
 	}
 
-	private double getBaseStealRate(Player hunter) {
-		Double stealRate = getPermissionValue(hunter, STEAL_RATE_PERM);
-		return stealRate != null ? stealRate : DEFAULT_STEAL_RATE;
+	private double getBaseStealBalance(Player hunter) {
+		Double stealRate = getPermissionValue(hunter, STEAL_BALANCE_PERM);
+		return stealRate != null ? stealRate : DEFAULT_STEAL_BALANCE;
 	}
 	
-	private double getBaseSaveRate(Player victim) {
-		Double saveRate = getPermissionValue(victim, SAVE_RATE_PERM);
-		return saveRate != null ? saveRate : DEFAULT_SAVE_RATE;
+	private double getBaseDropBalance(Player victim) {
+		Double saveRate = getPermissionValue(victim, DROP_BALANCE_PERM);
+		return saveRate != null ? saveRate : DEFAULT_DROP_BALANCE;
 	}
 	
 	// Generic method for checking permissions regardless of op
@@ -147,7 +147,7 @@ public class DropManager implements Listener {
 			for (PermissionAttachmentInfo pai : p.getEffectivePermissions()) {
 				String regex = "\\Q" + checkPermission + ".\\E";
 				if (pai.getPermission().matches(regex + "\\d+([.]\\d+)?"))
-					return Double.valueOf(pai.getPermission().replaceFirst(checkPermission, ""));
+					return Double.valueOf(pai.getPermission().replaceFirst(regex, ""));
 			}
 		}
 		return null;
