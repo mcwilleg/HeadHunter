@@ -4,15 +4,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.projectiles.ProjectileSource;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -151,14 +146,5 @@ public class DropManager implements Listener {
 			}
 		}
 		return null;
-	}
-
-	// Tagging arrows that hit for kill credit
-	@EventHandler
-	public void onProjectileHit(ProjectileHitEvent event) {
-		Projectile p = event.getEntity();
-		ProjectileSource s = p.getShooter();
-		if(s instanceof Player)
-			p.setMetadata("headhunter_shooter", new FixedMetadataValue(plugin, ((Player) s).getUniqueId()));
 	}
 }

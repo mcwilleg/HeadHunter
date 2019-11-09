@@ -24,6 +24,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private DropManager dropManager;
 	private MobLibrary mobLibrary;
 	private WorldManager worldManager;
+	private ProjectileManager projectileManager;
 	
 	@Override
 	public void onEnable() {
@@ -37,12 +38,14 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		dropManager = new DropManager(this);
 		mobLibrary = new MobLibrary(this);
 		worldManager = new WorldManager(this);
+		projectileManager = new ProjectileManager(this);
 		
 		// register listeners
 		if(DEBUG)
 			registerListener(this);
 		registerListener(dropManager);
 		registerListener(new DeathListener(this));
+		registerListener(projectileManager);
 		
 		// register commands
 		if(DEBUG)
@@ -111,5 +114,9 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public WorldManager getWorldManager() {
 		return worldManager;
+	}
+	
+	public ProjectileManager getProjectileManager() {
+		return projectileManager;
 	}
 }
