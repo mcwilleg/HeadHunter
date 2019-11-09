@@ -32,6 +32,7 @@ public class DeathListener implements Listener {
 				weapon = hunter.getInventory().getItemInMainHand();
 			}
 		}
-		plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
+		if(RANDOM.nextDouble() < plugin.getDropManager().getDropChance(hunter, weapon, victim))
+			plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
 	}
 }
