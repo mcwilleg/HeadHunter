@@ -36,25 +36,28 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		dropManager = new DropManager(this);
 		mobLibrary = new MobLibrary(this);
 		saveDefaultConfig();
-		registerEvents();
-		registerCommands();
-	}
-	
-	private void registerEvents() {
+		
+		// register listeners
 		if(DEBUG)
-			Bukkit.getPluginManager().registerEvents(this, this);
-		Bukkit.getPluginManager().registerEvents(dropManager, this);
-		Bukkit.getPluginManager().registerEvents(new DeathListener(this), this);
+			registerListener(this);
+		registerListener(dropManager);
+		registerListener(new DeathListener(this));
+		
+		// register commands
+		if(DEBUG)
+			registerCommand("hhdebug", this);
 	}
 	
-	private void registerCommands() {
-		if(DEBUG) {
-			PluginCommand hhdebugCommand = getCommand("hhdebug");
-			if(hhdebugCommand != null)
-				hhdebugCommand.setExecutor(this);
-			else
-				getLogger().log(Level.SEVERE, "Could not register command: /hhdebug");
-		}
+	private void registerListener(Listener listener) {
+		Bukkit.getPluginManager().registerEvents(listener, this);
+	}
+	
+	private void registerCommand(String name, CommandExecutor executor) {
+		PluginCommand command = getCommand(name);
+		if(command != null)
+			command.setExecutor(executor);
+		else
+			getLogger().log(Level.SEVERE, "Could not register command: /" + name);
 	}
 	
 	private Economy connectEconomy() {
