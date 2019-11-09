@@ -29,8 +29,6 @@ public class DeathListener implements Listener {
 		Player hunter = null;
 		ItemStack weapon = null;
 		
-		boolean anyCause = true;
-		
 		EntityDamageEvent lastDamageCause = victim.getLastDamageCause();
 		if(lastDamageCause instanceof EntityDamageByEntityEvent) {
 			// victim was killed by an entity
@@ -50,7 +48,7 @@ public class DeathListener implements Listener {
 			}
 		}
 		
-		if(hunter != null || anyCause) {
+		if(hunter != null || plugin.getSettings().isPlayerKillsOnly()) {
 			if(RANDOM.nextDouble() < plugin.getDropManager().getDropChance(hunter, weapon, victim))
 				plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
 		}
