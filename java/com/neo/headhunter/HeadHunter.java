@@ -44,6 +44,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		if(DEBUG)
 			Bukkit.getPluginManager().registerEvents(this, this);
 		Bukkit.getPluginManager().registerEvents(dropManager, this);
+		Bukkit.getPluginManager().registerEvents(new DeathListener(this), this);
 	}
 	
 	private void registerCommands() {

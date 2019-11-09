@@ -7,8 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -19,10 +17,8 @@ import org.bukkit.projectiles.ProjectileSource;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class DropManager implements Listener {
-	private static final Random RANDOM = new Random(System.currentTimeMillis());
 	private static final DecimalFormat DF_MONEY = new DecimalFormat("$0.00");
 	
 	// chance of a hunter to collect the victim's head when killing
@@ -53,24 +49,7 @@ public class DropManager implements Listener {
 		this.plugin = plugin;
 	}
 	
-	// Death listener for all entities
-	@EventHandler
-	public void onEntityDeath(EntityDeathEvent event) {
-		LivingEntity victim = event.getEntity();
-		if(victim.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-			EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) victim.getLastDamageCause();
-			if(damageEvent.getDamager() instanceof Player) {
-				// Damage was caused by player
-				if(victim instanceof Player) {
-					// Victim was player
-				} else {
-					// Victim was mob
-				}
-			}
-		}
-	}
-	
-	private void dropHead(Player hunter, ItemStack weapon, LivingEntity victim) {
+	public void performHeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
 		double headPrice = getBalance(victim) * getStealRate(hunter, weapon, victim);
 		ItemStack headLoot = createHeadLoot(victim, headPrice);
 		if(headLoot != null)
