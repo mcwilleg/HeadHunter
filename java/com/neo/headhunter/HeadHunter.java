@@ -1,6 +1,7 @@
 package com.neo.headhunter;
 
 import com.neo.headhunter.bounty.BountyManager;
+import com.neo.headhunter.command.HunterExecutor;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -56,6 +57,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		// register commands
 		if(DEBUG)
 			registerCommand("hhdebug", this);
+		registerCommand("hunter", new HunterExecutor(this));
 	}
 	
 	private void registerListener(Listener listener) {
@@ -68,6 +70,13 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			command.setExecutor(executor);
 		else
 			getLogger().log(Level.SEVERE, "Could not register command: /" + name);
+	}
+	
+	public void reloadAll() {
+		settings.reloadConfig();
+		mobLibrary.reloadConfig();
+		worldManager.reloadConfig();
+		bountyManager.reloadConfig();
 	}
 	
 	private Economy connectEconomy() {
