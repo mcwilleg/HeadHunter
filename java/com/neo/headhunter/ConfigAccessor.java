@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class ConfigAccessor {
@@ -81,6 +83,22 @@ public class ConfigAccessor {
 				if (!dynamic)
 					FileUtils.copyInputStreamToFile(this.getResource(), configFile);
 				config = YamlConfiguration.loadConfiguration(configFile);
+				
+				if(dynamic) {
+					// repair config in case parts were removed
+					Map<String, Object> previous = new HashMap<>();
+					for (String path : config.getKeys(true)) {
+						if (!config.isConfigurationSection(path))
+							previous.put(path, config.get(path));
+					}
+					FileUtils.copyInputStreamToFile(this.getResource(), configFile);
+					config = YamlConfiguration.loadConfiguration(configFile);
+					for(Map.Entry<String, Object> entry : previous.entrySet()) {
+						if(config.contains(entry.getKey()))
+							config.set(entry.getKey(), entry.getValue());
+					}
+					saveConfig();
+				}
 			} else {
 				// if config file does not exist, create it appropriately
 				if (this.getResource() != null) {
