@@ -48,7 +48,7 @@ public class DeathListener implements Listener {
 			}
 		}
 		
-		if(hunter != null || plugin.getSettings().isPlayerKillsOnly()) {
+		if(hunter != null || !plugin.getSettings().isPlayerKillsOnly()) {
 			if(RANDOM.nextDouble() < plugin.getDropManager().getDropChance(hunter, weapon, victim))
 				plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
 		}
