@@ -26,6 +26,9 @@ public class DeathListener implements Listener {
 	public void onEntityDeath(EntityDeathEvent event) {
 		LivingEntity victim = event.getEntity();
 		
+		if(!plugin.getWorldManager().isValidWorld(victim.getWorld()))
+			return;
+		
 		Player hunter = null;
 		ItemStack weapon = null;
 		
