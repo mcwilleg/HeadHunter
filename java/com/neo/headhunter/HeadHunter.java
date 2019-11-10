@@ -129,4 +129,8 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	public ProjectileManager getProjectileManager() {
 		return projectileManager;
 	}
+	
+	public BountyManager getBountyManager() {
+		return bountyManager;
+	}
 }
