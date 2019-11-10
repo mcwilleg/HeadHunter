@@ -54,7 +54,7 @@ public class MobLibrary extends ConfigAccessor {
 					head.setItemMeta(meta);
 				}
 			} else
-				return library.get(path);
+				return library.get(path).clone();
 		}
 		return null;
 	}
