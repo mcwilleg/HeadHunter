@@ -52,8 +52,14 @@ public class DeathListener implements Listener {
 		}
 		
 		if(hunter != null || !plugin.getSettings().isPlayerKillsOnly()) {
-			if(RANDOM.nextDouble() < plugin.getDropManager().getDropChance(hunter, weapon, victim))
-				plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
+			if(RANDOM.nextDouble() < plugin.getDropManager().getDropChance(hunter, weapon, victim)) {
+				double withdrawValue = plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
+				if(victim instanceof Player) {
+					if(withdrawValue > 0)
+						plugin.getEconomy().withdrawPlayer((Player) victim, withdrawValue);
+					plugin.getBountyManager().removeTotalBounty((Player) victim);
+				}
+			}
 		}
 	}
 }

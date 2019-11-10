@@ -44,14 +44,25 @@ public class DropManager implements Listener {
 		this.plugin = plugin;
 	}
 	
-	public void performHeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
-		double balanceValue = getBalance(victim) * getStealRate(hunter, weapon, victim);
-		ItemStack headLoot = createHeadLoot(victim, balanceValue);
-		if(headLoot != null) {
-			victim.getWorld().dropItemNaturally(victim.getEyeLocation(), headLoot);
-			if(victim instanceof Player)
-				plugin.getEconomy().withdrawPlayer((Player) victim, balanceValue);
+	public double performHeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
+		double balanceValue = getBalanceValue(victim) * getStealRate(hunter, weapon, victim);
+		double totalValue = balanceValue;
+		double withdrawValue = balanceValue;
+		if(victim instanceof Player) {
+			double bountyValue = plugin.getBountyManager().getTotalBounty((Player) victim);
+			if(bountyValue > 0) {
+				if(plugin.getSettings().isBalancePlusBounty())
+					totalValue += bountyValue;
+				else {
+					totalValue = bountyValue;
+					withdrawValue = 0;
+				}
+			}
 		}
+		ItemStack headLoot = createHeadLoot(victim, totalValue);
+		if(headLoot != null)
+			victim.getWorld().dropItemNaturally(victim.getEyeLocation(), headLoot);
+		return withdrawValue;
 	}
 	
 	private ItemStack createHeadLoot(LivingEntity victim, double headPrice) {
@@ -110,7 +121,7 @@ public class DropManager implements Listener {
 		return Math.min(1.0, stealRate * victimRate);
 	}
 	
-	private double getBalance(LivingEntity victim) {
+	private double getBalanceValue(LivingEntity victim) {
 		if(victim instanceof Player)
 			return plugin.getEconomy().getBalance((Player) victim);
 		return plugin.getMobLibrary().getMaxPrice(victim, 0);
