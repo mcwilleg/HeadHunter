@@ -1,5 +1,5 @@
 name: HeadHunter
-version: 0.1.7-alpha
+version: 0.1.8-alpha
 main: com.neo.headhunter.HeadHunter
 api-version: 1.13
 prefix: HeadHunter

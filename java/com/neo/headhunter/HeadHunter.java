@@ -1,5 +1,6 @@
 package com.neo.headhunter;
 
+import com.neo.headhunter.bounty.BountyManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -27,6 +28,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private MobLibrary mobLibrary;
 	private WorldManager worldManager;
 	private ProjectileManager projectileManager;
+	private BountyManager bountyManager;
 	
 	@Override
 	public void onEnable() {
@@ -42,6 +44,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		mobLibrary = new MobLibrary(this);
 		worldManager = new WorldManager(this);
 		projectileManager = new ProjectileManager(this);
+		bountyManager = new BountyManager(this);
 		
 		// register listeners
 		if(DEBUG)
