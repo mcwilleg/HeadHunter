@@ -10,9 +10,4 @@ final class Settings extends ConfigAccessor {
 	public boolean isPlayerKillsOnly() {
 		return config.getBoolean(PLAYER_KILLS_ONLY, true);
 	}
-	
-	public void setPlayerKillsOnly(boolean playerKillsOnly) {
-		config.set(PLAYER_KILLS_ONLY, playerKillsOnly);
-		saveConfig();
-	}
 }
