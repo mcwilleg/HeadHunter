@@ -30,14 +30,20 @@ public class BountyExecutor implements CommandExecutor {
 						return true;
 					} else if (args.length == 2) {
 						String bountyString = args[1];
-						if(bountyString.equalsIgnoreCase("remove")) {
+						if(bountyString.equalsIgnoreCase("remove") || bountyString.equalsIgnoreCase("0")) {
 							double amount = plugin.getBountyManager().removeBounty(hunter, victim);
-							plugin.getEconomy().depositPlayer(hunter, amount);
-							// message for successful bounty removal
+							if(amount > 0) {
+								plugin.getEconomy().depositPlayer(hunter, amount);
+								// message for successful bounty removal
+							} else {
+								// message for failed bounty removal
+							}
 							return true;
 						} else if (bountyString.matches("\\d+([.]\\d*)?")) {
 							double amount = Double.valueOf(bountyString);
 							if(amount > plugin.getSettings().getMinimumBounty()) {
+								double current = plugin.getBountyManager().removeBounty(hunter, victim);
+								plugin.getEconomy().depositPlayer(hunter, current);
 								plugin.getBountyManager().setBounty(hunter, victim, amount);
 								plugin.getEconomy().withdrawPlayer(hunter, amount);
 								// message for successful bounty set
