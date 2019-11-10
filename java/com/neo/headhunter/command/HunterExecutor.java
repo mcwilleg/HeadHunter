@@ -16,48 +16,50 @@ public class HunterExecutor implements CommandExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		switch(args.length) {
-		case 0:
-			// message for "/hunter"
-			return false;
-			
-		case 1:
+		if(args.length >= 1) {
 			if(args[0].equalsIgnoreCase("reload")) {
-				plugin.reloadAll();
-				// message for "/hunter reload"
-				return true;
-			}
-			return false;
-			
-		case 2:
-			if(args[0].equalsIgnoreCase("world")) {
+				if(args.length == 1) {
+					plugin.reloadAll();
+					// message for "/hunter reload"
+					return true;
+				} else {
+					// usage of "/hunter reload"
+				}
+			} else if(args[0].equalsIgnoreCase("world")) {
 				if(sender instanceof Player) {
-					Player senderPlayer = (Player) sender;
-					World world = senderPlayer.getWorld();
-					
-					if (args[1].equalsIgnoreCase("add")) {
-						// message for "/hunter world add"
-						boolean success = plugin.getWorldManager().addValidWorld(world);
-						if(success) {
-							// message for successful world addition
+					World world = ((Player) sender).getWorld();
+					if (args.length == 1) {
+						if(plugin.getWorldManager().isValidWorld(world)) {
+							// message for confirming valid world
 						} else {
-							// message for failed world addition
+							// message for confirming invalid world
 						}
-						return true;
-						
-					} else if (args[1].equalsIgnoreCase("remove")) {
-						// message for "/hunter world remove"
-						boolean success = plugin.getWorldManager().removeValidWorld(world);
-						if(success) {
-							// message for successful world removal
+					} else if(args.length == 2) {
+						if(args[1].equalsIgnoreCase("add")) {
+							if(plugin.getWorldManager().addValidWorld(world)) {
+								// message for successful world addition
+							} else {
+								// message for failed world addition
+							}
+							return true;
+						} else if(args[1].equalsIgnoreCase("remove")) {
+							if(plugin.getWorldManager().removeValidWorld(world)) {
+								// message for successful world removal
+							} else {
+								// message for failed world removal
+							}
+							return true;
 						} else {
-							// message for failed world removal
+							// usage of "/hunter world"
 						}
-						return true;
+					} else {
+						// usage of "/hunter world"
 					}
 				} else {
 					// message for player-only commands
 				}
+			} else {
+				// usage of "/hunter"
 			}
 		}
 		return false;
