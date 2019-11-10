@@ -84,7 +84,7 @@ public class ConfigAccessor {
 					FileUtils.copyInputStreamToFile(this.getResource(), configFile);
 				config = YamlConfiguration.loadConfiguration(configFile);
 				
-				if(dynamic) {
+				if(dynamic && this.getResource() != null) {
 					// repair config in case parts were removed
 					Map<String, Object> previous = new HashMap<>();
 					for (String path : config.getKeys(true)) {
