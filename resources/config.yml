@@ -3,3 +3,4 @@ worlds:
   valid: []
 player-kills-only: true
 balance-plus-bounty: true
+minimum-bounty: 20
