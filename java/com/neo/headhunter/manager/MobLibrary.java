@@ -20,7 +20,7 @@ import java.util.Map;
 public class MobLibrary extends ConfigAccessor {
 	private Map<String, ItemStack> library;
 	
-	MobLibrary(HeadHunter plugin) {
+	public MobLibrary(HeadHunter plugin) {
 		super(plugin, true, "mobs.yml");
 		initLibrary();
 	}

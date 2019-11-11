@@ -41,7 +41,7 @@ public class DropManager implements Listener {
 	
 	private HeadHunter plugin;
 	
-	DropManager(HeadHunter plugin) {
+	public DropManager(HeadHunter plugin) {
 		this.plugin = plugin;
 	}
 	
