@@ -1,5 +1,7 @@
-package com.neo.headhunter;
+package com.neo.headhunter.manager;
 
+import com.neo.headhunter.ConfigAccessor;
+import com.neo.headhunter.HeadHunter;
 import org.bukkit.World;
 
 import java.util.ArrayList;

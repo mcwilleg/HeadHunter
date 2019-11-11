@@ -1,5 +1,6 @@
-package com.neo.headhunter;
+package com.neo.headhunter.manager;
 
+import com.neo.headhunter.HeadHunter;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
