@@ -1,4 +1,4 @@
-package com.neo.headhunter;
+package com.neo.headhunter.config;
 
 import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.file.FileConfiguration;

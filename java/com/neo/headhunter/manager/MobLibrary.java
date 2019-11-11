@@ -1,6 +1,6 @@
 package com.neo.headhunter.manager;
 
-import com.neo.headhunter.ConfigAccessor;
+import com.neo.headhunter.config.ConfigAccessor;
 import com.neo.headhunter.HeadHunter;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

@@ -1,6 +1,6 @@
 package com.neo.headhunter.bounty;
 
-import com.neo.headhunter.ConfigAccessor;
+import com.neo.headhunter.config.ConfigAccessor;
 import com.neo.headhunter.HeadHunter;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;

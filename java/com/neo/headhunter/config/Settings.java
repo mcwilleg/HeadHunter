@@ -1,4 +1,6 @@
-package com.neo.headhunter;
+package com.neo.headhunter.config;
+
+import com.neo.headhunter.HeadHunter;
 
 public final class Settings extends ConfigAccessor {
 	private static final String PLAYER_KILLS_ONLY = "player-kills-only";

@@ -3,6 +3,7 @@ package com.neo.headhunter;
 import com.neo.headhunter.bounty.BountyManager;
 import com.neo.headhunter.command.BountyExecutor;
 import com.neo.headhunter.command.HunterExecutor;
+import com.neo.headhunter.config.Settings;
 import com.neo.headhunter.manager.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
