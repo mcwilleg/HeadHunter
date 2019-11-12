@@ -100,6 +100,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	public void onDebug(PlayerInteractEvent event) {
 		if(event.getAction() == Action.RIGHT_CLICK_AIR) {
 			// debug statements here
+			event.getPlayer().performCommand("hunter sellhead");
 		}
 	}
 	
