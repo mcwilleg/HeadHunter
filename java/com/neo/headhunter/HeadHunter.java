@@ -3,6 +3,7 @@ package com.neo.headhunter;
 import com.neo.headhunter.bounty.BountyManager;
 import com.neo.headhunter.command.BountyExecutor;
 import com.neo.headhunter.command.HunterExecutor;
+import com.neo.headhunter.command.SellExecutor;
 import com.neo.headhunter.config.Settings;
 import com.neo.headhunter.manager.*;
 import net.milkbowl.vault.economy.Economy;
@@ -62,6 +63,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			registerCommand("hhdebug", this);
 		registerCommand("hunter", new HunterExecutor(this));
 		registerCommand("bounty", new BountyExecutor(this));
+		registerCommand("sellhead", new SellExecutor(this));
 	}
 	
 	private void registerListener(Listener listener) {
