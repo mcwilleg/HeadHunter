@@ -24,14 +24,14 @@ public class MobLibrary extends ConfigAccessor {
 	private Map<String, ItemStack> library;
 	
 	public MobLibrary(HeadHunter plugin) {
-		super(plugin, true, "mobs.yml", "data");
+		super(plugin, true, "mobs.yml");
 		initLibrary();
 	}
 	
 	public double getDropChance(LivingEntity victim, double def) {
 		String path = getConfigPath(victim);
 		if(path != null)
-			return config.getDouble(path + ".protect-chance", def);
+			return config.getDouble(path + ".drop-chance", def);
 		return def;
 	}
 	
