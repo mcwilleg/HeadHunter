@@ -1,8 +1,9 @@
 package com.neo.headhunter.manager;
 
-import com.neo.headhunter.config.ConfigAccessor;
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.config.ConfigAccessor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,7 +22,7 @@ public class MobLibrary extends ConfigAccessor {
 	private Map<String, ItemStack> library;
 	
 	public MobLibrary(HeadHunter plugin) {
-		super(plugin, true, "mobs.yml");
+		super(plugin, true, "mobs.yml", "data");
 		initLibrary();
 	}
 	
@@ -44,19 +45,40 @@ public class MobLibrary extends ConfigAccessor {
 	public ItemStack getBaseHead(LivingEntity victim) {
 		String path = getConfigPath(victim);
 		if(path != null) {
-			if(path.equals("PLAYER")) {
-				Player victimPlayer = (Player) victim;
-				ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-				if(head.hasItemMeta()) {
-					SkullMeta meta = (SkullMeta) head.getItemMeta();
-					if(meta == null)
-						return head;
-					meta.setOwningPlayer(victimPlayer);
-					meta.setDisplayName(victimPlayer.getName() + "\'s Head");
-					head.setItemMeta(meta);
-				}
-			} else
-				return library.get(path).clone();
+			if(path.equals("PLAYER"))
+				return getPlayerHead((Player) victim);
+			else
+				return getMobHead(path);
+		}
+		return null;
+	}
+	
+	// returns a new ItemStack head object for the given player
+	public ItemStack getPlayerHead(OfflinePlayer owner) {
+		ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+		if(head.hasItemMeta()) {
+			SkullMeta meta = (SkullMeta) head.getItemMeta();
+			if(meta != null) {
+				meta.setOwningPlayer(owner);
+				meta.setDisplayName(owner.getName() + "\'s Head");
+				head.setItemMeta(meta);
+			}
+		}
+		return head;
+	}
+	
+	public ItemStack getMobHead(String mobConfigPath) {
+		ItemStack result = library.get(mobConfigPath);
+		if(result != null)
+			result = result.clone();
+		return result;
+	}
+	
+	// returns the config mob path used to create the specified head item
+	public String getMobPath(ItemStack head) {
+		for(Map.Entry<String, ItemStack> entry : library.entrySet()) {
+			if(head.isSimilar(entry.getValue()))
+				return entry.getKey();
 		}
 		return null;
 	}

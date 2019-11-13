@@ -7,7 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public class BountyManager extends ConfigAccessor {
 	public BountyManager(HeadHunter plugin) {
-		super(plugin, true, "bounties.yml");
+		super(plugin, true, "bounties.yml", "data");
 	}
 	
 	// returns the total of all bounties on the victim

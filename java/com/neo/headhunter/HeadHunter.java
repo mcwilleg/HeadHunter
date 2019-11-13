@@ -6,6 +6,7 @@ import com.neo.headhunter.command.HunterExecutor;
 import com.neo.headhunter.command.SellExecutor;
 import com.neo.headhunter.config.Settings;
 import com.neo.headhunter.manager.*;
+import com.neo.headhunter.manager.block.HeadBlockManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -34,6 +35,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private WorldManager worldManager;
 	private ProjectileManager projectileManager;
 	private BountyManager bountyManager;
+	private HeadBlockManager headBlockManager;
 	
 	@Override
 	public void onEnable() {
@@ -50,6 +52,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		worldManager = new WorldManager(this);
 		projectileManager = new ProjectileManager(this);
 		bountyManager = new BountyManager(this);
+		headBlockManager = new HeadBlockManager(this);
 		
 		// register listeners
 		if(DEBUG)
@@ -57,6 +60,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		registerListener(dropManager);
 		registerListener(new DeathListener(this));
 		registerListener(projectileManager);
+		registerListener(headBlockManager);
 		
 		// register commands
 		if(DEBUG)
@@ -148,5 +152,9 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public BountyManager getBountyManager() {
 		return bountyManager;
+	}
+	
+	public HeadBlockManager getHeadBlockManager() {
+		return headBlockManager;
 	}
 }

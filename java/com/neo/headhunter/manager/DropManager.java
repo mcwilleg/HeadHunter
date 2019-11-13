@@ -60,14 +60,13 @@ public class DropManager implements Listener {
 				}
 			}
 		}
-		ItemStack headLoot = createHeadLoot(victim, totalValue);
+		ItemStack headLoot = formatHead(plugin.getMobLibrary().getBaseHead(victim), totalValue);
 		if(headLoot != null)
 			victim.getWorld().dropItemNaturally(victim.getEyeLocation(), headLoot);
 		return withdrawValue;
 	}
 	
-	private ItemStack createHeadLoot(LivingEntity victim, double headPrice) {
-		ItemStack baseHead = plugin.getMobLibrary().getBaseHead(victim);
+	public ItemStack formatHead(ItemStack baseHead, double headPrice) {
 		if(baseHead != null) {
 			SkullMeta meta = (SkullMeta) baseHead.getItemMeta();
 			if (meta != null) {
