@@ -1,9 +1,9 @@
 package com.neo.headhunter.config;
 
+import com.neo.headhunter.HeadHunter;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,14 +14,14 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class ConfigAccessor {
-	protected final JavaPlugin plugin;
+	protected final HeadHunter plugin;
 	private final boolean dynamic;
 	private final String fileName, ancestry;
 	
 	private File configFile;
 	protected FileConfiguration config;
 	
-	public ConfigAccessor(JavaPlugin plugin, boolean dynamic, String fileName, String... ancestry) {
+	public ConfigAccessor(HeadHunter plugin, boolean dynamic, String fileName, String... ancestry) {
 		this.plugin = plugin;
 		this.dynamic = dynamic;
 		this.fileName = fileName.endsWith(".yml") ? fileName : (fileName + ".yml");

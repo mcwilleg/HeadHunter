@@ -2,6 +2,7 @@ package com.neo.headhunter.manager;
 
 import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.config.ConfigAccessor;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -9,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.InputStream;
@@ -77,8 +79,13 @@ public class MobLibrary extends ConfigAccessor {
 	// returns the config mob path used to create the specified head item
 	public String getMobPath(ItemStack head) {
 		for(Map.Entry<String, ItemStack> entry : library.entrySet()) {
-			if(head.isSimilar(entry.getValue()))
-				return entry.getKey();
+			ItemMeta headMeta = head.getItemMeta(), libMeta = entry.getValue().getItemMeta();
+			if(headMeta != null && libMeta != null) {
+				String headName = ChatColor.stripColor(headMeta.getDisplayName());
+				String libName = ChatColor.stripColor(libMeta.getDisplayName());
+				if(headName.equals(libName))
+					return entry.getKey();
+			}
 		}
 		return null;
 	}

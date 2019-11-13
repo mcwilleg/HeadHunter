@@ -87,6 +87,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		mobLibrary.reloadConfig();
 		worldManager.reloadConfig();
 		bountyManager.reloadConfig();
+		headBlockManager.reloadConfig();
 	}
 	
 	private Economy connectEconomy() {
@@ -124,6 +125,10 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			}
 		}
 		return false;
+	}
+	
+	public void debug(String message) {
+		getLogger().log(Level.INFO, message);
 	}
 	
 	public Economy getEconomy() {

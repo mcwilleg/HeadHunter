@@ -2,10 +2,7 @@ package com.neo.headhunter.manager.block;
 
 import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.config.ConfigAccessor;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,14 +38,14 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 		super(plugin, true, "placed_heads.yml", "data");
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		ItemStack item = event.getItemInHand();
 		if(isHead(item)) {
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
 			if(meta != null) {
-				double value = getHeadStackValue(item);
-				String mobPath = ((HeadHunter) plugin).getMobLibrary().getMobPath(item);
+				double value = ((int) (getHeadStackValue(item) / item.getAmount() * 100)) / 100.0;
+				String mobPath = plugin.getMobLibrary().getMobPath(item);
 				String blockPath = getBlockPath(event.getBlock());
 				if (mobPath == null) {
 					OfflinePlayer owner = meta.getOwningPlayer();
@@ -56,8 +53,7 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 						config.set(blockPath, "PLAYER " + owner.getUniqueId().toString() + " " + value);
 						saveConfig();
 					}
-				}
-				else {
+				} else {
 					config.set(getBlockPath(event.getBlock()), mobPath.replace(".", ";") + " " + value);
 					saveConfig();
 				}
@@ -65,7 +61,7 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
 		if(isHeadBlock(block)) {
@@ -77,30 +73,30 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 				ItemStack head = null;
 				double value = 0;
 				if(headData.length == 3) {
-					// create player head
 					UUID uuid = UUID.fromString(headData[1]);
 					value = Double.valueOf(headData[2]);
-					head = ((HeadHunter) plugin).getMobLibrary().getPlayerHead(Bukkit.getOfflinePlayer(uuid));
+					head = plugin.getMobLibrary().getPlayerHead(Bukkit.getOfflinePlayer(uuid));
 				} else if(headData.length == 2) {
-					// create mob head
 					String mobPath = headData[0].replace(";", ".");
 					value = Double.valueOf(headData[1]);
-					head = ((HeadHunter) plugin).getMobLibrary().getMobHead(mobPath);
+					head = plugin.getMobLibrary().getMobHead(mobPath);
 				}
-				head = ((HeadHunter) plugin).getDropManager().formatHead(head, value);
+				head = plugin.getDropManager().formatHead(head, value);
 				
-				if(head != null)
-					block.getWorld().dropItemNaturally(block.getLocation(), head);
+				if(head != null) {
+					if(event.isDropItems() && event.getPlayer().getGameMode() != GameMode.CREATIVE)
+						block.getWorld().dropItemNaturally(block.getLocation(), head);
+					config.set(blockPath, null);
+					saveConfig();
+				}
 			}
 		}
 	}
 	
 	private String getBlockPath(Block block) {
 		int chunkX = block.getX() >> 4, chunkZ = block.getZ() >> 4;
-		long chunkKey = (((long) chunkX) << 32) | (chunkZ & 0xFFFFFFFFL);
 		int offsetX = block.getX() & 0xF, offsetZ = block.getZ() & 0xF;
-		char offset = (char) ((offsetX << 4) | offsetZ);
-		return String.format("%H.%H", chunkKey, offset);
+		return String.format(block.getWorld().getUID().toString() + ".%H%H%H%H", chunkX, chunkZ, offsetX, offsetZ);
 	}
 	
 	private boolean isHead(ItemStack head) {
@@ -108,7 +104,7 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 	}
 	
 	private boolean isHeadBlock(Block headBlock) {
-		return headBlock != null && HEAD_BLOCK_MATERIALS.contains(headBlock.getType());
+		return headBlock != null && HEAD_MATERIALS.contains(headBlock.getType());
 	}
 	
 	public double getHeadStackValue(ItemStack head) {
