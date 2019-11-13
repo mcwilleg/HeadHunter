@@ -52,6 +52,7 @@ public class SellExecutor implements CommandExecutor {
 					}
 				}
 				if(totalAmount > 0) {
+					plugin.getEconomy().depositPlayer(hunter, totalValue);
 					// message for successful head sell
 				} else {
 					// message for no heads in inventory
