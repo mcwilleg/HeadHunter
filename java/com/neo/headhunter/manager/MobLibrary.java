@@ -58,13 +58,11 @@ public class MobLibrary extends ConfigAccessor {
 	// returns a new ItemStack head object for the given player
 	public ItemStack getPlayerHead(OfflinePlayer owner) {
 		ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-		if(head.hasItemMeta()) {
-			SkullMeta meta = (SkullMeta) head.getItemMeta();
-			if(meta != null) {
-				meta.setOwningPlayer(owner);
-				meta.setDisplayName(owner.getName() + "\'s Head");
-				head.setItemMeta(meta);
-			}
+		SkullMeta meta = (SkullMeta) head.getItemMeta();
+		if(meta != null) {
+			meta.setOwningPlayer(owner);
+			meta.setDisplayName(owner.getName() + "\'s Head");
+			head.setItemMeta(meta);
 		}
 		return head;
 	}
