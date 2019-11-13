@@ -44,8 +44,17 @@ public class BountyManager extends ConfigAccessor {
 	public double removeBounty(OfflinePlayer hunter, OfflinePlayer victim) {
 		double bounty = getBounty(hunter, victim);
 		config.set(bountyPath(hunter, victim), null);
+		if(hasBounties(victim))
+			config.set(id(victim), null);
 		saveConfig();
 		return bounty;
+	}
+	
+	public boolean hasBounties(OfflinePlayer victim) {
+		ConfigurationSection victimSection = config.getConfigurationSection(id(victim));
+		if(victimSection != null)
+			return !victimSection.getKeys(false).isEmpty();
+		return false;
 	}
 	
 	// helper method to improve readability
