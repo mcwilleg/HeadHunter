@@ -9,9 +9,11 @@ public class BlockConfigAccessor extends ConfigAccessor {
 		super(plugin, true, fileName, ancestry);
 	}
 	
-	protected void setBlockData(Block block, String value) {
+	protected void setBlockData(String prefix, Block block, String value) {
 		if(block != null) {
 			String worldPath = getWorldPath(block);
+			if(prefix != null)
+				worldPath = String.join(".", prefix, worldPath);
 			String chunkPath = getChunkPath(block);
 			String blockPath = getBlockPath(block);
 			String path = String.join(".", worldPath, chunkPath, blockPath);
@@ -28,6 +30,10 @@ public class BlockConfigAccessor extends ConfigAccessor {
 				}
 			}
 		}
+	}
+	
+	protected void setBlockData(Block block, String value) {
+		setBlockData(null, block, value);
 	}
 	
 	protected String getBlockData(Block block) {
