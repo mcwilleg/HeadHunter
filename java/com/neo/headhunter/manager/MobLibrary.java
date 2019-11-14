@@ -28,13 +28,6 @@ public class MobLibrary extends ConfigAccessor {
 		initLibrary();
 	}
 	
-	public double getDropChance(LivingEntity victim, double def) {
-		String path = getConfigPath(victim);
-		if(path != null)
-			return config.getDouble(path + ".drop-chance", def);
-		return def;
-	}
-	
 	public double getMaxPrice(LivingEntity victim, double def) {
 		String path = getConfigPath(victim);
 		if(path != null)

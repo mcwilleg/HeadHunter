@@ -1,325 +1,220 @@
 BAT:
-  drop-chance: 1
   max-price: 20
 BLAZE:
-  drop-chance: 1
   max-price: 110
 CAVE_SPIDER:
-  drop-chance: 1
   max-price: 30
 COD:
-  drop-chance: 1
   max-price: 5
 COW:
-  drop-chance: 1
   max-price: 8
 CREEPER:
-  drop-chance: 1
   max-price: 30
 DOLPHIN:
-  drop-chance: 1
   max-price: 280
 DONKEY:
-  drop-chance: 1
   max-price: 50
 DROWNED:
-  drop-chance: 1
   max-price: 70
 ELDER_GUARDIAN:
-  drop-chance: 1
   max-price: 4600
 ENDER_DRAGON:
-  drop-chance: 1
   max-price: 5400
 ENDERMAN:
-  drop-chance: 1
   max-price: 300
 ENDERMITE:
-  drop-chance: 1
   max-price: 100
 EVOKER:
-  drop-chance: 1
   max-price: 1900
 GHAST:
-  drop-chance: 1
   max-price: 320
 GIANT:
-  drop-chance: 1
   max-price: 2300
 GUARDIAN:
-  drop-chance: 1
   max-price: 450
 HUSK:
-  drop-chance: 1
   max-price: 90
 ILLUSIONER:
-  drop-chance: 1
   max-price: 1200
 IRON_GOLEM:
-  drop-chance: 1
   max-price: 240
 MAGMA_CUBE:
-  drop-chance: 1
   max-price: 410
 MULE:
-  drop-chance: 1
   max-price: 60
 OCELOT:
-  drop-chance: 1
   max-price: 90
 PHANTOM:
-  drop-chance: 1
   max-price: 100
 PIG:
-  drop-chance: 1
   max-price: 8
 PIG_ZOMBIE:
-  drop-chance: 1
   max-price: 40
 PILLAGER:
-  drop-chance: 1
   max-price: 220
 POLAR_BEAR:
-  drop-chance: 1
   max-price: 250
 PUFFERFISH:
-  drop-chance: 1
   max-price: 12
 RAVAGER:
-  drop-chance: 1
   max-price: 510
 SALMON:
-  drop-chance: 1
   max-price: 5
 SHEEP:
-  drop-chance: 1
   max-price: 8
 SHULKER:
-  drop-chance: 1
   max-price: 280
 SILVERFISH:
-  drop-chance: 1
   max-price: 2
 SKELETON:
-  drop-chance: 1
   max-price: 18
 SKELETON_HORSE:
-  drop-chance: 1
   max-price: 140
 SLIME:
-  drop-chance: 1
   max-price: 230
 SNOWMAN:
-  drop-chance: 1
   max-price: 3
 SPIDER:
-  drop-chance: 1
   max-price: 30
 SQUID:
-  drop-chance: 1
   max-price: 10
 STRAY:
-  drop-chance: 1
   max-price: 110
 TROPICAL_FISH:
-  drop-chance: 1
   max-price: 5
 TURTLE:
-  drop-chance: 1
   max-price: 50
 VEX:
-  drop-chance: 1
   max-price: 4
 VINDICATOR:
-  drop-chance: 1
   max-price: 270
 WITCH:
-  drop-chance: 1
   max-price: 250
 WITHER:
-  drop-chance: 1
   max-price: 2200
 WITHER_SKELETON:
-  drop-chance: 1
   max-price: 400
 WOLF:
-  drop-chance: 1
   max-price: 80
 ZOMBIE:
-  drop-chance: 1
   max-price: 15
 ZOMBIE_HORSE:
-  drop-chance: 1
   max-price: 140
 CAT:
   ALL_BLACK:
-    drop-chance: 1
     max-price: 180
   BLACK:
-    drop-chance: 1
     max-price: 100
   BRITISH_SHORTHAIR:
-    drop-chance: 1
     max-price: 100
   CALICO:
-    drop-chance: 1
     max-price: 100
   JELLIE:
-    drop-chance: 1
     max-price: 100
   PERSIAN:
-    drop-chance: 1
     max-price: 100
   RAGDOLL:
-    drop-chance: 1
     max-price: 100
   RED:
-    drop-chance: 1
     max-price: 100
   SIAMESE:
-    drop-chance: 1
     max-price: 100
   TABBY:
-    drop-chance: 1
     max-price: 100
   WHITE:
-    drop-chance: 1
     max-price: 100
 FOX:
   RED:
-    drop-chance: 1
     max-price: 240
   SNOW:
-    drop-chance: 1
     max-price: 240
 HORSE:
   BLACK:
-    drop-chance: 1
     max-price: 70
   BROWN:
-    drop-chance: 1
     max-price: 70
   CHESTNUT:
-    drop-chance: 1
     max-price: 70
   CREAMY:
-    drop-chance: 1
     max-price: 70
   DARK_BROWN:
-    drop-chance: 1
     max-price: 70
   GRAY:
-    drop-chance: 1
     max-price: 70
   WHITE:
-    drop-chance: 1
     max-price: 70
 LLAMA:
   BROWN:
-    drop-chance: 1
     max-price: 40
   CREAMY:
-    drop-chance: 1
     max-price: 40
   GRAY:
-    drop-chance: 1
     max-price: 40
   WHITE:
-    drop-chance: 1
     max-price: 40
 MUSHROOM_COW:
   BROWN:
-    drop-chance: 1
     max-price: 580
   RED:
-    drop-chance: 1
     max-price: 580
 PANDA:
   BROWN:
-    drop-chance: 1
     max-price: 290
   NORMAL:
-    drop-chance: 1
     max-price: 190
 PARROT:
   BLUE:
-    drop-chance: 1
     max-price: 12
   CYAN:
-    drop-chance: 1
     max-price: 12
   GRAY:
-    drop-chance: 1
     max-price: 12
   GREEN:
-    drop-chance: 1
     max-price: 12
   RED:
-    drop-chance: 1
     max-price: 12
 RABBIT:
   BLACK:
-    drop-chance: 1
     max-price: 15
   BLACK_AND_WHITE:
-    drop-chance: 1
     max-price: 15
   BROWN:
-    drop-chance: 1
     max-price: 15
   GOLD:
-    drop-chance: 1
     max-price: 15
   SALT_AND_PEPPER:
-    drop-chance: 1
     max-price: 15
   THE_KILLER_BUNNY:
-    drop-chance: 1
     max-price: 15
   WHITE:
-    drop-chance: 1
     max-price: 15
 VILLAGER:
   DESERT:
-    drop-chance: 1
     max-price: 130
   JUNGLE:
-    drop-chance: 1
     max-price: 130
   PLAINS:
-    drop-chance: 1
     max-price: 130
   SAVANNA:
-    drop-chance: 1
     max-price: 130
   SNOW:
-    drop-chance: 1
     max-price: 130
   SWAMP:
-    drop-chance: 1
     max-price: 130
   TAIGA:
-    drop-chance: 1
     max-price: 130
 ZOMBIE_VILLAGER:
   DESERT:
-    drop-chance: 1
     max-price: 40
   JUNGLE:
-    drop-chance: 1
     max-price: 40
   PLAINS:
-    drop-chance: 1
     max-price: 40
   SAVANNA:
-    drop-chance: 1
     max-price: 40
   SNOW:
-    drop-chance: 1
     max-price: 40
   SWAMP:
-    drop-chance: 1
     max-price: 40
   TAIGA:
-    drop-chance: 1
     max-price: 40

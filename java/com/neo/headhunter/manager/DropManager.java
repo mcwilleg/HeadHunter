@@ -101,7 +101,7 @@ public class DropManager implements Listener {
 		if(victim instanceof Player)
 			victimChance = getBaseDropChance((Player) victim);
 		else
-			victimChance = plugin.getMobLibrary().getDropChance(victim, DEFAULT_DROP_CHANCE);
+			victimChance = DEFAULT_DROP_CHANCE;
 		return Math.min(1.0, dropChance * victimChance);
 	}
 	
@@ -135,13 +135,12 @@ public class DropManager implements Listener {
 				stealChancePerm = String.join(".", stealChancePerm, mobConfigPath.toLowerCase());
 		}
 		Double stealChance = getPermissionValue(hunter, stealChancePerm);
-		plugin.debug("stealChance: " + stealChance);
 		return stealChance != null ? stealChance : DEFAULT_STEAL_CHANCE;
 	}
 	
 	private double getBaseDropChance(Player victim) {
-		Double protectChance = getPermissionValue(victim, DROP_CHANCE_PERM);
-		return protectChance != null ? protectChance : DEFAULT_DROP_CHANCE;
+		Double dropChance = getPermissionValue(victim, DROP_CHANCE_PERM);
+		return dropChance != null ? dropChance : DEFAULT_DROP_CHANCE;
 	}
 	
 	private double getBaseStealBalance(Player hunter, LivingEntity victim) {
@@ -156,8 +155,8 @@ public class DropManager implements Listener {
 	}
 	
 	private double getBaseDropBalance(Player victim) {
-		Double saveRate = getPermissionValue(victim, DROP_BALANCE_PERM);
-		return saveRate != null ? saveRate : DEFAULT_DROP_BALANCE;
+		Double dropBalance = getPermissionValue(victim, DROP_BALANCE_PERM);
+		return dropBalance != null ? dropBalance : DEFAULT_DROP_BALANCE;
 	}
 	
 	// Generic method for checking permissions regardless of op
