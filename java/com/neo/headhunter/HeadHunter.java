@@ -37,6 +37,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private ProjectileManager projectileManager;
 	private BountyManager bountyManager;
 	private HeadBlockManager headBlockManager;
+	private SellExecutor sellExecutor;
 	
 	@Override
 	public void onEnable() {
@@ -54,6 +55,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		projectileManager = new ProjectileManager(this);
 		bountyManager = new BountyManager(this);
 		headBlockManager = new HeadBlockManager(this);
+		sellExecutor = new SellExecutor(this);
 		
 		// register listeners
 		if(DEBUG)
@@ -69,7 +71,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			registerCommand("hhdebug", this);
 		registerCommand("hunter", new HunterExecutor(this));
 		registerCommand("bounty", new BountyExecutor(this));
-		registerCommand("sellhead", new SellExecutor(this));
+		registerCommand("sellhead", sellExecutor);
 	}
 	
 	private void registerListener(Listener listener) {
@@ -164,5 +166,9 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public HeadBlockManager getHeadBlockManager() {
 		return headBlockManager;
+	}
+	
+	public SellExecutor getSellExecutor() {
+		return sellExecutor;
 	}
 }

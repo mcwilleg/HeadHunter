@@ -37,9 +37,15 @@ public class BlockConfigAccessor extends ConfigAccessor {
 	}
 	
 	protected String getBlockData(Block block) {
+		return getBlockData(null, block);
+	}
+	
+	protected String getBlockData(String prefix, Block block) {
 		if(block == null)
 			throw new IllegalArgumentException("block cannot be null");
 		String worldPath = getWorldPath(block);
+		if(prefix != null)
+			worldPath = String.join(".", prefix, worldPath);
 		String chunkPath = getChunkPath(block);
 		String blockPath = getBlockPath(block);
 		String path = String.join(".", worldPath, chunkPath, blockPath);

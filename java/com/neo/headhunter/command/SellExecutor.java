@@ -19,44 +19,16 @@ public class SellExecutor implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 0) {
 			if(sender instanceof Player) {
-				Player hunter = (Player) sender;
-				PlayerInventory inventory = hunter.getInventory();
-				int heldSlot = inventory.getHeldItemSlot();
-				ItemStack heldItem = inventory.getItem(heldSlot);
-				double headStackValue = plugin.getHeadBlockManager().getHeadStackValue(heldItem);
-				if(heldItem != null && headStackValue > 0) {
-					int amount = heldItem.getAmount();
-					plugin.getEconomy().depositPlayer(hunter, headStackValue);
-					inventory.clear(heldSlot);
-					// message for successful head sell
-				} else {
-					// message for invalid head
-				}
+				sellHeads((Player) sender, false);
+				return true;
 			} else {
 				// message for player-only commands
 			}
 		} else if(args.length == 1 && args[0].equalsIgnoreCase("all")) {
 			// sell all heads
 			if(sender instanceof Player) {
-				Player hunter = (Player) sender;
-				PlayerInventory inventory = hunter.getInventory();
-				double totalValue = 0;
-				int totalAmount = 0;
-				for(int i = 0; i < 36; i++) {
-					ItemStack currentItem = inventory.getItem(i);
-					double itemStackValue = plugin.getHeadBlockManager().getHeadStackValue(currentItem);
-					if(currentItem != null && itemStackValue > 0) {
-						totalValue += itemStackValue;
-						totalAmount += currentItem.getAmount();
-						inventory.clear(i);
-					}
-				}
-				if(totalAmount > 0) {
-					plugin.getEconomy().depositPlayer(hunter, totalValue);
-					// message for successful head sell
-				} else {
-					// message for no heads in inventory
-				}
+				sellHeads((Player) sender, true);
+				return true;
 			} else {
 				// message for player-only commands
 			}
@@ -64,5 +36,40 @@ public class SellExecutor implements CommandExecutor {
 			// usage for "/sellhead"
 		}
 		return false;
+	}
+	
+	public void sellHeads(Player hunter, boolean all) {
+		PlayerInventory inventory = hunter.getInventory();
+		if(all) {
+			double totalValue = 0;
+			int totalAmount = 0;
+			for(int i = 0; i < 36; i++) {
+				ItemStack currentItem = inventory.getItem(i);
+				double itemStackValue = plugin.getHeadBlockManager().getHeadStackValue(currentItem);
+				if(currentItem != null && itemStackValue > 0) {
+					totalValue += itemStackValue;
+					totalAmount += currentItem.getAmount();
+					inventory.clear(i);
+				}
+			}
+			if(totalAmount > 0) {
+				plugin.getEconomy().depositPlayer(hunter, totalValue);
+				// message for successful head sell
+			} else {
+				// message for no heads in inventory
+			}
+		} else {
+			int heldSlot = inventory.getHeldItemSlot();
+			ItemStack heldItem = inventory.getItem(heldSlot);
+			double headStackvalue = plugin.getHeadBlockManager().getHeadStackValue(heldItem);
+			if(heldItem != null && headStackvalue > 0) {
+				int amount = heldItem.getAmount();
+				plugin.getEconomy().depositPlayer(hunter, headStackvalue);
+				inventory.clear(heldSlot);
+				// message for successful head sell
+			} else {
+				// message for invalid head
+			}
+		}
 	}
 }
