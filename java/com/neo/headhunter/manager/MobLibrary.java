@@ -74,8 +74,8 @@ public class MobLibrary extends ConfigAccessor {
 		return result;
 	}
 	
-	// returns the config mob path used to create the specified head item
-	public String getMobPath(ItemStack head) {
+	// returns the mob config path used to create the specified head item
+	public String getConfigPath(ItemStack head) {
 		for(Map.Entry<String, ItemStack> entry : library.entrySet()) {
 			ItemMeta headMeta = head.getItemMeta(), libMeta = entry.getValue().getItemMeta();
 			if(headMeta != null && libMeta != null) {
@@ -88,7 +88,8 @@ public class MobLibrary extends ConfigAccessor {
 		return null;
 	}
 	
-	private String getConfigPath(LivingEntity victim) {
+	// returns the mob config path used to create a head for the specified victim
+	public String getConfigPath(LivingEntity victim) {
 		if(victim != null) {
 			String type = victim.getType().name();
 			if(!type.equals("PLAYER")) {

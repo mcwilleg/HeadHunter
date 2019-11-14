@@ -90,7 +90,7 @@ public class DropManager implements Listener {
 	
 	// chance (0.0 - 1.0) of 'victim' dropping a head if 'hunter' kills it with 'weapon'
 	public double getDropChance(Player hunter, ItemStack weapon, LivingEntity victim) {
-		double dropChance = getBaseStealChance(hunter);
+		double dropChance = getBaseStealChance(hunter, victim);
 		
 		// hunter's weapon's looting effect
 		if(weapon != null && weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
@@ -107,7 +107,7 @@ public class DropManager implements Listener {
 	
 	// proportion (0.0 - 1.0) of 'victim''s balance being imparted to a head if 'hunter' kills it with 'weapon'
 	private double getStealRate(Player hunter, ItemStack weapon, LivingEntity victim) {
-		double stealRate = getBaseStealBalance(hunter);
+		double stealRate = getBaseStealBalance(hunter, victim);
 		
 		// hunter's weapon's smite effect
 		if(weapon != null && weapon.containsEnchantment(Enchantment.DAMAGE_UNDEAD))
@@ -127,19 +127,32 @@ public class DropManager implements Listener {
 		return plugin.getMobLibrary().getMaxPrice(victim, 0);
 	}
 	
-	private double getBaseStealChance(Player hunter) {
-		Double dropChance = getPermissionValue(hunter, STEAL_CHANCE_PERM);
-		return dropChance != null ? dropChance : DEFAULT_STEAL_CHANCE;
+	private double getBaseStealChance(Player hunter, LivingEntity victim) {
+		String stealChancePerm = STEAL_CHANCE_PERM;
+		if(!(victim instanceof Player)) {
+			String mobConfigPath = plugin.getMobLibrary().getConfigPath(victim);
+			if(mobConfigPath != null)
+				stealChancePerm = String.join(".", stealChancePerm, mobConfigPath.toLowerCase());
+		}
+		Double stealChance = getPermissionValue(hunter, stealChancePerm);
+		plugin.debug("stealChance: " + stealChance);
+		return stealChance != null ? stealChance : DEFAULT_STEAL_CHANCE;
 	}
 	
 	private double getBaseDropChance(Player victim) {
 		Double protectChance = getPermissionValue(victim, DROP_CHANCE_PERM);
 		return protectChance != null ? protectChance : DEFAULT_DROP_CHANCE;
 	}
-
-	private double getBaseStealBalance(Player hunter) {
-		Double stealRate = getPermissionValue(hunter, STEAL_BALANCE_PERM);
-		return stealRate != null ? stealRate : DEFAULT_STEAL_BALANCE;
+	
+	private double getBaseStealBalance(Player hunter, LivingEntity victim) {
+		String stealBalancePerm = STEAL_BALANCE_PERM;
+		if(!(victim instanceof Player)) {
+			String mobConfigPath = plugin.getMobLibrary().getConfigPath(victim);
+			if(mobConfigPath != null)
+				stealBalancePerm = String.join(".", stealBalancePerm, mobConfigPath.toLowerCase());
+		}
+		Double stealBalance = getPermissionValue(hunter, stealBalancePerm);
+		return stealBalance != null ? stealBalance : DEFAULT_STEAL_BALANCE;
 	}
 	
 	private double getBaseDropBalance(Player victim) {
@@ -150,10 +163,12 @@ public class DropManager implements Listener {
 	// Generic method for checking permissions regardless of op
 	private Double getPermissionValue(Player p, String checkPermission) {
 		if(p != null) {
+			plugin.debug("checkPermission: " + checkPermission);
 			for (PermissionAttachmentInfo pai : p.getEffectivePermissions()) {
 				String regex = "\\Q" + checkPermission + ".\\E";
-				if (pai.getPermission().matches(regex + "\\d+([.]\\d+)?"))
-					return Double.valueOf(pai.getPermission().replaceFirst(regex, ""));
+				String permission = pai.getPermission().toLowerCase();
+				if (permission.matches(regex + "\\d+([.]\\d+)?"))
+					return Double.valueOf(permission.replaceFirst(regex, ""));
 			}
 		}
 		return null;

@@ -45,7 +45,7 @@ public class HeadBlockManager extends BlockConfigAccessor implements Listener {
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
 			if(meta != null) {
 				double value = ((int) (getHeadStackValue(item) / item.getAmount() * 100)) / 100.0;
-				String mobPath = plugin.getMobLibrary().getMobPath(item);
+				String mobPath = plugin.getMobLibrary().getConfigPath(item);
 				if (mobPath == null) {
 					OfflinePlayer owner = meta.getOwningPlayer();
 					if(owner != null) {
