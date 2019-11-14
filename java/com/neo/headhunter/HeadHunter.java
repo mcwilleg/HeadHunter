@@ -7,6 +7,7 @@ import com.neo.headhunter.command.SellExecutor;
 import com.neo.headhunter.config.Settings;
 import com.neo.headhunter.manager.*;
 import com.neo.headhunter.manager.block.HeadBlockManager;
+import com.neo.headhunter.manager.block.SignBlockManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -61,6 +62,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		registerListener(new DeathListener(this));
 		registerListener(projectileManager);
 		registerListener(headBlockManager);
+		registerListener(new SignBlockManager(this));
 		
 		// register commands
 		if(DEBUG)
@@ -128,7 +130,8 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	}
 	
 	public void debug(String message) {
-		getLogger().log(Level.INFO, message);
+		if(DEBUG)
+			getLogger().log(Level.INFO, message);
 	}
 	
 	public Economy getEconomy() {

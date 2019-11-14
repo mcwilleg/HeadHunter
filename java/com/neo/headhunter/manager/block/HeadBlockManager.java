@@ -1,10 +1,9 @@
 package com.neo.headhunter.manager.block;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.config.ConfigAccessor;
+import com.neo.headhunter.config.BlockConfigAccessor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -16,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class HeadBlockManager extends ConfigAccessor implements Listener {
+public class HeadBlockManager extends BlockConfigAccessor implements Listener {
 	private static final List<Material> HEAD_MATERIALS = Arrays.asList(
 			Material.CREEPER_HEAD,
 			Material.DRAGON_HEAD,
@@ -36,7 +35,7 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 	);
 	
 	public HeadBlockManager(HeadHunter plugin) {
-		super(plugin, true, "placed_heads.yml", "data");
+		super(plugin, "placed_heads.yml", "data");
 	}
 	
 	@EventHandler(ignoreCancelled = true)
@@ -47,15 +46,14 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 			if(meta != null) {
 				double value = ((int) (getHeadStackValue(item) / item.getAmount() * 100)) / 100.0;
 				String mobPath = plugin.getMobLibrary().getMobPath(item);
-				String blockPath = getBlockPath(event.getBlock());
 				if (mobPath == null) {
 					OfflinePlayer owner = meta.getOwningPlayer();
 					if(owner != null) {
-						config.set(blockPath, "PLAYER " + owner.getUniqueId().toString() + " " + value);
+						setBlockData(event.getBlock(), "PLAYER " + owner.getUniqueId().toString() + " " + value);
 						saveConfig();
 					}
 				} else {
-					config.set(blockPath, mobPath.replace(".", ";") + " " + value);
+					setBlockData(event.getBlock(), mobPath.replace(".", ";") + " " + value);
 					saveConfig();
 				}
 			}
@@ -66,8 +64,7 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 	public void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
 		if(isHeadBlock(block)) {
-			String blockPath = getBlockPath(block);
-			String headDataString = config.getString(blockPath);
+			String headDataString = getBlockData(block);
 			if(headDataString != null) {
 				block.setType(Material.AIR);
 				String[] headData = headDataString.split(" ");
@@ -87,36 +84,11 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 				if(head != null) {
 					if(event.isDropItems() && event.getPlayer().getGameMode() != GameMode.CREATIVE)
 						block.getWorld().dropItemNaturally(block.getLocation(), head);
-					config.set(blockPath, null);
-					String chunkPath = getChunkPath(block);
-					ConfigurationSection chunkSection = config.getConfigurationSection(chunkPath);
-					if(chunkSection != null && chunkSection.getKeys(false).isEmpty()) {
-						config.set(chunkPath, null);
-						String worldPath = getWorldPath(block);
-						ConfigurationSection worldSection = config.getConfigurationSection(worldPath);
-						if(worldSection != null && worldSection.getKeys(false).isEmpty())
-							config.set(worldPath, null);
-					}
+					setBlockData(block, null);
 					saveConfig();
 				}
 			}
 		}
-	}
-	
-	// helper method for config operations
-	private String getBlockPath(Block block) {
-		int offsetX = block.getX() & 0xF, offsetZ = block.getZ() & 0xF;
-		return String.format(getChunkPath(block) + ".%H%H%H", offsetX, offsetZ, (byte) block.getY());
-	}
-	
-	// helper method for config operations
-	private String getChunkPath(Block block) {
-		return String.format(getWorldPath(block) + ".%H%H", block.getX() >> 4, block.getZ() >> 4);
-	}
-	
-	// helper method for config operations
-	private String getWorldPath(Block block) {
-		return block.getWorld().getUID().toString();
 	}
 	
 	private boolean isHead(ItemStack head) {
