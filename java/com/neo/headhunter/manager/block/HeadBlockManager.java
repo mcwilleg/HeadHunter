@@ -4,6 +4,7 @@ import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.config.ConfigAccessor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -41,7 +42,7 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		ItemStack item = event.getItemInHand();
-		if(isHead(item)) {
+		if(isHead(item) && event.getPlayer().getGameMode() != GameMode.CREATIVE) {
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
 			if(meta != null) {
 				double value = ((int) (getHeadStackValue(item) / item.getAmount() * 100)) / 100.0;
@@ -54,7 +55,7 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 						saveConfig();
 					}
 				} else {
-					config.set(getBlockPath(event.getBlock()), mobPath.replace(".", ";") + " " + value);
+					config.set(blockPath, mobPath.replace(".", ";") + " " + value);
 					saveConfig();
 				}
 			}
@@ -87,16 +88,35 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 					if(event.isDropItems() && event.getPlayer().getGameMode() != GameMode.CREATIVE)
 						block.getWorld().dropItemNaturally(block.getLocation(), head);
 					config.set(blockPath, null);
+					String chunkPath = getChunkPath(block);
+					ConfigurationSection chunkSection = config.getConfigurationSection(chunkPath);
+					if(chunkSection != null && chunkSection.getKeys(false).isEmpty()) {
+						config.set(chunkPath, null);
+						String worldPath = getWorldPath(block);
+						ConfigurationSection worldSection = config.getConfigurationSection(worldPath);
+						if(worldSection != null && worldSection.getKeys(false).isEmpty())
+							config.set(worldPath, null);
+					}
 					saveConfig();
 				}
 			}
 		}
 	}
 	
+	// helper method for config operations
 	private String getBlockPath(Block block) {
-		int chunkX = block.getX() >> 4, chunkZ = block.getZ() >> 4;
 		int offsetX = block.getX() & 0xF, offsetZ = block.getZ() & 0xF;
-		return String.format(block.getWorld().getUID().toString() + ".%H%H%H%H", chunkX, chunkZ, offsetX, offsetZ);
+		return String.format(getChunkPath(block) + ".%H%H%H", offsetX, offsetZ, (byte) block.getY());
+	}
+	
+	// helper method for config operations
+	private String getChunkPath(Block block) {
+		return String.format(getWorldPath(block) + ".%H%H", block.getX() >> 4, block.getZ() >> 4);
+	}
+	
+	// helper method for config operations
+	private String getWorldPath(Block block) {
+		return block.getWorld().getUID().toString();
 	}
 	
 	private boolean isHead(ItemStack head) {
@@ -104,7 +124,8 @@ public class HeadBlockManager extends ConfigAccessor implements Listener {
 	}
 	
 	private boolean isHeadBlock(Block headBlock) {
-		return headBlock != null && HEAD_MATERIALS.contains(headBlock.getType());
+		return headBlock != null && (HEAD_MATERIALS.contains(headBlock.getType()) ||
+				                             HEAD_BLOCK_MATERIALS.contains(headBlock.getType()));
 	}
 	
 	public double getHeadStackValue(ItemStack head) {
