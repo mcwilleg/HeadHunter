@@ -47,7 +47,6 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	@Override
 	public void onEnable() {
-		// Plugin startup logic
 		economy = connectEconomy();
 		if(economy == null) {
 			getLogger().log(Level.SEVERE, "Could not connect to Vault. Make sure Vault is installed for HeadHunter!");
@@ -118,10 +117,12 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			factionsHook = new FactionsBlueHook(this);
 		else if(Bukkit.getPluginManager().isPluginEnabled("Factions")) {
 			Plugin factionsPlugin = Bukkit.getPluginManager().getPlugin("Factions");
-			if(factionsPlugin != null && factionsPlugin.getDescription().getDepend().contains("MassiveCore"))
-				factionsHook = new FactionsMassiveCoreHook(this);
-			else
-				factionsHook = new FactionsUUIDHook(this);
+			if(factionsPlugin != null) {
+				if(factionsPlugin.getDescription().getDepend().contains("MassiveCore"))
+					factionsHook = new FactionsMassiveCoreHook(this);
+				else
+					factionsHook = new FactionsUUIDHook(this);
+			}
 		}
 		return null;
 	}
@@ -161,6 +162,10 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		return economy;
 	}
 	
+	public FactionsHook getFactionsHook() {
+		return factionsHook;
+	}
+	
 	public Settings getSettings() {
 		return settings;
 	}
@@ -191,9 +196,5 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public SellExecutor getSellExecutor() {
 		return sellExecutor;
-	}
-	
-	public FactionsHook getFactionsHook() {
-		return factionsHook;
 	}
 }
