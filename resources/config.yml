@@ -4,3 +4,8 @@ worlds:
 player-kills-only: true
 balance-plus-bounty: true
 minimum-bounty: 20
+factions:
+  drop-in-wilderness: true
+  drop-in-safezone: false
+  drop-in-warzone: true
+  drop-in-home: false

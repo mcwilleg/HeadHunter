@@ -1,6 +1,7 @@
 package com.neo.headhunter.manager;
 
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.manager.support.FactionsHook;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -53,6 +54,14 @@ public class DeathListener implements Listener {
 		}
 		
 		if(hunter != null || !plugin.getSettings().isPlayerKillsOnly()) {
+			FactionsHook factionsHook = plugin.getFactionsHook();
+			if(factionsHook != null && victim instanceof Player) {
+				if(!factionsHook.isValidTerritory((Player) victim))
+					return;
+				if(!factionsHook.isValidZone(victim.getLocation()))
+					return;
+			}
+			
 			if(RANDOM.nextDouble() < plugin.getDropManager().getDropChance(hunter, weapon, victim)) {
 				double withdrawValue = plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
 				if(victim instanceof Player) {

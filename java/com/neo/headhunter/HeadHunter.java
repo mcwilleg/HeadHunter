@@ -8,6 +8,8 @@ import com.neo.headhunter.config.Settings;
 import com.neo.headhunter.manager.*;
 import com.neo.headhunter.manager.block.HeadBlockManager;
 import com.neo.headhunter.manager.block.SignBlockManager;
+import com.neo.headhunter.manager.support.FactionsBlueHook;
+import com.neo.headhunter.manager.support.FactionsHook;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -29,6 +31,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private static final boolean DEBUG = true;
 
 	private Economy economy;
+	private FactionsHook factionsHook;
 	
 	private Settings settings;
 	private DropManager dropManager;
@@ -47,6 +50,8 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			getLogger().log(Level.SEVERE, "Could not connect to Vault. Make sure Vault is installed for HeadHunter!");
 			return;
 		}
+		
+		factionsHook = connectFactions();
 		
 		settings = new Settings(this);
 		dropManager = new DropManager(this);
@@ -103,6 +108,12 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			return null;
 		
 		return rsp.getProvider();
+	}
+	
+	private FactionsHook connectFactions() {
+		if(Bukkit.getPluginManager().isPluginEnabled("FactionsBlue"))
+			factionsHook = new FactionsBlueHook(this);
+		return null;
 	}
 	
 	@EventHandler
@@ -170,5 +181,9 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public SellExecutor getSellExecutor() {
 		return sellExecutor;
+	}
+	
+	public FactionsHook getFactionsHook() {
+		return factionsHook;
 	}
 }
