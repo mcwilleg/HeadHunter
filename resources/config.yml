@@ -8,4 +8,4 @@ factions:
   drop-in-wilderness: true
   drop-in-safezone: false
   drop-in-warzone: true
-  drop-in-home: false
+  drop-in-faction: false

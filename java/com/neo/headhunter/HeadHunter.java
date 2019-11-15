@@ -10,6 +10,7 @@ import com.neo.headhunter.manager.block.HeadBlockManager;
 import com.neo.headhunter.manager.block.SignBlockManager;
 import com.neo.headhunter.manager.support.FactionsBlueHook;
 import com.neo.headhunter.manager.support.FactionsHook;
+import com.neo.headhunter.manager.support.FactionsMassiveCoreHook;
 import com.neo.headhunter.manager.support.FactionsUUIDHook;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -118,7 +119,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		else if(Bukkit.getPluginManager().isPluginEnabled("Factions")) {
 			Plugin factionsPlugin = Bukkit.getPluginManager().getPlugin("Factions");
 			if(factionsPlugin != null && factionsPlugin.getDescription().getDepend().contains("MassiveCore"))
-				factionsHook = null;
+				factionsHook = new FactionsMassiveCoreHook(this);
 			else
 				factionsHook = new FactionsUUIDHook(this);
 		}
