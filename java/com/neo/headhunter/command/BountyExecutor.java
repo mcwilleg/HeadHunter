@@ -1,6 +1,7 @@
 package com.neo.headhunter.command;
 
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.message.Usage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -54,18 +55,16 @@ public class BountyExecutor implements CommandExecutor {
 						} else {
 							// message for invalid amount
 						}
-					} else {
-						// message for "/bounty"
-					}
+					} else
+						sender.sendMessage(Usage.BOUNTY.toString());
 				} else {
 					// message for invalid bounty target
 				}
 			} else {
 				// message for player-only commands
 			}
-		} else {
-			// message for "/bounty"
-		}
+		} else
+			sender.sendMessage(Usage.BOUNTY.toString());
 		return false;
 	}
 	

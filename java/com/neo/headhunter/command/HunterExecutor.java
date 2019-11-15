@@ -1,6 +1,7 @@
 package com.neo.headhunter.command;
 
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.message.Usage;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,11 +21,10 @@ public class HunterExecutor implements CommandExecutor {
 			if(args[0].equalsIgnoreCase("reload")) {
 				if(args.length == 1) {
 					plugin.reloadAll();
-					// message for "/hunter reload"
+					// message for reloaded
 					return true;
-				} else {
-					// usage of "/hunter reload"
-				}
+				} else
+					sender.sendMessage(Usage.HUNTER_RELOAD.toString());
 			} else if(args[0].equalsIgnoreCase("world")) {
 				if(sender instanceof Player) {
 					World world = ((Player) sender).getWorld();
@@ -49,18 +49,15 @@ public class HunterExecutor implements CommandExecutor {
 								// message for failed world removal
 							}
 							return true;
-						} else {
-							// usage of "/hunter world"
-						}
-					} else {
-						// usage of "/hunter world"
-					}
+						} else
+							sender.sendMessage(Usage.HUNTER_WORLD.toString());
+					} else
+						sender.sendMessage(Usage.HUNTER_WORLD.toString());
 				} else {
 					// message for player-only commands
 				}
-			} else {
-				// usage of "/hunter"
-			}
+			} else
+				sender.sendMessage(Usage.HUNTER.toString());
 		}
 		return false;
 	}

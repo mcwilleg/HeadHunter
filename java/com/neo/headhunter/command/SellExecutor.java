@@ -1,6 +1,7 @@
 package com.neo.headhunter.command;
 
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.message.Usage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,9 +33,8 @@ public class SellExecutor implements CommandExecutor {
 			} else {
 				// message for player-only commands
 			}
-		} else {
-			// usage for "/sellhead"
-		}
+		} else
+			sender.sendMessage(Usage.SELLHEAD.toString());
 		return false;
 	}
 	
