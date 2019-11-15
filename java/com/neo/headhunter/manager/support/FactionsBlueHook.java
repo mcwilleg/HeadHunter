@@ -28,7 +28,7 @@ public class FactionsBlueHook extends ConfigAccessor implements FactionsHook {
 	
 	@Override
 	public boolean isValidZone(Location location) {
-		Faction faction = getFactionAt(location);
+		Faction faction = FactionsApi.getOwner(new Claim(location));
 		if(faction != null) {
 			if(faction.isWilderness())
 				return config.getBoolean(FactionsPath.DROP_WILDERNESS, true);
@@ -38,9 +38,5 @@ public class FactionsBlueHook extends ConfigAccessor implements FactionsHook {
 				return config.getBoolean(FactionsPath.DROP_WARZONE, true);
 		}
 		return true;
-	}
-	
-	private Faction getFactionAt(Location location) {
-		return FactionsApi.getOwner(new Claim(location));
 	}
 }
