@@ -17,7 +17,10 @@ public enum Message {
 	BOUNTY_REMOVE_FAIL("You do not have a bounty on %S."),
 	BOUNTY_TARGET_INVALID("\"%S\" is an invalid bounty target."),
 	BOUNTY_AMOUNT_INVALID("\"%S\" is an invalid bounty amount."),
-	BOUNTY_AMOUNT_LOW("That bounty is too low. Bounties must be greater than: %.2f.");
+	BOUNTY_AMOUNT_LOW("That bounty is too low. Bounties must be greater than: %.2f."),
+	SELL_FAIL("You are not holding any heads."),
+	SELL_SINGLE("Sold %d head for %.2f."),
+	SELL_MULTIPLE("Sold %d heads for a total of %.2f.");
 	
 	private final String message;
 	
@@ -26,7 +29,7 @@ public enum Message {
 	}
 	
 	public String success(Object... parameters) {
-		return ChatColor.GREEN + String.format(message, parameters);
+		return ChatColor.AQUA + String.format(message, parameters);
 	}
 	
 	public String info(Object... parameters) {

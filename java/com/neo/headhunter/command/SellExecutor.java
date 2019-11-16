@@ -1,6 +1,7 @@
 package com.neo.headhunter.command;
 
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.message.Message;
 import com.neo.headhunter.message.Usage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,17 +23,15 @@ public class SellExecutor implements CommandExecutor {
 			if(sender instanceof Player) {
 				sellHeads((Player) sender, false);
 				return true;
-			} else {
-				// message for player-only commands
-			}
+			} else
+				sender.sendMessage(Message.PLAYERS_ONLY.failure("/sellhead"));
 		} else if(args.length == 1 && args[0].equalsIgnoreCase("all")) {
 			// sell all heads
 			if(sender instanceof Player) {
 				sellHeads((Player) sender, true);
 				return true;
-			} else {
-				// message for player-only commands
-			}
+			} else
+				sender.sendMessage(Message.PLAYERS_ONLY.failure("/sellhead all"));
 		} else
 			sender.sendMessage(Usage.SELLHEAD.toString());
 		return false;
@@ -54,10 +53,13 @@ public class SellExecutor implements CommandExecutor {
 			}
 			if(totalAmount > 0) {
 				plugin.getEconomy().depositPlayer(hunter, totalValue);
-				// message for successful head sell
-			} else {
-				// message for no heads in inventory
-			}
+				
+				if(totalAmount == 1)
+					hunter.sendMessage(Message.SELL_SINGLE.success(1, totalValue));
+				else
+					hunter.sendMessage(Message.SELL_MULTIPLE.success(totalAmount, totalValue));
+			} else
+				hunter.sendMessage(Message.SELL_FAIL.failure());
 		} else {
 			int heldSlot = inventory.getHeldItemSlot();
 			ItemStack heldItem = inventory.getItem(heldSlot);
@@ -66,10 +68,13 @@ public class SellExecutor implements CommandExecutor {
 				int amount = heldItem.getAmount();
 				plugin.getEconomy().depositPlayer(hunter, headStackvalue);
 				inventory.clear(heldSlot);
-				// message for successful head sell
-			} else {
-				// message for invalid head
-			}
+				
+				if(amount == 1)
+					hunter.sendMessage(Message.SELL_SINGLE.success(1, headStackvalue));
+				else
+					hunter.sendMessage(Message.SELL_MULTIPLE.success(amount, headStackvalue));
+			} else
+				hunter.sendMessage(Message.SELL_FAIL.failure());
 		}
 	}
 }
