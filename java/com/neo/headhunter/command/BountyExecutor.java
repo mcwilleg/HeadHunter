@@ -26,6 +26,12 @@ public class BountyExecutor implements CommandExecutor {
 				OfflinePlayer victim = getPlayer(args[0]);
 				if(victim != null) {
 					if (args.length == 1) {
+						// check permission
+						if(!sender.hasPermission("hunter.bounty.check")) {
+							sender.sendMessage(Message.PERMISSION.failure("/bounty <TARGET>"));
+							return true;
+						}
+						
 						double totalBounty = plugin.getBountyManager().getTotalBounty(victim);
 						double hunterBounty = plugin.getBountyManager().getBounty(hunter, victim);
 						// message for bounty check
@@ -37,6 +43,12 @@ public class BountyExecutor implements CommandExecutor {
 					} else if (args.length == 2) {
 						String bountyString = args[1];
 						if(bountyString.equalsIgnoreCase("remove") || bountyString.equalsIgnoreCase("0")) {
+							// check permission
+							if(!sender.hasPermission("hunter.bounty.remove")) {
+								sender.sendMessage(Message.PERMISSION.failure("/bounty <TARGET> <remove>"));
+								return true;
+							}
+							
 							double amount = plugin.getBountyManager().removeBounty(hunter, victim);
 							if(amount > 0) {
 								plugin.getEconomy().depositPlayer(hunter, amount);
@@ -48,6 +60,12 @@ public class BountyExecutor implements CommandExecutor {
 								sender.sendMessage(Message.BOUNTY_REMOVE_FAIL.failure(victim.getName()));
 							return true;
 						} else if (bountyString.matches("\\d+([.]\\d*)?")) {
+							// check permission
+							if(!sender.hasPermission("hunter.bounty.set")) {
+								sender.sendMessage(Message.PERMISSION.failure("/bounty <TARGET> <AMOUNT>"));
+								return true;
+							}
+							
 							double amount = Double.valueOf(bountyString);
 							if(amount > plugin.getSettings().getMinimumBounty()) {
 								double current = plugin.getBountyManager().removeBounty(hunter, victim);

@@ -21,12 +21,24 @@ public class HunterExecutor implements CommandExecutor {
 		if(args.length >= 1) {
 			if(args[0].equalsIgnoreCase("reload")) {
 				if(args.length == 1) {
+					// check permission
+					if(!sender.hasPermission("hunter.reload")) {
+						sender.sendMessage(Message.PERMISSION.failure("/hunter reload"));
+						return true;
+					}
+					
 					plugin.reloadAll();
 					sender.sendMessage(Message.RELOADED.success(plugin.getName(), plugin.getVersion()));
 					return true;
 				} else
 					sender.sendMessage(Usage.HUNTER_RELOAD.toString());
 			} else if(args[0].equalsIgnoreCase("world")) {
+				// check permission
+				if(!sender.hasPermission("hunter.world")) {
+					sender.sendMessage(Message.PERMISSION.failure("/hunter world [add/remove]"));
+					return true;
+				}
+				
 				if(sender instanceof Player) {
 					World world = ((Player) sender).getWorld();
 					if (args.length == 1) {

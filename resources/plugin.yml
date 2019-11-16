@@ -1,5 +1,5 @@
 name: HeadHunter
-version: 0.3.6-alpha
+version: 0.3.7-alpha
 main: com.neo.headhunter.HeadHunter
 api-version: 1.13
 prefix: HeadHunter
@@ -24,7 +24,7 @@ permissions:
   hunter.sellhead.sign:
     description: Allows selling heads with signs
   hunter.sellhead.*:
-    description: Allows selling heads from inventory
+    description: Allows selling heads
     children:
       hunter.sellhead.hand: true
       hunter.sellhead.all: true
@@ -41,5 +41,16 @@ permissions:
       hunter.bounty.set: true
       hunter.bounty.remove: true
       hunter.bounty.check: true
+  hunter.sign:
+    description: Allows creating HeadHunter signs
   hunter.world:
     description: Allows enabling and disabling head drops in worlds
+  hunter.reload:
+    description: Allows reloading HeadHunter
+  hunter.*:
+    description: Allows all HeadHunter features
+    children:
+      hunter.reload: true
+      hunter.world: true
+      hunter.bounty.*: true
+      hunter.sellhead.*: true

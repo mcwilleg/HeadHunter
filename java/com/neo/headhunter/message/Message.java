@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 
 public enum Message {
 	RELOADED("%S v%S reloaded."),
+	PERMISSION("You do not have permission for %S."),
 	PLAYERS_ONLY("The %S command is for players only."),
 	WORLD_CHECK("Head drops are %S in world %S."),
 	WORLD_ADDED("Successfully allowed head drops in world %S."),
