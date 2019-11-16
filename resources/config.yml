@@ -4,6 +4,7 @@ worlds:
 player-kills-only: true
 balance-plus-bounty: true
 minimum-bounty: 20
+bounty-broadcast: true
 factions:
   drop-in-wilderness: true
   drop-in-safezone: false

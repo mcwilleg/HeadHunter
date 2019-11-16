@@ -40,7 +40,10 @@ public class BountyExecutor implements CommandExecutor {
 							double amount = plugin.getBountyManager().removeBounty(hunter, victim);
 							if(amount > 0) {
 								plugin.getEconomy().depositPlayer(hunter, amount);
-								sender.sendMessage(Message.BOUNTY_REMOVED.success(victim.getName()));
+								if(plugin.getSettings().isBountyBroadcast())
+									Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_REMOVE.success(hunter.getName(), amount, victim.getName()));
+								else
+									sender.sendMessage(Message.BOUNTY_REMOVED.success(victim.getName()));
 							} else
 								sender.sendMessage(Message.BOUNTY_REMOVE_FAIL.failure(victim.getName()));
 							return true;
@@ -51,12 +54,13 @@ public class BountyExecutor implements CommandExecutor {
 								plugin.getEconomy().depositPlayer(hunter, current);
 								plugin.getBountyManager().setBounty(hunter, victim, amount);
 								plugin.getEconomy().withdrawPlayer(hunter, amount);
-								sender.sendMessage(Message.BOUNTY_ADDED.success(victim.getName(), amount));
+								if(plugin.getSettings().isBountyBroadcast())
+									Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_SET.success(hunter.getName(), amount, victim.getName()));
+								else
+									sender.sendMessage(Message.BOUNTY_SET.success(victim.getName(), amount));
 								return true;
-							} else {
-								double minBounty = plugin.getSettings().getMinimumBounty();
-								sender.sendMessage(Message.BOUNTY_AMOUNT_LOW.failure(minBounty));
-							}
+							} else
+								sender.sendMessage(Message.BOUNTY_AMOUNT_LOW.failure(plugin.getSettings().getMinimumBounty()));
 						} else
 							sender.sendMessage(Message.BOUNTY_AMOUNT_INVALID.failure(bountyString));
 					} else

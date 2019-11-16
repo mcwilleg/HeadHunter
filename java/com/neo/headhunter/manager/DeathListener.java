@@ -2,6 +2,8 @@ package com.neo.headhunter.manager;
 
 import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.manager.support.FactionsHook;
+import com.neo.headhunter.message.Message;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -67,7 +69,15 @@ public class DeathListener implements Listener {
 				if(victim instanceof Player) {
 					if(withdrawValue > 0)
 						plugin.getEconomy().withdrawPlayer((Player) victim, withdrawValue);
-					plugin.getBountyManager().removeTotalBounty((Player) victim);
+					if(hunter != null) {
+						double bounty = plugin.getBountyManager().removeTotalBounty((Player) victim);
+						if (bounty > 0) {
+							if (plugin.getSettings().isBountyBroadcast())
+								Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_CLAIM.success(hunter.getName(), bounty, victim.getName()));
+							else
+								hunter.sendMessage(Message.BOUNTY_CLAIM.success(bounty, victim.getName()));
+						}
+					}
 				}
 			}
 		}
