@@ -53,8 +53,10 @@ public class BountyExecutor implements CommandExecutor {
 								plugin.getEconomy().withdrawPlayer(hunter, amount);
 								sender.sendMessage(Message.BOUNTY_ADDED.success(victim.getName(), amount));
 								return true;
-							} else
-								sender.sendMessage(Message.BOUNTY_AMOUNT_LOW.failure());
+							} else {
+								double minBounty = plugin.getSettings().getMinimumBounty();
+								sender.sendMessage(Message.BOUNTY_AMOUNT_LOW.failure(minBounty));
+							}
 						} else
 							sender.sendMessage(Message.BOUNTY_AMOUNT_INVALID.failure(bountyString));
 					} else

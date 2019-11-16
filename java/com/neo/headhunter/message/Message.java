@@ -17,7 +17,7 @@ public enum Message {
 	BOUNTY_REMOVE_FAIL("You do not have a bounty on %S."),
 	BOUNTY_TARGET_INVALID("\"%S\" is an invalid bounty target."),
 	BOUNTY_AMOUNT_INVALID("\"%S\" is an invalid bounty amount."),
-	BOUNTY_AMOUNT_LOW("That bounty is too low.");
+	BOUNTY_AMOUNT_LOW("That bounty is too low. Bounties must be greater than: %.2f.");
 	
 	private final String message;
 	
