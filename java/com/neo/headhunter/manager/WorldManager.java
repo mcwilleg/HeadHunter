@@ -38,9 +38,4 @@ public class WorldManager extends ConfigAccessor {
 		saveConfig();
 		return success;
 	}
-	
-	public void setWorldsIgnored(boolean ignored) {
-		config.set(WORLDS_IGNORED, ignored);
-		saveConfig();
-	}
 }
