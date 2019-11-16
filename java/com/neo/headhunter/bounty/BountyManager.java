@@ -50,7 +50,7 @@ public class BountyManager extends ConfigAccessor {
 		return bounty;
 	}
 	
-	public boolean hasBounties(OfflinePlayer victim) {
+	private boolean hasBounties(OfflinePlayer victim) {
 		ConfigurationSection victimSection = config.getConfigurationSection(id(victim));
 		if(victimSection != null)
 			return !victimSection.getKeys(false).isEmpty();

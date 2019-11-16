@@ -34,7 +34,7 @@ public class ConfigAccessor {
 	/**
 	 * Deletes the file associated with this configuration.
 	 */
-	public void deleteConfigFile() {
+	protected void deleteConfigFile() {
 		// ignore if config file has not yet been initialized
 		// * this should never happen
 		if(configFile != null && !configFile.delete())
@@ -44,7 +44,7 @@ public class ConfigAccessor {
 	/**
 	 * Saves the current configuration to the specified file.
 	 */
-	public void saveConfig() {
+	protected void saveConfig() {
 		// ignore if config file or configuration have not yet been initialized
 		// * this should never happen
 		if(configFile == null || config == null)
@@ -60,7 +60,7 @@ public class ConfigAccessor {
 	/**
 	 * If necessary, first initializes the configuration and associated file, then loads the configuration.
 	 */
-	public void reloadConfig() {
+	public final void reloadConfig() {
 		// create plugin data folder and subfolders if they don't exist
 		if(!plugin.getDataFolder().exists()) {
 			if(!plugin.getDataFolder().mkdir())
