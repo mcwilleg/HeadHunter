@@ -34,6 +34,7 @@ public class BountyExecutor implements CommandExecutor {
 						
 						double totalBounty = plugin.getBountyManager().getTotalBounty(victim);
 						double hunterBounty = plugin.getBountyManager().getBounty(hunter, victim);
+						
 						// message for bounty check
 						String personal = "";
 						if(hunterBounty > 0)
@@ -69,14 +70,18 @@ public class BountyExecutor implements CommandExecutor {
 							double amount = Double.valueOf(bountyString);
 							if(amount > plugin.getSettings().getMinimumBounty()) {
 								double current = plugin.getBountyManager().removeBounty(hunter, victim);
-								plugin.getEconomy().depositPlayer(hunter, current);
-								plugin.getBountyManager().setBounty(hunter, victim, amount);
-								plugin.getEconomy().withdrawPlayer(hunter, amount);
-								if(plugin.getSettings().isBountyBroadcast())
-									Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_SET.success(hunter.getName(), amount, victim.getName()));
-								else
-									sender.sendMessage(Message.BOUNTY_SET.success(victim.getName(), amount));
-								return true;
+								double balance = plugin.getEconomy().getBalance(hunter);
+								if(balance + current >= amount) {
+									plugin.getEconomy().depositPlayer(hunter, current);
+									plugin.getBountyManager().setBounty(hunter, victim, amount);
+									plugin.getEconomy().withdrawPlayer(hunter, amount);
+									if (plugin.getSettings().isBountyBroadcast())
+										Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_SET.success(hunter.getName(), amount, victim.getName()));
+									else
+										sender.sendMessage(Message.BOUNTY_SET.success(victim.getName(), amount));
+									return true;
+								} else
+									sender.sendMessage(Message.BOUNTY_SET_AFFORD.failure(amount));
 							} else
 								sender.sendMessage(Message.BOUNTY_AMOUNT_LOW.failure(plugin.getSettings().getMinimumBounty()));
 						} else
@@ -92,6 +97,7 @@ public class BountyExecutor implements CommandExecutor {
 		return false;
 	}
 	
+	@SuppressWarnings("deprecation")
 	private OfflinePlayer getPlayer(String name) {
 		OfflinePlayer result = Bukkit.getPlayerExact(name);
 		if(result == null)

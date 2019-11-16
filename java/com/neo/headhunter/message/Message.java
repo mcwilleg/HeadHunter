@@ -18,6 +18,7 @@ public enum Message {
 	BOUNTY_TOTAL("%S: $%.2f %S"),
 	BOUNTY_PERSONAL("(You own: $%.2f)"),
 	BOUNTY_SET("Successfully set your bounty on %S to $%.2f."),
+	BOUNTY_SET_AFFORD("You do not have enough money to set a bounty of $%.2f."),
 	BOUNTY_REMOVED("Successfully removed your bounty on %S."),
 	BOUNTY_REMOVE_FAIL("You do not have a bounty on %S."),
 	BOUNTY_TARGET_INVALID("\"%S\" is an invalid bounty target."),
