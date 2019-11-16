@@ -5,6 +5,7 @@ import com.neo.headhunter.config.BlockConfigAccessor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -38,7 +39,7 @@ public class HeadBlockManager extends BlockConfigAccessor implements Listener {
 		super(plugin, "placed_heads.yml", "data");
 	}
 	
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		ItemStack item = event.getItemInHand();
 		if(isHead(item) && event.getPlayer().getGameMode() != GameMode.CREATIVE) {
@@ -109,7 +110,7 @@ public class HeadBlockManager extends BlockConfigAccessor implements Listener {
 					String priceString = lore.get(0);
 					priceString = ChatColor.stripColor(priceString);
 					priceString = priceString.replace("Sell Price: $", "");
-					if(priceString.matches("\\d+([.]\\d+)?")) {
+					if(priceString.matches("\\d+([.]\\d{0,2})?")) {
 						return Double.valueOf(priceString) * head.getAmount();
 					}
 				}

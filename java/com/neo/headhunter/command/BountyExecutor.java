@@ -59,7 +59,7 @@ public class BountyExecutor implements CommandExecutor {
 							} else
 								sender.sendMessage(Message.BOUNTY_REMOVE_FAIL.failure(victim.getName()));
 							return true;
-						} else if (bountyString.matches("\\d+([.]\\d*)?")) {
+						} else if (bountyString.matches("\\d+([.]\\d{0,2})?")) {
 							// check permission
 							if(!sender.hasPermission("hunter.bounty.set")) {
 								sender.sendMessage(Message.PERMISSION.failure("/bounty <TARGET> <AMOUNT>"));
