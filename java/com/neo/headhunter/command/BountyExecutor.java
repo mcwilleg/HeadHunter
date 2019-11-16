@@ -1,6 +1,7 @@
 package com.neo.headhunter.command;
 
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.message.Message;
 import com.neo.headhunter.message.Usage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -28,6 +29,10 @@ public class BountyExecutor implements CommandExecutor {
 						double totalBounty = plugin.getBountyManager().getTotalBounty(victim);
 						double hunterBounty = plugin.getBountyManager().getBounty(hunter, victim);
 						// message for bounty check
+						String personal = "";
+						if(hunterBounty > 0)
+							personal = Message.BOUNTY_PERSONAL.success(hunterBounty);
+						sender.sendMessage(Message.BOUNTY_TOTAL.info(victim.getName(), totalBounty, personal));
 						return true;
 					} else if (args.length == 2) {
 						String bountyString = args[1];
@@ -35,10 +40,9 @@ public class BountyExecutor implements CommandExecutor {
 							double amount = plugin.getBountyManager().removeBounty(hunter, victim);
 							if(amount > 0) {
 								plugin.getEconomy().depositPlayer(hunter, amount);
-								// message for successful bounty removal
-							} else {
-								// message for failed bounty removal
-							}
+								sender.sendMessage(Message.BOUNTY_REMOVED.success(victim.getName()));
+							} else
+								sender.sendMessage(Message.BOUNTY_REMOVE_FAIL.failure(victim.getName()));
 							return true;
 						} else if (bountyString.matches("\\d+([.]\\d*)?")) {
 							double amount = Double.valueOf(bountyString);
@@ -47,22 +51,18 @@ public class BountyExecutor implements CommandExecutor {
 								plugin.getEconomy().depositPlayer(hunter, current);
 								plugin.getBountyManager().setBounty(hunter, victim, amount);
 								plugin.getEconomy().withdrawPlayer(hunter, amount);
-								// message for successful bounty set
+								sender.sendMessage(Message.BOUNTY_ADDED.success(victim.getName(), amount));
 								return true;
-							} else {
-								// message for low amount
-							}
-						} else {
-							// message for invalid amount
-						}
+							} else
+								sender.sendMessage(Message.BOUNTY_AMOUNT_LOW.failure());
+						} else
+							sender.sendMessage(Message.BOUNTY_AMOUNT_INVALID.failure(bountyString));
 					} else
 						sender.sendMessage(Usage.BOUNTY.toString());
-				} else {
-					// message for invalid bounty target
-				}
-			} else {
-				// message for player-only commands
-			}
+				} else
+					sender.sendMessage(Message.BOUNTY_TARGET_INVALID.failure(args[0]));
+			} else
+				sender.sendMessage(Message.PLAYERS_ONLY.failure("/bounty <TARGET> [AMOUNT/remove]"));
 		} else
 			sender.sendMessage(Usage.BOUNTY.toString());
 		return false;
