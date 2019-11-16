@@ -1,5 +1,5 @@
 name: HeadHunter
-version: 0.3.5-alpha
+version: 0.3.6-alpha
 main: com.neo.headhunter.HeadHunter
 api-version: 1.13
 prefix: HeadHunter
@@ -16,3 +16,30 @@ commands:
     description: Set and remove bounties on other players.
   sellhead:
     description: Sell a stack of heads from your inventory.
+permissions:
+  hunter.sellhead.hand:
+    description: Allows selling a stack of heads from main hand
+  hunter.sellhead.all:
+    description: Allows selling all heads from inventory
+  hunter.sellhead.sign:
+    description: Allows selling heads with signs
+  hunter.sellhead.*:
+    description: Allows selling heads from inventory
+    children:
+      hunter.sellhead.hand: true
+      hunter.sellhead.all: true
+      hunter.sellhead.sign: true
+  hunter.bounty.set:
+    description: Allows setting bounties on other players
+  hunter.bounty.remove:
+    description: Allows removing bounties on other players
+  hunter.bounty.check:
+    description: Allows checking and listing bounties on other players
+  hunter.bounty.*:
+    description: Allows editing and checking bounties on other players
+    children:
+      hunter.bounty.set: true
+      hunter.bounty.remove: true
+      hunter.bounty.check: true
+  hunter.world:
+    description: Allows enabling and disabling head drops in worlds
