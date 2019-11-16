@@ -1,6 +1,7 @@
 package com.neo.headhunter.command;
 
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.message.Message;
 import com.neo.headhunter.message.Usage;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -21,7 +22,7 @@ public class HunterExecutor implements CommandExecutor {
 			if(args[0].equalsIgnoreCase("reload")) {
 				if(args.length == 1) {
 					plugin.reloadAll();
-					// message for reloaded
+					sender.sendMessage(Message.RELOADED.success(plugin.getName(), plugin.getVersion()));
 					return true;
 				} else
 					sender.sendMessage(Usage.HUNTER_RELOAD.toString());
@@ -29,33 +30,29 @@ public class HunterExecutor implements CommandExecutor {
 				if(sender instanceof Player) {
 					World world = ((Player) sender).getWorld();
 					if (args.length == 1) {
-						if(plugin.getWorldManager().isValidWorld(world)) {
-							// message for confirming valid world
-						} else {
-							// message for confirming invalid world
-						}
+						String status = "disabled";
+						if(plugin.getWorldManager().isValidWorld(world))
+							status = "enabled";
+						sender.sendMessage(Message.WORLD_CHECK.info(status, world.getName()));
 					} else if(args.length == 2) {
 						if(args[1].equalsIgnoreCase("add")) {
-							if(plugin.getWorldManager().addValidWorld(world)) {
-								// message for successful world addition
-							} else {
-								// message for failed world addition
-							}
+							if(plugin.getWorldManager().addValidWorld(world))
+								sender.sendMessage(Message.WORLD_ADDED.success(world.getName()));
+							else
+								sender.sendMessage(Message.WORLD_ADD_FAIL.info(world.getName()));
 							return true;
 						} else if(args[1].equalsIgnoreCase("remove")) {
-							if(plugin.getWorldManager().removeValidWorld(world)) {
-								// message for successful world removal
-							} else {
-								// message for failed world removal
-							}
+							if(plugin.getWorldManager().removeValidWorld(world))
+								sender.sendMessage(Message.WORLD_REMOVED.success(world.getName()));
+							else
+								sender.sendMessage(Message.WORLD_REMOVE_FAIL.info(world.getName()));
 							return true;
 						} else
 							sender.sendMessage(Usage.HUNTER_WORLD.toString());
 					} else
 						sender.sendMessage(Usage.HUNTER_WORLD.toString());
-				} else {
-					// message for player-only commands
-				}
+				} else
+					sender.sendMessage(Message.PLAYERS_ONLY.failure("/hunter world ..."));
 			} else
 				sender.sendMessage(Usage.HUNTER.toString());
 		}

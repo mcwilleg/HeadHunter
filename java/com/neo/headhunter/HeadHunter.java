@@ -153,6 +153,10 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		return false;
 	}
 	
+	public String getVersion() {
+		return getDescription().getVersion();
+	}
+	
 	public void debug(String message) {
 		if(DEBUG)
 			getLogger().log(Level.INFO, message);
