@@ -162,7 +162,6 @@ public class DropManager implements Listener {
 	// Generic method for checking permissions regardless of op
 	private Double getPermissionValue(Player p, String checkPermission) {
 		if(p != null) {
-			plugin.debug("checkPermission: " + checkPermission);
 			for (PermissionAttachmentInfo pai : p.getEffectivePermissions()) {
 				String regex = "\\Q" + checkPermission + ".\\E";
 				String permission = pai.getPermission().toLowerCase();
