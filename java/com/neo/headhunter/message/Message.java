@@ -35,7 +35,7 @@ public enum Message {
 	}
 	
 	public String success(Object... parameters) {
-		return ChatColor.AQUA + String.format(message, parameters);
+		return ChatColor.DARK_AQUA + String.format(message, parameters);
 	}
 	
 	public String info(Object... parameters) {

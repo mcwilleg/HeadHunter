@@ -39,23 +39,30 @@ public class DeathListener implements Listener {
 		EntityDamageEvent lastDamageCause = victim.getLastDamageCause();
 		if(lastDamageCause instanceof EntityDamageByEntityEvent) {
 			// victim was killed by an entity
+			
 			EntityDamageByEntityEvent lastDamageEntityCause = (EntityDamageByEntityEvent) lastDamageCause;
 			if(lastDamageEntityCause.getDamager() instanceof Player) {
 				// victim was killed by a player
+				
 				hunter = (Player) lastDamageEntityCause.getDamager();
 				weapon = hunter.getInventory().getItemInMainHand();
 			} else if(lastDamageEntityCause.getDamager() instanceof Projectile) {
 				// victim was killed by a projectile
+				
 				Projectile projectile = (Projectile) lastDamageEntityCause.getDamager();
 				if(projectile.getShooter() instanceof Player) {
 					// victim was killed by a projectile launched by a player
+					
 					hunter = (Player) projectile.getShooter();
 					weapon = plugin.getProjectileManager().getWeapon(projectile);
 				}
 			}
 		}
 		
+		// check player-kills-only option
 		if(hunter != null || !plugin.getSettings().isPlayerKillsOnly()) {
+			
+			// check the factions plugin if there is one
 			FactionsHook factionsHook = plugin.getFactionsHook();
 			if(factionsHook != null && victim instanceof Player) {
 				if(!factionsHook.isValidTerritory((Player) victim))
@@ -66,9 +73,13 @@ public class DeathListener implements Listener {
 			
 			if(RANDOM.nextDouble() < plugin.getDropManager().getDropChance(hunter, weapon, victim)) {
 				double withdrawValue = plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
+				
+				// manipulate money if a player died
 				if(victim instanceof Player) {
 					if(withdrawValue > 0)
 						plugin.getEconomy().withdrawPlayer((Player) victim, withdrawValue);
+					
+					// manipulate bounties if the killer is a player
 					if(hunter != null) {
 						double bounty = plugin.getBountyManager().removeTotalBounty((Player) victim);
 						if (bounty > 0) {
