@@ -26,7 +26,7 @@ public class SignBlockManager extends BlockConfigAccessor implements Listener {
 		if(ownerUUID != null && block != null && block.getState() instanceof Sign) {
 			// check permission
 			if(!event.getPlayer().hasPermission("hunter.sellhead.sign")) {
-				event.getPlayer().sendMessage(Message.PERMISSION.failure("selling at signs"));
+				event.getPlayer().sendMessage(Message.PERMISSION.format("selling at signs"));
 				return;
 			}
 			
@@ -41,7 +41,7 @@ public class SignBlockManager extends BlockConfigAccessor implements Listener {
 		if(lines[0] != null && lines[0].equalsIgnoreCase("[sellhead]")) {
 			// check permission
 			if(!event.getPlayer().hasPermission("hunter.sign")) {
-				event.getPlayer().sendMessage(Message.PERMISSION.failure("creating head-selling signs"));
+				event.getPlayer().sendMessage(Message.PERMISSION.format("creating head-selling signs"));
 				return;
 			}
 			

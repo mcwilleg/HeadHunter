@@ -22,7 +22,7 @@ public class SellExecutor implements CommandExecutor {
 		if(args.length == 0) {
 			// check permission
 			if(!sender.hasPermission("hunter.sellhead.hand")) {
-				sender.sendMessage(Message.PERMISSION.failure("/sellhead"));
+				sender.sendMessage(Message.PERMISSION.format("/sellhead"));
 				return true;
 			}
 			
@@ -30,11 +30,11 @@ public class SellExecutor implements CommandExecutor {
 				sellHeads((Player) sender, false);
 				return true;
 			} else
-				sender.sendMessage(Message.PLAYERS_ONLY.failure("/sellhead"));
+				sender.sendMessage(Message.PLAYERS_ONLY.format("/sellhead"));
 		} else if(args.length == 1 && args[0].equalsIgnoreCase("all")) {
 			// check permission
 			if(!sender.hasPermission("hunter.sellhead.all")) {
-				sender.sendMessage(Message.PERMISSION.failure("/sellhead all"));
+				sender.sendMessage(Message.PERMISSION.format("/sellhead all"));
 				return true;
 			}
 			
@@ -42,7 +42,7 @@ public class SellExecutor implements CommandExecutor {
 				sellHeads((Player) sender, true);
 				return true;
 			} else
-				sender.sendMessage(Message.PLAYERS_ONLY.failure("/sellhead all"));
+				sender.sendMessage(Message.PLAYERS_ONLY.format("/sellhead all"));
 		} else
 			sender.sendMessage(Usage.SELLHEAD.toString());
 		return false;
@@ -66,11 +66,11 @@ public class SellExecutor implements CommandExecutor {
 				plugin.getEconomy().depositPlayer(hunter, totalValue);
 				
 				if(totalAmount == 1)
-					hunter.sendMessage(Message.SELL_SINGLE.success(1, totalValue));
+					hunter.sendMessage(Message.SELL_SINGLE.format(1, totalValue));
 				else
-					hunter.sendMessage(Message.SELL_MULTIPLE.success(totalAmount, totalValue));
+					hunter.sendMessage(Message.SELL_MULTIPLE.format(totalAmount, totalValue));
 			} else
-				hunter.sendMessage(Message.SELL_FAIL.failure());
+				hunter.sendMessage(Message.SELL_FAIL.format());
 		} else {
 			int heldSlot = inventory.getHeldItemSlot();
 			ItemStack heldItem = inventory.getItem(heldSlot);
@@ -81,11 +81,11 @@ public class SellExecutor implements CommandExecutor {
 				inventory.clear(heldSlot);
 				
 				if(amount == 1)
-					hunter.sendMessage(Message.SELL_SINGLE.success(1, headStackvalue));
+					hunter.sendMessage(Message.SELL_SINGLE.format(1, headStackvalue));
 				else
-					hunter.sendMessage(Message.SELL_MULTIPLE.success(amount, headStackvalue));
+					hunter.sendMessage(Message.SELL_MULTIPLE.format(amount, headStackvalue));
 			} else
-				hunter.sendMessage(Message.SELL_FAIL.failure());
+				hunter.sendMessage(Message.SELL_FAIL.format());
 		}
 	}
 }

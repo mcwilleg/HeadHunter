@@ -28,7 +28,7 @@ public class BountyExecutor implements CommandExecutor {
 					if (args.length == 1) {
 						// check permission
 						if(!sender.hasPermission("hunter.bounty.check")) {
-							sender.sendMessage(Message.PERMISSION.failure("/bounty <TARGET>"));
+							sender.sendMessage(Message.PERMISSION.format("/bounty <TARGET>"));
 							return true;
 						}
 						
@@ -38,15 +38,15 @@ public class BountyExecutor implements CommandExecutor {
 						// message for bounty check
 						String personal = "";
 						if(hunterBounty > 0)
-							personal = Message.BOUNTY_PERSONAL.success(hunterBounty);
-						sender.sendMessage(Message.BOUNTY_TOTAL.info(victim.getName(), totalBounty, personal));
+							personal = Message.BOUNTY_PERSONAL.format(hunterBounty);
+						sender.sendMessage(Message.BOUNTY_TOTAL.format(victim.getName(), totalBounty, personal));
 						return true;
 					} else if (args.length == 2) {
 						String bountyString = args[1];
 						if(bountyString.equalsIgnoreCase("remove") || bountyString.equalsIgnoreCase("0")) {
 							// check permission
 							if(!sender.hasPermission("hunter.bounty.remove")) {
-								sender.sendMessage(Message.PERMISSION.failure("/bounty <TARGET> <remove>"));
+								sender.sendMessage(Message.PERMISSION.format("/bounty <TARGET> <remove>"));
 								return true;
 							}
 							
@@ -54,21 +54,21 @@ public class BountyExecutor implements CommandExecutor {
 							if(amount > 0) {
 								plugin.getEconomy().depositPlayer(hunter, amount);
 								if(plugin.getSettings().isBountyBroadcast())
-									Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_REMOVE.success(hunter.getName(), amount, victim.getName()));
+									Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_REMOVE.format(hunter.getName(), amount, victim.getName()));
 								else
-									sender.sendMessage(Message.BOUNTY_REMOVED.success(victim.getName()));
+									sender.sendMessage(Message.BOUNTY_REMOVED.format(victim.getName()));
 							} else
-								sender.sendMessage(Message.BOUNTY_REMOVE_FAIL.failure(victim.getName()));
+								sender.sendMessage(Message.BOUNTY_REMOVE_FAIL.format(victim.getName()));
 							return true;
 						} else if (bountyString.matches("\\d+([.]\\d{0,2})?")) {
 							// check permission
 							if(!sender.hasPermission("hunter.bounty.set")) {
-								sender.sendMessage(Message.PERMISSION.failure("/bounty <TARGET> <AMOUNT>"));
+								sender.sendMessage(Message.PERMISSION.format("/bounty <TARGET> <AMOUNT>"));
 								return true;
 							}
 							
 							double amount = Double.valueOf(bountyString);
-							if(amount > plugin.getSettings().getMinimumBounty()) {
+							if(amount >= plugin.getSettings().getMinimumBounty()) {
 								double current = plugin.getBountyManager().removeBounty(hunter, victim);
 								double balance = plugin.getEconomy().getBalance(hunter);
 								if(balance + current >= amount) {
@@ -76,22 +76,22 @@ public class BountyExecutor implements CommandExecutor {
 									plugin.getBountyManager().setBounty(hunter, victim, amount);
 									plugin.getEconomy().withdrawPlayer(hunter, amount);
 									if (plugin.getSettings().isBountyBroadcast())
-										Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_SET.success(hunter.getName(), amount, victim.getName()));
+										Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_SET.format(hunter.getName(), amount, victim.getName()));
 									else
-										sender.sendMessage(Message.BOUNTY_SET.success(victim.getName(), amount));
+										sender.sendMessage(Message.BOUNTY_SET.format(victim.getName(), amount));
 									return true;
 								} else
-									sender.sendMessage(Message.BOUNTY_SET_AFFORD.failure(amount));
+									sender.sendMessage(Message.BOUNTY_SET_AFFORD.format(amount));
 							} else
-								sender.sendMessage(Message.BOUNTY_AMOUNT_LOW.failure(plugin.getSettings().getMinimumBounty()));
+								sender.sendMessage(Message.BOUNTY_AMOUNT_LOW.format(plugin.getSettings().getMinimumBounty()));
 						} else
-							sender.sendMessage(Message.BOUNTY_AMOUNT_INVALID.failure(bountyString));
+							sender.sendMessage(Message.BOUNTY_AMOUNT_INVALID.format(bountyString));
 					} else
 						sender.sendMessage(Usage.BOUNTY.toString());
 				} else
-					sender.sendMessage(Message.BOUNTY_TARGET_INVALID.failure(args[0]));
+					sender.sendMessage(Message.BOUNTY_TARGET_INVALID.format(args[0]));
 			} else
-				sender.sendMessage(Message.PLAYERS_ONLY.failure("/bounty <TARGET> [AMOUNT/remove]"));
+				sender.sendMessage(Message.PLAYERS_ONLY.format("/bounty <TARGET> [AMOUNT/remove]"));
 		} else
 			sender.sendMessage(Usage.BOUNTY.toString());
 		return false;

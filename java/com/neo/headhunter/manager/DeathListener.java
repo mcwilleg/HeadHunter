@@ -84,9 +84,9 @@ public class DeathListener implements Listener {
 						double bounty = plugin.getBountyManager().removeTotalBounty((Player) victim);
 						if (bounty > 0) {
 							if (plugin.getSettings().isBountyBroadcast())
-								Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_CLAIM.success(hunter.getName(), bounty, victim.getName()));
+								Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_CLAIM.format(hunter.getName(), bounty, victim.getName()));
 							else
-								hunter.sendMessage(Message.BOUNTY_CLAIM.success(bounty, victim.getName()));
+								hunter.sendMessage(Message.BOUNTY_CLAIM.format(bounty, victim.getName()));
 						}
 					}
 				}
