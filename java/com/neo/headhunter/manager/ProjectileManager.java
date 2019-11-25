@@ -37,7 +37,7 @@ public class ProjectileManager implements Listener {
 		ProjectileSource s = p.getShooter();
 		if(s instanceof Player) {
 			Player hunter = (Player) s;
-			ItemStack projectileWeapon = hunter.getInventory().getItemInMainHand();
+			ItemStack projectileWeapon = hunter.getInventory().getItemInMainHand(); // TODO get by held item slot
 			p.setMetadata(WEAPON_META_KEY, new FixedMetadataValue(plugin, projectileWeapon));
 		}
 	}

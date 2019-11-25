@@ -32,7 +32,9 @@ import java.util.logging.Level;
 
 public final class HeadHunter extends JavaPlugin implements Listener, CommandExecutor {
 	private static final boolean DEBUG = true;
-
+	
+	private boolean legacy;
+	
 	private Economy economy;
 	private FactionsHook factionsHook;
 	
@@ -47,6 +49,15 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	@Override
 	public void onEnable() {
+		// determine legacy status
+		String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
+		String majorVer = split[0]; // For 1.10 will be "1"
+		String minorVer = split[1]; // For 1.10 will be "10"
+		String patchVer = split.length > 2 ? split[2] : "0"; // For 1.10 will be "0", for 1.9.4 will be "4"
+		
+		legacy = majorVer.compareTo("1") < 0 || minorVer.compareTo("14") < 0 || patchVer.compareTo("0") < 0;
+		
+		// connections
 		economy = connectEconomy();
 		if(economy == null) {
 			getLogger().log(Level.SEVERE, "Could not connect to Vault. Make sure Vault is installed for HeadHunter!");
@@ -55,6 +66,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		
 		factionsHook = connectFactions();
 		
+		// managers
 		settings = new Settings(this);
 		dropManager = new DropManager(this);
 		mobLibrary = new MobLibrary(this);
@@ -140,6 +152,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		if(sender instanceof Player && args.length == 2) {
 			Player p = (Player) sender;
 			if(args[0].equalsIgnoreCase("save")) {
+				// TODO get by held item slot
 				getConfig().set(args[1].toUpperCase(), p.getInventory().getItemInMainHand().clone());
 				saveConfig();
 			} else if(args[0].equalsIgnoreCase("load")) {
@@ -160,6 +173,10 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	public void debug(String message) {
 		if(DEBUG)
 			getLogger().log(Level.INFO, message);
+	}
+	
+	public boolean isLegacy() {
+		return legacy;
 	}
 	
 	public Economy getEconomy() {

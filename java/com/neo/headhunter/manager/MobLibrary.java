@@ -85,7 +85,9 @@ public class MobLibrary extends ConfigAccessor {
 	public String getConfigPath(LivingEntity victim) {
 		if(victim != null) {
 			String type = victim.getType().name();
-			if(!type.equals("PLAYER")) {
+			if(!(victim instanceof Player)) {
+				if(plugin.isLegacy())
+					type = getLegacyMob(victim);
 				String variant = getVariant(victim);
 				if(variant != null)
 					return type + "." + variant;
@@ -95,38 +97,63 @@ public class MobLibrary extends ConfigAccessor {
 		return null;
 	}
 	
+	// returns the configuration path that will return the correct head variant for the given entity victim
+	private String getLegacyMob(LivingEntity victim) {
+		if(victim != null) {
+			String type = victim.getType().name();
+			switch(type) {
+			case "MUSHROOM_COW":
+				return "MUSHROOM_COW.RED";
+			case "SKELETON":
+				String skeletonType = ((Skeleton) victim).getSkeletonType().name();
+				switch(skeletonType) {
+				case "WITHER":
+					return "WITHER_SKELETON";
+				case "STRAY":
+					return skeletonType;
+				}
+				break;
+			}
+			return type;
+		}
+		return null;
+	}
+	
+	// returns the configuration subsection that will return the correct head variant for the given entity victim
 	private String getVariant(LivingEntity victim) {
 		if(victim != null) {
 			String type = victim.getType().name();
-			if(isVariantMob(type)) {
-				switch(type) {
-				case "CAT":
-					return ((Cat) victim).getCatType().name();
-				case "FOX":
-					return ((Fox) victim).getFoxType().name();
-				case "HORSE":
-					return ((Horse) victim).getColor().name();
-				case "LLAMA":
-				case "TRADER_LLAMA":
-					return ((Llama) victim).getColor().name();
-				case "MUSHROOM_COW":
-					return ((MushroomCow) victim).getVariant().name();
-				case "PANDA":
-					Panda victimPanda = (Panda) victim;
-					Panda.Gene mainGene = victimPanda.getMainGene();
-					Panda.Gene hiddenGene = victimPanda.getHiddenGene();
-					if(mainGene == Panda.Gene.BROWN && mainGene == hiddenGene)
-						return Panda.Gene.BROWN.name();
-					return Panda.Gene.NORMAL.name();
-				case "PARROT":
-					return ((Parrot) victim).getVariant().name();
-				case "RABBIT":
-					return ((Rabbit) victim).getRabbitType().name();
-				case "VILLAGER":
-					return ((Villager) victim).getVillagerType().name();
-				case "ZOMBIE_VILLAGER":
-					return Villager.Type.PLAINS.name();
-				}
+			switch(type) {
+			case "CAT":
+				return ((Cat) victim).getCatType().name();
+			case "FOX":
+				return ((Fox) victim).getFoxType().name();
+			case "HORSE":
+				return ((Horse) victim).getColor().name();
+			case "LLAMA":
+			case "TRADER_LLAMA":
+				return ((Llama) victim).getColor().name();
+			case "MUSHROOM_COW":
+				if(plugin.isLegacy())
+					return null;
+				return ((MushroomCow) victim).getVariant().name();
+			case "OCELOT":
+				break;
+			case "PANDA":
+				Panda victimPanda = (Panda) victim;
+				Panda.Gene mainGene = victimPanda.getMainGene();
+				Panda.Gene hiddenGene = victimPanda.getHiddenGene();
+				if(mainGene == Panda.Gene.BROWN && mainGene == hiddenGene)
+					return Panda.Gene.BROWN.name();
+				return Panda.Gene.NORMAL.name();
+			case "PARROT":
+				return ((Parrot) victim).getVariant().name();
+			case "RABBIT":
+				return ((Rabbit) victim).getRabbitType().name();
+			case "VILLAGER":
+				return ((Villager) victim).getVillagerType().name();
+			case "ZOMBIE_VILLAGER":
+				return Villager.Type.PLAINS.name();
 			}
 		}
 		return null;

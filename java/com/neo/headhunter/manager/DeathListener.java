@@ -45,7 +45,7 @@ public class DeathListener implements Listener {
 				// victim was killed by a player
 				
 				hunter = (Player) lastDamageEntityCause.getDamager();
-				weapon = hunter.getInventory().getItemInMainHand();
+				weapon = hunter.getInventory().getItemInMainHand(); // TODO get by held item slot
 			} else if(lastDamageEntityCause.getDamager() instanceof Projectile) {
 				// victim was killed by a projectile
 				
