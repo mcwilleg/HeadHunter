@@ -6,7 +6,7 @@ import com.neo.headhunter.config.ConfigAccessor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class FactionsUUIDHook extends ConfigAccessor implements FactionsHook {
+public class FactionsUUIDHook extends ConfigAccessor<HeadHunter> implements FactionsHook {
 	public FactionsUUIDHook(HeadHunter plugin) {
 		super(plugin, true, "config.yml");
 	}

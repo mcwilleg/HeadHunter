@@ -14,7 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class SignBlockManager extends BlockConfigAccessor implements Listener {
+public class SignBlockManager extends BlockConfigAccessor<HeadHunter> implements Listener {
 	public SignBlockManager(HeadHunter plugin) {
 		super(plugin, "signs.yml", "data");
 	}

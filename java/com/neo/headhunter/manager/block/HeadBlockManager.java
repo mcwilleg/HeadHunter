@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class HeadBlockManager extends BlockConfigAccessor implements Listener {
+public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements Listener {
 	private static final List<Material> HEAD_MATERIALS = Arrays.asList(
 			Material.CREEPER_HEAD,
 			Material.DRAGON_HEAD,

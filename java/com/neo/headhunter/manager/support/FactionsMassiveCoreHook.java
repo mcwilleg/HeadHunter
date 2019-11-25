@@ -10,7 +10,7 @@ import com.neo.headhunter.config.ConfigAccessor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class FactionsMassiveCoreHook extends ConfigAccessor implements FactionsHook {
+public class FactionsMassiveCoreHook extends ConfigAccessor<HeadHunter> implements FactionsHook {
 	public FactionsMassiveCoreHook(HeadHunter plugin) {
 		super(plugin, true, "config.yml");
 	}

@@ -1,11 +1,11 @@
 package com.neo.headhunter.config;
 
-import com.neo.headhunter.HeadHunter;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class BlockConfigAccessor extends ConfigAccessor {
-	public BlockConfigAccessor(HeadHunter plugin, String fileName, String... ancestry) {
+public class BlockConfigAccessor<T extends JavaPlugin> extends ConfigAccessor<T> {
+	public BlockConfigAccessor(T plugin, String fileName, String... ancestry) {
 		super(plugin, true, fileName, ancestry);
 	}
 	

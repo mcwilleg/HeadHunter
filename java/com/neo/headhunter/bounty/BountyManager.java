@@ -5,7 +5,7 @@ import com.neo.headhunter.HeadHunter;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class BountyManager extends ConfigAccessor {
+public class BountyManager extends ConfigAccessor<HeadHunter> {
 	public BountyManager(HeadHunter plugin) {
 		super(plugin, true, "bounties.yml", "data");
 	}

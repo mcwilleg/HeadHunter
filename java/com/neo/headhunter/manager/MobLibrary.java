@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MobLibrary extends ConfigAccessor {
+public class MobLibrary extends ConfigAccessor<HeadHunter> {
 	private Map<String, ItemStack> library;
 	
 	public MobLibrary(HeadHunter plugin) {
@@ -54,7 +54,10 @@ public class MobLibrary extends ConfigAccessor {
 		SkullMeta meta = (SkullMeta) head.getItemMeta();
 		if(meta != null) {
 			meta.setOwningPlayer(owner);
-			meta.setDisplayName(owner.getName() + "\'s Head");
+			String displayName = owner.getName() + "\'";
+			if(!displayName.endsWith("s\'"))
+				displayName += "s";
+			meta.setDisplayName(displayName + " Head");
 			head.setItemMeta(meta);
 		}
 		return head;
@@ -137,8 +140,6 @@ public class MobLibrary extends ConfigAccessor {
 				if(plugin.isLegacy())
 					return null;
 				return ((MushroomCow) victim).getVariant().name();
-			case "OCELOT":
-				break;
 			case "PANDA":
 				Panda victimPanda = (Panda) victim;
 				Panda.Gene mainGene = victimPanda.getMainGene();

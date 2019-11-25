@@ -24,7 +24,7 @@ public enum Message {
 	BOUNTY_TARGET_INVALID("&c\"%s\" is an invalid bounty target."),
 	BOUNTY_AMOUNT_INVALID("&c\"%s\" is an invalid bounty amount."),
 	BOUNTY_AMOUNT_LOW("&cThat bounty is too low. Bounties must be at least $%.2f."),
-	SELL_FAIL("&cYou are not holding any heads."),
+	SELL_FAIL("&cYou are not holding any valuable heads."),
 	SELL_SINGLE("&eSold &6%d &ehead for &6$%.2f&e."),
 	SELL_MULTIPLE("&eSold &6%d &eheads for a total of &6$%.2f&e.");
 	
