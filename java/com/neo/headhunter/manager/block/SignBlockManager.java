@@ -49,9 +49,9 @@ public class SignBlockManager extends BlockConfigAccessor<HeadHunter> implements
 			ChatColor accentColor = ChatColor.DARK_RED;
 			
 			event.setLine(0, baseColor + "[" + accentColor + "Sell Heads" + baseColor + "]");
-			event.setLine(1, baseColor + "Click this sign");
-			event.setLine(2, baseColor + "to sell your");
-			event.setLine(3, baseColor + "victims' heads!");
+			event.setLine(1, baseColor + "Click to sell heads!");
+			event.setLine(2, baseColor + "Crouch and click to");
+			event.setLine(3, baseColor + "sell all heads.");
 			
 			setBlockData("sell-head", event.getBlock(), event.getPlayer().getUniqueId().toString());
 			saveConfig();

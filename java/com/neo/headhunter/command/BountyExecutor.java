@@ -106,6 +106,10 @@ public class BountyExecutor implements CommandExecutor {
 			result = Bukkit.getOfflinePlayer(name);
 		if(result.hasPlayedBefore())
 			return result;
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			if(p.getName().equalsIgnoreCase(name))
+				return p;
+		}
 		return null;
 	}
 }
