@@ -98,7 +98,7 @@ public class BountyExecutor implements CommandExecutor {
 	}
 	
 	@SuppressWarnings("deprecation")
-	private OfflinePlayer getPlayer(String name) {
+	public OfflinePlayer getPlayer(String name) {
 		OfflinePlayer result = Bukkit.getPlayerExact(name);
 		if(result == null)
 			result = Bukkit.getPlayer(name);

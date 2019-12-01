@@ -5,7 +5,6 @@ import com.neo.headhunter.config.ConfigAccessor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
@@ -15,9 +14,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MobLibrary extends ConfigAccessor<HeadHunter> {
@@ -50,10 +47,17 @@ public class MobLibrary extends ConfigAccessor<HeadHunter> {
 	
 	// returns a new ItemStack head object for the given player
 	public ItemStack getPlayerHead(OfflinePlayer owner) {
-		ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+		ItemStack head;
+		if(plugin.isVersionBefore(1, 13, 0))
+			head = new ItemStack(Material.valueOf("SKULL_ITEM"), 1, (short) 3);
+		else
+			head = new ItemStack(Material.PLAYER_HEAD);
 		SkullMeta meta = (SkullMeta) head.getItemMeta();
 		if(meta != null) {
-			meta.setOwningPlayer(owner);
+			if(plugin.isVersionBefore(1, 13, 0))
+				meta.setOwner(owner.getName());
+			else
+				meta.setOwningPlayer(owner);
 			String displayName = owner.getName() + "\'";
 			if(!displayName.endsWith("s\'"))
 				displayName += "s";
@@ -85,77 +89,86 @@ public class MobLibrary extends ConfigAccessor<HeadHunter> {
 	}
 	
 	// returns the mob config path used to create a head for the specified victim
+	@SuppressWarnings("deprecation")
 	public String getConfigPath(LivingEntity victim) {
 		if(victim != null) {
 			String type = victim.getType().name();
-			if(!(victim instanceof Player)) {
-				if(plugin.isLegacy())
-					type = getLegacyMob(victim);
-				String variant = getVariant(victim);
-				if(variant != null)
-					return type + "." + variant;
-			}
-			return type;
-		}
-		return null;
-	}
-	
-	// returns the configuration path that will return the correct head variant for the given entity victim
-	private String getLegacyMob(LivingEntity victim) {
-		if(victim != null) {
-			String type = victim.getType().name();
-			switch(type) {
-			case "MUSHROOM_COW":
-				return "MUSHROOM_COW.RED";
-			case "SKELETON":
-				String skeletonType = ((Skeleton) victim).getSkeletonType().name();
-				switch(skeletonType) {
-				case "WITHER":
-					return "WITHER_SKELETON";
-				case "STRAY":
-					return skeletonType;
-				}
-				break;
-			}
-			return type;
-		}
-		return null;
-	}
-	
-	// returns the configuration subsection that will return the correct head variant for the given entity victim
-	private String getVariant(LivingEntity victim) {
-		if(victim != null) {
-			String type = victim.getType().name();
+			String variant = null;
+			
 			switch(type) {
 			case "CAT":
-				return ((Cat) victim).getCatType().name();
+				variant = ((Cat) victim).getCatType().name();
+				break;
 			case "FOX":
-				return ((Fox) victim).getFoxType().name();
+				variant = ((Fox) victim).getFoxType().name();
+				break;
 			case "HORSE":
-				return ((Horse) victim).getColor().name();
+				variant = ((Horse) victim).getColor().name();
+				break;
 			case "LLAMA":
 			case "TRADER_LLAMA":
-				return ((Llama) victim).getColor().name();
+				variant = ((Llama) victim).getColor().name();
+				break;
 			case "MUSHROOM_COW":
-				if(plugin.isLegacy())
-					return null;
-				return ((MushroomCow) victim).getVariant().name();
+				if(plugin.isVersionBefore(1, 14, 0))
+					variant = "RED";
+				else
+					variant = ((MushroomCow) victim).getVariant().name();
+				break;
+			case "OCELOT":
+				if(plugin.isVersionBefore(1, 14, 0)) {
+					switch(((Ocelot) victim).getCatType().name()) {
+					case "BLACK_CAT":
+						type = "CAT";
+						variant = "BLACK";
+						break;
+					case "RED_CAT":
+						type = "CAT";
+						variant = "RED";
+						break;
+					case "SIAMESE_CAT":
+						type = "CAT";
+						variant = "SIAMESE";
+						break;
+					}
+				}
+				break;
 			case "PANDA":
 				Panda victimPanda = (Panda) victim;
 				Panda.Gene mainGene = victimPanda.getMainGene();
 				Panda.Gene hiddenGene = victimPanda.getHiddenGene();
 				if(mainGene == Panda.Gene.BROWN && mainGene == hiddenGene)
-					return Panda.Gene.BROWN.name();
-				return Panda.Gene.NORMAL.name();
+					variant = Panda.Gene.BROWN.name();
+				else
+					variant = Panda.Gene.NORMAL.name();
+				break;
 			case "PARROT":
-				return ((Parrot) victim).getVariant().name();
+				variant = ((Parrot) victim).getVariant().name();
+				break;
 			case "RABBIT":
-				return ((Rabbit) victim).getRabbitType().name();
+				variant = ((Rabbit) victim).getRabbitType().name();
+				break;
+			case "SKELETON":
+				switch(((Skeleton) victim).getSkeletonType().name()) {
+				case "WITHER":
+					type = "WITHER_SKELETON";
+					break;
+				case "STRAY":
+					type = "STRAY";
+					break;
+				}
+				break;
 			case "VILLAGER":
-				return ((Villager) victim).getVillagerType().name();
-			case "ZOMBIE_VILLAGER":
-				return Villager.Type.PLAINS.name();
+				if(plugin.isVersionBefore(1, 14, 0))
+					variant = "PLAINS";
+				else
+					variant = ((Villager) victim).getVillagerType().name();
+				break;
 			}
+			
+			if(variant != null)
+				return String.join(".", type, variant);
+			return type;
 		}
 		return null;
 	}
@@ -163,40 +176,21 @@ public class MobLibrary extends ConfigAccessor<HeadHunter> {
 	// caches default mob heads from internal resource
 	private void initLibrary() {
 		library = new HashMap<>();
-		InputStream resource = plugin.getResource("mob_db.yml");
+		InputStream resource;
+		/*
+		if(plugin.isVersionBefore(1, 13, 0))
+			resource = plugin.getResource("mob_db_legacy.yml");
+		else
+			resource = plugin.getResource("mob_db.yml");
+		*/
+		resource = plugin.getResource("mob_db.yml");
 		if(resource != null) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(new InputStreamReader(resource));
-			for(String key : config.getKeys(false)) {
-				if(isVariantMob(key)) {
-					ConfigurationSection variantSection = config.getConfigurationSection(key);
-					if(variantSection != null) {
-						for (String variantKey : variantSection.getKeys(false)) {
-							String path = key + "." + variantKey;
-							library.put(path, config.getItemStack(path));
-						}
-					}
-				} else
-					library.put(key, config.getItemStack(key));
+			for(String key : config.getKeys(true)) {
+				ItemStack head = config.getItemStack(key);
+				if(head != null)
+					library.put(key, head);
 			}
 		}
 	}
-	
-	// helper method to improve readability
-	private boolean isVariantMob(String entityType) {
-		return VARIANT_MOBS.contains(entityType);
-	}
-	
-	private static final List<String> VARIANT_MOBS = Arrays.asList(
-			"CAT", // 11 types
-			"FOX", // 2 types
-			"HORSE", // 7 types
-			"LLAMA", // 4 types
-			"MUSHROOM_COW", // 2 types
-			"PANDA", // 2 types
-			"PARROT", // 5 types
-			"RABBIT", // 7 types
-			"TRADER_LLAMA", // 4 types
-			"VILLAGER", // 7 types
-			"ZOMBIE_VILLAGER" // 7 types
-	);
 }

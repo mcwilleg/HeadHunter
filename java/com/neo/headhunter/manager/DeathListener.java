@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.Random;
 
@@ -45,7 +46,8 @@ public class DeathListener implements Listener {
 				// victim was killed by a player
 				
 				hunter = (Player) lastDamageEntityCause.getDamager();
-				weapon = hunter.getInventory().getItemInMainHand(); // TODO get by held item slot
+				PlayerInventory inv = hunter.getInventory();
+				weapon = inv.getItem(inv.getHeldItemSlot());
 			} else if(lastDamageEntityCause.getDamager() instanceof Projectile) {
 				// victim was killed by a projectile
 				

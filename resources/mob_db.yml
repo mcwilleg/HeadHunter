@@ -7,6 +7,15 @@ BAT:
     meta-type: SKULL
     display-name: Bat Head
     internal: H4sIAAAAAAAAAE2Py06DQBiFf01MKvEx3JJMgYGycKGC7ZAOVaC0w47LIJehNhRMh+fyAcWdy/Od7yyOAqDAQ9iOQrz3X2Ut+AJuSQGPpsFXS920VFuzsGpkKVJtbtlqxg1cWqWF01WhgDKPzrwfan65h8XAr8PY84sCADcLuItTMXL44dJDybFCxdETuSTmnKMQiR1pzhY5xTJ7JSbp5n7zbG6l/c/FQ3rAgulelZw+xqyL0VYPBN8Ey7zbf9PpU9K1e6XroKYNkUnDMDtQSRt3mThFS6OXlmku8rVYsENS/XE/2k/+xBCLvHrnvNUzb30nx0mUYzr5LQ09uzyip/kB/AJei4lYHAEAAA==
+BEE:
+  ==: org.bukkit.inventory.ItemStack
+  v: 1631
+  type: PLAYER_HEAD
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    display-name: Bee
+    internal: H4sIAAAAAAAAAE3Py06DQBgF4F8TEyQ+hluS4Tpl4ULF2iEFtAXKzI7LYAeG2rRQxefyAZ2ly5PvnMXRAXS42/aTlG+nz1ZIrsE1aeDecxeVg1tstE3bGE6JsVFVtmtgXKPW541VlQsddDU68tMo+PkWtJF/j9OJn3UAuNLgJi/lxOGXzyFixR41RSjrmXgqp1skE9IdMTnkc/VMPDIoXz1669n/13XHcudKaod7dnifqiFHa3sj+Wpj1kN2idIPOw5qJ7ayn7h7MZNdhlhQI/ZKTJYSkw5LQdNeObHiLu+pFTlJ+iRYKoeoozMdyBe1wo4pi4KlSIJQxCL02wI9qAfwBylZIkIcAQAA
 BLAZE:
   ==: org.bukkit.inventory.ItemStack
   v: 1631

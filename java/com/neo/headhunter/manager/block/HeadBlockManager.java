@@ -12,31 +12,42 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements Listener {
-	private static final List<Material> HEAD_MATERIALS = Arrays.asList(
-			Material.CREEPER_HEAD,
-			Material.DRAGON_HEAD,
-			Material.PLAYER_HEAD,
-			Material.ZOMBIE_HEAD,
-			Material.SKELETON_SKULL,
-			Material.WITHER_SKELETON_SKULL
-	);
-	
-	private static final List<Material> HEAD_BLOCK_MATERIALS = Arrays.asList(
-			Material.CREEPER_WALL_HEAD,
-			Material.DRAGON_WALL_HEAD,
-			Material.PLAYER_WALL_HEAD,
-			Material.ZOMBIE_WALL_HEAD,
-			Material.SKELETON_WALL_SKULL,
-			Material.WITHER_SKELETON_WALL_SKULL
+	private static final List<Material> HEAD_MATERIALS = new ArrayList<>();
+	private static final List<String> HEAD_MATERIAL_NAMES = Arrays.asList(
+			"SKULL",
+			"SKULL_ITEM",
+			"LEGACY_SKULL",
+			"LEGACY_SKULL_ITEM",
+			"CREEPER_HEAD",
+			"DRAGON_HEAD",
+			"PLAYER_HEAD",
+			"ZOMBIE_HEAD",
+			"SKELETON_SKULL",
+			"WITHER_SKELETON_SKULL",
+			"CREEPER_WALL_HEAD",
+			"DRAGON_WALL_HEAD",
+			"PLAYER_WALL_HEAD",
+			"ZOMBIE_WALL_HEAD",
+			"SKELETON_WALL_SKULL",
+			"WITHER_SKELETON_WALL_SKULL"
 	);
 	
 	public HeadBlockManager(HeadHunter plugin) {
 		super(plugin, "placed_heads.yml", "data");
+		for(String materialName : HEAD_MATERIAL_NAMES) {
+			try {
+				Material headMaterial = Material.valueOf(materialName);
+				HEAD_MATERIALS.add(headMaterial);
+			} catch(IllegalArgumentException ex) {
+				// ignore
+			}
+		}
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -48,7 +59,11 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 				double value = ((int) (getHeadStackValue(item) / item.getAmount() * 100)) / 100.0;
 				String mobPath = plugin.getMobLibrary().getConfigPath(item);
 				if (mobPath == null) {
-					OfflinePlayer owner = meta.getOwningPlayer();
+					OfflinePlayer owner;
+					if(plugin.isVersionBefore(1, 13, 0))
+						owner = plugin.getBountyExecutor().getPlayer(meta.getOwner());
+					else
+						owner = meta.getOwningPlayer();
 					if(owner != null) {
 						setBlockData(event.getBlock(), "PLAYER " + owner.getUniqueId().toString() + " " + value);
 						saveConfig();
@@ -83,8 +98,10 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 				head = plugin.getDropManager().formatHead(head, value);
 				
 				if(head != null) {
-					if(event.isDropItems() && event.getPlayer().getGameMode() != GameMode.CREATIVE)
-						block.getWorld().dropItemNaturally(block.getLocation(), head);
+					if(plugin.isVersionBefore(1, 12, 0) || event.isDropItems()) {
+						if (event.getPlayer().getGameMode() != GameMode.CREATIVE)
+							block.getWorld().dropItemNaturally(block.getLocation(), head);
+					}
 					setBlockData(block, null);
 					saveConfig();
 				}
@@ -97,8 +114,7 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 	}
 	
 	private boolean isHeadBlock(Block headBlock) {
-		return headBlock != null && (HEAD_MATERIALS.contains(headBlock.getType()) ||
-				                             HEAD_BLOCK_MATERIALS.contains(headBlock.getType()));
+		return headBlock != null && (HEAD_MATERIALS.contains(headBlock.getType()));
 	}
 	
 	public double getHeadStackValue(ItemStack head) {

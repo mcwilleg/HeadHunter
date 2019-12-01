@@ -24,6 +24,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,8 +33,9 @@ import java.util.logging.Level;
 
 public final class HeadHunter extends JavaPlugin implements Listener, CommandExecutor {
 	private static final boolean DEBUG = true;
+	private static final int MAJOR_VER = 0, MINOR_VER = 1, PATCH_VER = 2;
 	
-	private boolean legacy;
+	private int[] version = new int[3];
 	
 	private Economy economy;
 	private FactionsHook factionsHook;
@@ -46,16 +48,19 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private BountyManager bountyManager;
 	private HeadBlockManager headBlockManager;
 	private SellExecutor sellExecutor;
+	private BountyExecutor bountyExecutor;
 	
 	@Override
 	public void onEnable() {
-		// determine legacy status
+		// determine current Bukkit version
 		String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
 		String majorVer = split[0]; // For 1.10 will be "1"
 		String minorVer = split[1]; // For 1.10 will be "10"
 		String patchVer = split.length > 2 ? split[2] : "0"; // For 1.10 will be "0", for 1.9.4 will be "4"
 		
-		legacy = majorVer.compareTo("1") < 0 || minorVer.compareTo("14") < 0 || patchVer.compareTo("0") < 0;
+		version[MAJOR_VER] = Integer.valueOf(majorVer);
+		version[MINOR_VER] = Integer.valueOf(minorVer);
+		version[PATCH_VER] = Integer.valueOf(patchVer);
 		
 		// connections
 		economy = connectEconomy();
@@ -75,6 +80,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		bountyManager = new BountyManager(this);
 		headBlockManager = new HeadBlockManager(this);
 		sellExecutor = new SellExecutor(this);
+		bountyExecutor = new BountyExecutor(this);
 		
 		// register listeners
 		if(DEBUG)
@@ -89,8 +95,8 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		if(DEBUG)
 			registerCommand("hhdebug", this);
 		registerCommand("hunter", new HunterExecutor(this));
-		registerCommand("bounty", new BountyExecutor(this));
 		registerCommand("sellhead", sellExecutor);
+		registerCommand("bounty", bountyExecutor);
 	}
 	
 	private void registerListener(Listener listener) {
@@ -152,8 +158,8 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		if(sender instanceof Player && args.length == 2) {
 			Player p = (Player) sender;
 			if(args[0].equalsIgnoreCase("save")) {
-				// TODO get by held item slot
-				getConfig().set(args[1].toUpperCase(), p.getInventory().getItemInMainHand().clone());
+				PlayerInventory inv = p.getInventory();
+				getConfig().set(args[1].toUpperCase(), inv.getItem(inv.getHeldItemSlot()).clone());
 				saveConfig();
 			} else if(args[0].equalsIgnoreCase("load")) {
 				ItemStack item = getConfig().getItemStack(args[1].toUpperCase());
@@ -170,13 +176,9 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		return getDescription().getVersion();
 	}
 	
-	public void debug(String message) {
-		if(DEBUG)
-			getLogger().log(Level.INFO, message);
-	}
-	
-	public boolean isLegacy() {
-		return legacy;
+	// parameters are the earliest necessary version
+	public boolean isVersionBefore(int majorVer, int minorVer, int patchVer) {
+		return version[MAJOR_VER] < majorVer || version[MINOR_VER] < minorVer || version[PATCH_VER] < patchVer;
 	}
 	
 	public Economy getEconomy() {
@@ -217,5 +219,9 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public SellExecutor getSellExecutor() {
 		return sellExecutor;
+	}
+	
+	public BountyExecutor getBountyExecutor() {
+		return bountyExecutor;
 	}
 }

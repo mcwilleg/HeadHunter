@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.projectiles.ProjectileSource;
@@ -37,7 +38,8 @@ public class ProjectileManager implements Listener {
 		ProjectileSource s = p.getShooter();
 		if(s instanceof Player) {
 			Player hunter = (Player) s;
-			ItemStack projectileWeapon = hunter.getInventory().getItemInMainHand(); // TODO get by held item slot
+			PlayerInventory inv = hunter.getInventory();
+			ItemStack projectileWeapon = inv.getItem(inv.getHeldItemSlot());
 			p.setMetadata(WEAPON_META_KEY, new FixedMetadataValue(plugin, projectileWeapon));
 		}
 	}
