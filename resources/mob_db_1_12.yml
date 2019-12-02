@@ -71,6 +71,16 @@ ELDER_GUARDIAN:
     meta-type: SKULL
     skull-owner: MHF_EGuardian
     display-name: Elder Guardian Head
+ENDER_DRAGON:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    internal: H4sIAAAAAAAAAE2Oy06DQBiFf01MkPgYbklghossumik0iHtIJRChx2XQcABGwpW+lQ+oixdnvOdLzkygAxPh89JiPfhq2oEl+CelPCsY2yYqMoUmyOs6Drmio1zVSlNC6EXHRvcsmSQF+nMh7Hhl0eQRv4zTgO/yABwJ8FDnImJwy+fPTU91Wp58kQxE3PJ0UEVPmnPFunjOX8lJukWvl2bu9n+tzXGLDEEw16d9sGUd7G6w6Hg21AruuM3vYWCof2VOmvsO7GgUYBoS4XvHLU0YUv/gVJ3g/ftRqNugPzEa6hLMHWIytri5jtvLUPMoAm5+lFck16zq2C1Wt7DH5NdgssYAQAA
+    skull-owner: EnderDragon
+    display-name: Ender Dragon Head
 ENDERMAN:
   ==: org.bukkit.inventory.ItemStack
   type: SKULL_ITEM
