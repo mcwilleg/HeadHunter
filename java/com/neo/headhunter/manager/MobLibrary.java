@@ -173,6 +173,9 @@ public class MobLibrary extends ConfigAccessor<HeadHunter> {
 					}
 				}
 				break;
+			case "ZOMBIE_VILLAGER":
+				variant = "PLAINS";
+				break;
 			}
 			
 			if(variant != null)
