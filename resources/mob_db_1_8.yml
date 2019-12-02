@@ -1,0 +1,258 @@
+BLAZE:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Blaze
+    display-name: Blaze Head
+CAVE_SPIDER:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_CaveSpider
+    display-name: Cave Spider Head
+CHICKEN:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Chicken
+    display-name: Chicken Head
+COW:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Cow
+    display-name: Cow Head
+CREEPER:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 4
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    display-name: Creeper Head
+ELDER_GUARDIAN:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_EGuardian
+    display-name: Elder Guardian Head
+ENDERMAN:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Enderman
+    display-name: Enderman Head
+ENDERMITE:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Endermite
+    display-name: Endermite
+GHAST:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Ghast
+    display-name: Ghast Face
+GUARDIAN:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Guardian
+    display-name: Guardian Head
+IRON_GOLEM:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Golem
+    display-name: Iron Golem Head
+MAGMA_CUBE:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_LavaSlime
+    display-name: Magma Cube Face
+OCELOT:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Ocelot
+    display-name: Ocelot Head
+PIG:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Pig
+    display-name: Pig Head
+PIG_ZOMBIE:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_PigZombie
+    display-name: Zombie Pigman Head
+SHEEP:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Sheep
+    display-name: Sheep Head
+SHULKER:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Shulker
+    display-name: Shulker Mollusk
+SKELETON:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    display-name: Skeleton Skull
+SLIME:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Slime
+    display-name: Slime Face
+SNOWMAN:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_SnowGolem
+    display-name: Snow Golem Head
+SPIDER:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Spider
+    display-name: Spider Head
+SQUID:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Squid
+    display-name: Squid Head
+WITCH:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Witch
+    display-name: Witch Head
+WITHER:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Wither
+    display-name: Wither Skull
+WITHER_SKELETON:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 1
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    display-name: Wither Skeleton Skull
+WOLF:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 3
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    skull-owner: MHF_Wolf
+    display-name: Wolf Head
+ZOMBIE:
+  ==: org.bukkit.inventory.ItemStack
+  type: SKULL_ITEM
+  damage: 2
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    display-name: Zombie Head
+MUSHROOM_COW:
+  RED:
+    ==: org.bukkit.inventory.ItemStack
+    type: SKULL_ITEM
+    damage: 3
+    meta:
+      ==: ItemMeta
+      meta-type: SKULL
+      skull-owner: MHF_MushroomCow
+      display-name: Mooshroom Head
+VILLAGER:
+  PLAINS:
+    ==: org.bukkit.inventory.ItemStack
+    type: SKULL_ITEM
+    damage: 3
+    meta:
+      ==: ItemMeta
+      meta-type: SKULL
+      skull-owner: MHF_Villager
+      display-name: Villager Head

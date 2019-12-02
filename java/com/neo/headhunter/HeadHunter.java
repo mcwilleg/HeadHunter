@@ -159,8 +159,11 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			Player p = (Player) sender;
 			if(args[0].equalsIgnoreCase("save")) {
 				PlayerInventory inv = p.getInventory();
-				getConfig().set(args[1].toUpperCase(), inv.getItem(inv.getHeldItemSlot()).clone());
-				saveConfig();
+				ItemStack heldItem = inv.getItem(inv.getHeldItemSlot());
+				if(heldItem != null) {
+					getConfig().set(args[1].toUpperCase(), heldItem.clone());
+					saveConfig();
+				}
 			} else if(args[0].equalsIgnoreCase("load")) {
 				ItemStack item = getConfig().getItemStack(args[1].toUpperCase());
 				if(item != null)

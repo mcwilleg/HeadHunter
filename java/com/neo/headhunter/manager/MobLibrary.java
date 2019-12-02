@@ -107,6 +107,7 @@ public class MobLibrary extends ConfigAccessor<HeadHunter> {
 				break;
 			case "LLAMA":
 			case "TRADER_LLAMA":
+				type = "LLAMA";
 				variant = ((Llama) victim).getColor().name();
 				break;
 			case "MUSHROOM_COW":
@@ -164,6 +165,14 @@ public class MobLibrary extends ConfigAccessor<HeadHunter> {
 				else
 					variant = ((Villager) victim).getVillagerType().name();
 				break;
+			case "ZOMBIE":
+				if(plugin.isVersionBefore(1, 13, 0)) {
+					if(((Zombie) victim).isVillager()) {
+						type = "ZOMBIE_VILLAGER";
+						variant = "PLAINS";
+					}
+				}
+				break;
 			}
 			
 			if(variant != null)
@@ -177,13 +186,12 @@ public class MobLibrary extends ConfigAccessor<HeadHunter> {
 	private void initLibrary() {
 		library = new HashMap<>();
 		InputStream resource;
-		/*
-		if(plugin.isVersionBefore(1, 13, 0))
-			resource = plugin.getResource("mob_db_legacy.yml");
+		if(plugin.isVersionBefore(1, 9, 0))
+			resource = plugin.getResource("mob_db_1_8.yml");
+		else if(plugin.isVersionBefore(1, 13, 0))
+			resource = plugin.getResource("mob_db_1_12.yml");
 		else
 			resource = plugin.getResource("mob_db.yml");
-		*/
-		resource = plugin.getResource("mob_db.yml");
 		if(resource != null) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(new InputStreamReader(resource));
 			for(String key : config.getKeys(true)) {

@@ -1,9 +1,13 @@
 BAT:
   max-price: 20
+BEE:
+  max-price: 10
 BLAZE:
   max-price: 110
 CAVE_SPIDER:
   max-price: 30
+CHICKEN:
+  max-price: 6
 COD:
   max-price: 5
 COW:
@@ -185,7 +189,7 @@ RABBIT:
   SALT_AND_PEPPER:
     max-price: 15
   THE_KILLER_BUNNY:
-    max-price: 15
+    max-price: 35
   WHITE:
     max-price: 15
 VILLAGER:

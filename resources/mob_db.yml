@@ -34,6 +34,15 @@ CAVE_SPIDER:
     meta-type: SKULL
     display-name: Cave Spider Head
     internal: H4sIAAAAAAAAAE2OwW6CQBiE/zZpQkkfo1eSBQTlSEqDEFmKIrB7W2CJ4K41ChV4pj5kOfY2k2++ZFQAFd4O50GIr9t30wquwHNQw3tpN2hTVY6GarTWVmxJbGMaGkPGqmKWaTucqaAu0pXf+pbfX0Hp+dgPN35XAeBJgZeMiYHDL59CRIsTqotQVFNgLz09IBEH3XUdXLKp/AjsQC5869q7yfm3tXqWW4KY4YlekqGUGdqZe8G3e72Sxx+ckhEbxKR+otM8GbEkM5HJGHsEYc/Vo7TuqJegyP8c8ew+ojRroxx3WNKOdKGI0/NMZlen/nGODNI2he4sz+EPEEkedxQBAAA=
+CHICKEN:
+  ==: org.bukkit.inventory.ItemStack
+  v: 1631
+  type: PLAYER_HEAD
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    display-name: Chicken Head
+    internal: H4sIAAAAAAAAAE2PzW6CQBhFvzZpQkkfo1uSGRGpCxdNpXWMMEURZHaDDOFnxhoFhXmuPmBZdnlyzl1cE8CEl13TSfl9+SkqKQx4JDm8urnN3/hRWAJNHWsqMm7xzMWWi/OscCZOzgtsgjmOzuLSVuL6DEYr+ra7iKsJAA8GPMVcdgJ+xbBG7FCi/LCWx4HMRo52SFJSn11yiofsg8yIGv3qfbYZ5v9ap+WJI1N7XbJT2GUqRht7K8Vqi49qf/OjVNNlOKGJh2kka5bEKtDkHui9DnR69zVB9Mtz0oT0fsJUEDU9U+HoyoolHgq0j9PaR4HybKY+JV02mpzwvAgXi/EB/AE9ZdW5HAEAAA==
 COD:
   ==: org.bukkit.inventory.ItemStack
   v: 1631
@@ -670,7 +679,7 @@ LLAMA:
     meta:
       ==: ItemMeta
       meta-type: SKULL
-      display-name: Light Gray Llama Head
+      display-name: Gray Llama Head
       internal: H4sIAAAAAAAAAE2OXU+DMBiFX01MkPgzvCUp46NyaZy6klHcVj7aOwZtBrRz2cCM/SZ/pFx6ec5znuTYADY87fpR66/zt2q1tOCeNPAsm7rCFWocjJFyfK8JnRelakeFFUIy8qWPsQ32LJ3keWjl5RGsQV6H8SwvNgDcWfCQV3qU8CunGInygJoy1vVEwjmzHdIp6U6YHPNp/0ZCYma+eg3XU/RvGwxVEWjuxQdx3Ix7k6O1t9VytXVrk/3wBZ/oZ+ZSI/q0EEYs62tyoz1nok8KfhMsNnSZuSnLJt59zP1mkXTcp4Z7lNGOst4TReYnHQnS4r1VpRvNz+EPHrXbBhQBAAA=
   WHITE:
     ==: org.bukkit.inventory.ItemStack
