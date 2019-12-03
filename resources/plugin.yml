@@ -30,9 +30,7 @@ permissions:
       hunter.sellhead.all: true
       hunter.sellhead.sign: true
   hunter.bounty.set:
-    description: Allows setting bounties on other players
-  hunter.bounty.remove:
-    description: Allows removing bounties on other players
+    description: Allows setting and removing bounties on other players
   hunter.bounty.check:
     description: Allows checking and listing bounties on other players
   hunter.bounty.*:
