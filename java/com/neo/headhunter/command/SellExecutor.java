@@ -20,29 +20,37 @@ public class SellExecutor implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(args.length == 0) {
-			// check permission
+			// permission
 			if(!sender.hasPermission("hunter.sellhead.hand")) {
 				sender.sendMessage(Message.PERMISSION.format("/sellhead"));
-				return true;
+				return false;
 			}
 			
-			if(sender instanceof Player) {
-				sellHeads((Player) sender, false);
-				return true;
-			} else
+			// assert sender is a player
+			if(!(sender instanceof Player)) {
 				sender.sendMessage(Message.PLAYERS_ONLY.format("/sellhead"));
+				return false;
+			}
+			
+			// sell held stack of heads
+			sellHeads((Player) sender, false);
+			return true;
 		} else if(args.length == 1 && args[0].equalsIgnoreCase("all")) {
-			// check permission
+			// permission
 			if(!sender.hasPermission("hunter.sellhead.all")) {
 				sender.sendMessage(Message.PERMISSION.format("/sellhead all"));
-				return true;
+				return false;
 			}
 			
-			if(sender instanceof Player) {
-				sellHeads((Player) sender, true);
-				return true;
-			} else
+			// assert sender is a player
+			if(!(sender instanceof Player)) {
 				sender.sendMessage(Message.PLAYERS_ONLY.format("/sellhead all"));
+				return false;
+			}
+			
+			// sell all heads in inventory
+			sellHeads((Player) sender, true);
+			return true;
 		} else
 			sender.sendMessage(Usage.SELLHEAD.toString());
 		return false;
