@@ -1,6 +1,6 @@
 package com.neo.headhunter.config;
 
-import org.apache.commons.io.FileUtils;
+import com.google.common.io.Files;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -81,7 +81,7 @@ public class ConfigAccessor<T extends JavaPlugin> {
 			if (configFile.exists()) {
 				// if config file already exists, just load configuration
 				if (!dynamic)
-					FileUtils.copyInputStreamToFile(this.getResource(), configFile);
+					copyInputStreamToFile(this.getResource(), configFile);
 				config = YamlConfiguration.loadConfiguration(configFile);
 				
 				if(dynamic && this.getResource() != null) {
@@ -91,7 +91,7 @@ public class ConfigAccessor<T extends JavaPlugin> {
 						if (!config.isConfigurationSection(path))
 							previous.put(path, config.get(path));
 					}
-					FileUtils.copyInputStreamToFile(this.getResource(), configFile);
+					copyInputStreamToFile(this.getResource(), configFile);
 					config = YamlConfiguration.loadConfiguration(configFile);
 					for(Map.Entry<String, Object> entry : previous.entrySet()) {
 						if(config.contains(entry.getKey()))
@@ -103,7 +103,7 @@ public class ConfigAccessor<T extends JavaPlugin> {
 				// if config file does not exist, create it appropriately
 				if (this.getResource() != null) {
 					// if config file has a default in the JAR
-					FileUtils.copyInputStreamToFile(this.getResource(), configFile);
+					copyInputStreamToFile(this.getResource(), configFile);
 					config = YamlConfiguration.loadConfiguration(configFile);
 					config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(this.getResource())));
 				} else {
@@ -126,5 +126,19 @@ public class ConfigAccessor<T extends JavaPlugin> {
 	// helper method for readability
 	private InputStream getResource() {
 		return plugin.getResource(fileName);
+	}
+	
+	private void copyInputStreamToFile(InputStream inputStream, File file) throws IOException {
+		if(inputStream == null || file == null)
+			throw new IOException("input stream and file cannot be null");
+		if(file.isDirectory())
+			throw new IOException("file " + file.getName() + " cannot be a directory");
+		if(!file.exists()) {
+			if(!file.createNewFile())
+				throw new IOException("file " + file.getName() + " could not be created");
+		}
+		byte[] buffer = new byte[inputStream.available()];
+		if(inputStream.read(buffer) > 0)
+			Files.write(buffer, file);
 	}
 }
