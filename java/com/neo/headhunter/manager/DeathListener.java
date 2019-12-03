@@ -62,34 +62,38 @@ public class DeathListener implements Listener {
 		}
 		
 		// check player-kills-only option
-		if(hunter != null || !plugin.getSettings().isPlayerKillsOnly()) {
+		if(hunter == null && plugin.getSettings().isPlayerKillsOnly())
+			return;
+		
+		// check the factions plugin if there is one and the victim is a player
+		FactionsHook factionsHook = plugin.getFactionsHook();
+		if(factionsHook != null && victim instanceof Player) {
+			if(!factionsHook.isValidTerritory((Player) victim))
+				return;
+			if(!factionsHook.isValidZone(victim.getLocation()))
+				return;
+		}
+		
+		// perform drop rate check and drop
+		if(RANDOM.nextDouble() < plugin.getDropManager().getDropChance(hunter, weapon, victim)) {
+			double withdrawValue = plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
 			
-			// check the factions plugin if there is one
-			FactionsHook factionsHook = plugin.getFactionsHook();
-			if(factionsHook != null && victim instanceof Player) {
-				if(!factionsHook.isValidTerritory((Player) victim))
-					return;
-				if(!factionsHook.isValidZone(victim.getLocation()))
-					return;
-			}
-			
-			if(RANDOM.nextDouble() < plugin.getDropManager().getDropChance(hunter, weapon, victim)) {
-				double withdrawValue = plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
+			// manipulate money if a player died
+			if(victim instanceof Player) {
+				if(withdrawValue > 0)
+					plugin.getEconomy().withdrawPlayer((Player) victim, withdrawValue);
 				
-				// manipulate money if a player died
-				if(victim instanceof Player) {
-					if(withdrawValue > 0)
-						plugin.getEconomy().withdrawPlayer((Player) victim, withdrawValue);
-					
-					// manipulate bounties if the killer is a player
-					if(hunter != null) {
-						double bounty = plugin.getBountyManager().removeTotalBounty((Player) victim);
-						if (bounty > 0) {
-							if (plugin.getSettings().isBountyBroadcast())
-								Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_CLAIM.format(hunter.getName(), bounty, victim.getName()));
-							else
-								hunter.sendMessage(Message.BOUNTY_CLAIM.format(bounty, victim.getName()));
-						}
+				// manipulate bounties if the killer is a player
+				if(hunter != null) {
+					double bounty = plugin.getBountyManager().removeTotalBounty((Player) victim);
+					if (bounty > 0) {
+						
+						// check broadcast setting and message
+						String hName = hunter.getName(), vName = victim.getName();
+						if (plugin.getSettings().isBountyBroadcast())
+							Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_CLAIM.format(hName, bounty, vName));
+						else
+							hunter.sendMessage(Message.BOUNTY_CLAIM.format(bounty, vName));
 					}
 				}
 			}
