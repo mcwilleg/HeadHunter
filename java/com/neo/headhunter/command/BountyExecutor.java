@@ -36,7 +36,6 @@ public class BountyExecutor implements CommandExecutor {
 				return true;
 			}
 			
-			// TODO /bounty list [page]
 			// get page number and assert it is valid
 			int page = 1;
 			if(args.length == 2) {
