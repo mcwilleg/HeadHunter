@@ -2,6 +2,8 @@ package com.neo.headhunter.bounty;
 
 import org.bukkit.OfflinePlayer;
 
+import javax.annotation.Nonnull;
+
 public class BountyListEntry implements Comparable<BountyListEntry> {
 	private final OfflinePlayer victim;
 	private final double amount;
@@ -22,7 +24,7 @@ public class BountyListEntry implements Comparable<BountyListEntry> {
 	}
 	
 	@Override
-	public int compareTo(BountyListEntry o) {
+	public int compareTo(@Nonnull BountyListEntry o) {
 		return Double.compare(amount, o.amount);
 	}
 }

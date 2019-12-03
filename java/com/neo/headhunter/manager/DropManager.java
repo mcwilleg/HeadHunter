@@ -45,7 +45,7 @@ public class DropManager implements Listener {
 		this.plugin = plugin;
 	}
 	
-	public double performHeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
+	double performHeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
 		double balanceValue = getBalanceValue(victim) * getStealRate(hunter, weapon, victim);
 		double totalValue = balanceValue;
 		double withdrawValue = balanceValue;
@@ -89,7 +89,7 @@ public class DropManager implements Listener {
 	}
 	
 	// chance (0.0 - 1.0) of 'victim' dropping a head if 'hunter' kills it with 'weapon'
-	public double getDropChance(Player hunter, ItemStack weapon, LivingEntity victim) {
+	double getDropChance(Player hunter, ItemStack weapon, LivingEntity victim) {
 		double dropChance = getBaseStealChance(hunter, victim);
 		
 		// hunter's weapon's looting effect
@@ -124,7 +124,7 @@ public class DropManager implements Listener {
 	private double getBalanceValue(LivingEntity victim) {
 		if(victim instanceof Player)
 			return plugin.getEconomy().getBalance((Player) victim);
-		return plugin.getMobLibrary().getMaxPrice(victim, 0);
+		return plugin.getMobLibrary().getMaxPrice(victim);
 	}
 	
 	private double getBaseStealChance(Player hunter, LivingEntity victim) {

@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import javax.annotation.Nonnull;
+
 public class SellExecutor implements CommandExecutor {
 	private HeadHunter plugin;
 	
@@ -18,7 +20,7 @@ public class SellExecutor implements CommandExecutor {
 	}
 	
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
 		if(args.length == 0) {
 			// permission
 			if(!sender.hasPermission("hunter.sellhead.hand")) {

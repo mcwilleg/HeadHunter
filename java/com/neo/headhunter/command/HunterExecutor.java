@@ -9,6 +9,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
+
 public class HunterExecutor implements CommandExecutor {
 	private HeadHunter plugin;
 	
@@ -17,7 +19,7 @@ public class HunterExecutor implements CommandExecutor {
 	}
 	
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
 		if(args.length < 1) {
 			sender.sendMessage(Usage.HUNTER.toString());
 			return false;

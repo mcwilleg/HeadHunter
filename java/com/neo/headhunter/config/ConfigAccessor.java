@@ -34,6 +34,7 @@ public class ConfigAccessor<T extends JavaPlugin> {
 	/**
 	 * Deletes the file associated with this configuration.
 	 */
+	@SuppressWarnings("unused")
 	protected void deleteConfigFile() {
 		// ignore if config file has not yet been initialized
 		// * this should never happen

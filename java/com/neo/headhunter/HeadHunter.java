@@ -29,6 +29,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.annotation.Nonnull;
 import java.util.logging.Level;
 
 public final class HeadHunter extends JavaPlugin implements Listener, CommandExecutor {
@@ -154,7 +155,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	}
 	
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
 		if(sender instanceof Player && args.length == 2) {
 			Player p = (Player) sender;
 			if(args[0].equalsIgnoreCase("save")) {

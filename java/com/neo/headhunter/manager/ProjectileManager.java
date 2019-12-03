@@ -21,7 +21,7 @@ public class ProjectileManager implements Listener {
 		this.plugin = plugin;
 	}
 	
-	public ItemStack getWeapon(Projectile projectile) {
+	ItemStack getWeapon(Projectile projectile) {
 		if(projectile.hasMetadata(WEAPON_META_KEY)) {
 			for(MetadataValue metaWeapon : projectile.getMetadata(WEAPON_META_KEY)) {
 				if(metaWeapon.value() instanceof ItemStack)

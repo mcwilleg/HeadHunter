@@ -25,16 +25,16 @@ public class MobLibrary extends ConfigAccessor<HeadHunter> {
 		initLibrary();
 	}
 	
-	public double getMaxPrice(LivingEntity victim, double def) {
+	double getMaxPrice(LivingEntity victim) {
 		String path = getConfigPath(victim);
 		if(path != null)
-			return config.getDouble(path + ".max-price", def);
-		return def;
+			return config.getDouble(path + ".max-price", 0);
+		return 0;
 	}
 	
 	// returns an ItemStack head object corresponding to the victim LivingEntity
 	// the returned ItemStack will include a colorless display name, and no lore or price
-	public ItemStack getBaseHead(LivingEntity victim) {
+	ItemStack getBaseHead(LivingEntity victim) {
 		String path = getConfigPath(victim);
 		if(path != null) {
 			if(path.equals("PLAYER"))
@@ -46,6 +46,7 @@ public class MobLibrary extends ConfigAccessor<HeadHunter> {
 	}
 	
 	// returns a new ItemStack head object for the given player
+	@SuppressWarnings("deprecation")
 	public ItemStack getPlayerHead(OfflinePlayer owner) {
 		ItemStack head;
 		if(plugin.isVersionBefore(1, 13, 0))
@@ -90,7 +91,7 @@ public class MobLibrary extends ConfigAccessor<HeadHunter> {
 	
 	// returns the mob config path used to create a head for the specified victim
 	@SuppressWarnings("deprecation")
-	public String getConfigPath(LivingEntity victim) {
+	String getConfigPath(LivingEntity victim) {
 		if(victim != null) {
 			String type = victim.getType().name();
 			String variant = null;
