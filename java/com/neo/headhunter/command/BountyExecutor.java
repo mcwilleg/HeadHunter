@@ -33,7 +33,13 @@ public class BountyExecutor implements CommandExecutor {
 			// permission
 			if(!sender.hasPermission("hunter.bounty.check")) {
 				sender.sendMessage(Message.PERMISSION.format("/bounty <TARGET>"));
-				return true;
+				return false;
+			}
+			
+			// assert command is exactly /bounty list
+			if(args.length != 1 && args.length != 2) {
+				sender.sendMessage(Usage.BOUNTY_LIST.toString());
+				return false;
 			}
 			
 			// get page number and assert it is valid
@@ -101,7 +107,7 @@ public class BountyExecutor implements CommandExecutor {
 				// permission
 				if(!sender.hasPermission("hunter.bounty.check")) {
 					sender.sendMessage(Message.PERMISSION.format("/bounty <TARGET>"));
-					return true;
+					return false;
 				}
 				
 				double totalBounty = plugin.getBountyManager().getTotalBounty(victim);
@@ -112,6 +118,7 @@ public class BountyExecutor implements CommandExecutor {
 				if(hunterBounty > 0)
 					personal = Message.BOUNTY_PERSONAL.format(hunterBounty);
 				sender.sendMessage(Message.BOUNTY_TOTAL.format(vName, totalBounty, personal));
+				return true;
 			} else if(args.length == 2) {
 				// set or remove bounty
 				
@@ -122,7 +129,7 @@ public class BountyExecutor implements CommandExecutor {
 					// permission
 					if(!sender.hasPermission("hunter.bounty.set")) {
 						sender.sendMessage(Message.PERMISSION.format("/bounty <TARGET> <remove>"));
-						return true;
+						return false;
 					}
 					
 					// assert bounty exists
@@ -145,7 +152,7 @@ public class BountyExecutor implements CommandExecutor {
 					// permission
 					if(!sender.hasPermission("hunter.bounty.set")) {
 						sender.sendMessage(Message.PERMISSION.format("/bounty <TARGET> <AMOUNT>"));
-						return true;
+						return false;
 					}
 					
 					// assert bounty target is not the command sender
@@ -187,7 +194,6 @@ public class BountyExecutor implements CommandExecutor {
 				return false;
 			}
 		}
-		return false;
 	}
 	
 	@SuppressWarnings("deprecation")

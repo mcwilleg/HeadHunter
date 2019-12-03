@@ -18,57 +18,79 @@ public class HunterExecutor implements CommandExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(args.length >= 1) {
-			if(args[0].equalsIgnoreCase("reload")) {
-				if(args.length == 1) {
-					// check permission
-					if(!sender.hasPermission("hunter.reload")) {
-						sender.sendMessage(Message.PERMISSION.format("/hunter reload"));
-						return true;
-					}
-					
-					plugin.reloadAll();
-					sender.sendMessage(Message.RELOADED.format(plugin.getName(), plugin.getVersion()));
-					return true;
-				} else
-					sender.sendMessage(Usage.HUNTER_RELOAD.toString());
-			} else if(args[0].equalsIgnoreCase("world")) {
-				// check permission
-				if(!sender.hasPermission("hunter.world")) {
-					sender.sendMessage(Message.PERMISSION.format("/hunter world [add/remove]"));
-					return true;
-				}
-				
-				if(sender instanceof Player) {
-					World world = ((Player) sender).getWorld();
-					if (args.length == 1) {
-						String status = "disabled";
-						if(plugin.getWorldManager().isValidWorld(world))
-							status = "enabled";
-						sender.sendMessage(Message.WORLD_CHECK.format(status, world.getName()));
-					} else if(args.length == 2) {
-						if(args[1].equalsIgnoreCase("add")) {
-							if(plugin.getWorldManager().addValidWorld(world))
-								sender.sendMessage(Message.WORLD_ADDED.format(world.getName()));
-							else
-								sender.sendMessage(Message.WORLD_ADD_FAIL.format(world.getName()));
-							return true;
-						} else if(args[1].equalsIgnoreCase("remove")) {
-							if(plugin.getWorldManager().removeValidWorld(world))
-								sender.sendMessage(Message.WORLD_REMOVED.format(world.getName()));
-							else
-								sender.sendMessage(Message.WORLD_REMOVE_FAIL.format(world.getName()));
-							return true;
-						} else
-							sender.sendMessage(Usage.HUNTER_WORLD.toString());
-					} else
-						sender.sendMessage(Usage.HUNTER_WORLD.toString());
-				} else
-					sender.sendMessage(Message.PLAYERS_ONLY.format("/hunter world ..."));
-			} else
-				sender.sendMessage(Usage.HUNTER.toString());
-		} else
+		if(args.length < 1) {
 			sender.sendMessage(Usage.HUNTER.toString());
-		return false;
+			return false;
+		}
+		
+		if(args[0].equalsIgnoreCase("reload")) {
+			// permission
+			if(!sender.hasPermission("hunter.reload")) {
+				sender.sendMessage(Message.PERMISSION.format("/hunter reload"));
+				return false;
+			}
+			
+			// assert command is exactly /hunter reload
+			if(args.length != 1) {
+				sender.sendMessage(Usage.HUNTER_RELOAD.toString());
+				return false;
+			}
+			
+			// reload plugin
+			plugin.reloadAll();
+			sender.sendMessage(Message.RELOADED.format(plugin.getName(), plugin.getVersion()));
+			return true;
+		} else if(args[0].equalsIgnoreCase("world")) {
+			// permission
+			if(!sender.hasPermission("hunter.world")) {
+				sender.sendMessage(Message.PERMISSION.format("/hunter world [add/remove]"));
+				return false;
+			}
+			
+			// assert sender is a player
+			if(!(sender instanceof Player)) {
+				sender.sendMessage(Message.PLAYERS_ONLY.format("/hunter world ..."));
+				return false;
+			}
+			
+			// get world and check argument length
+			World world = ((Player) sender).getWorld();
+			if(args.length == 1) {
+				
+				// message for world check
+				String status = "disabled";
+				if(plugin.getWorldManager().isValidWorld(world))
+					status = "enabled";
+				sender.sendMessage(Message.WORLD_CHECK.format(status, world.getName()));
+				return true;
+			} else if(args.length == 2) {
+				if(args[1].equalsIgnoreCase("add")) {
+					
+					// message for world add
+					if(plugin.getWorldManager().addValidWorld(world))
+						sender.sendMessage(Message.WORLD_ADDED.format(world.getName()));
+					else
+						sender.sendMessage(Message.WORLD_ADD_FAIL.format(world.getName()));
+					return true;
+				} else if(args[1].equalsIgnoreCase("remove")) {
+					
+					// message for world remove
+					if(plugin.getWorldManager().removeValidWorld(world))
+						sender.sendMessage(Message.WORLD_REMOVED.format(world.getName()));
+					else
+						sender.sendMessage(Message.WORLD_REMOVE_FAIL.format(world.getName()));
+					return true;
+				} else {
+					sender.sendMessage(Usage.HUNTER_WORLD.toString());
+					return false;
+				}
+			} else {
+				sender.sendMessage(Usage.HUNTER_WORLD.toString());
+				return false;
+			}
+		} else {
+			sender.sendMessage(Usage.HUNTER.toString());
+			return false;
+		}
 	}
 }
