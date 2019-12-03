@@ -1,6 +1,7 @@
 package com.neo.headhunter.command;
 
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.bounty.BountyListEntry;
 import com.neo.headhunter.message.Message;
 import com.neo.headhunter.message.Usage;
 import org.bukkit.Bukkit;
@@ -9,6 +10,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class BountyExecutor implements CommandExecutor {
 	private HeadHunter plugin;
@@ -34,6 +37,51 @@ public class BountyExecutor implements CommandExecutor {
 			}
 			
 			// TODO /bounty list [page]
+			// get page number and assert it is valid
+			int page = 1;
+			if(args.length == 2) {
+				if(!args[1].matches("\\d+")) {
+					sender.sendMessage(Message.BOUNTY_PAGE_INVALID.format(args[1]));
+					return false;
+				}
+				
+				page = Integer.valueOf(args[1]);
+				if(page < 0) {
+					sender.sendMessage(Message.BOUNTY_PAGE_INVALID.format(args[1]));
+					return false;
+				}
+			}
+			
+			// assert page number is within range of bounty list
+			List<BountyListEntry> bountyListPage = plugin.getBountyManager().getBountyListPage(page);
+			if(bountyListPage == null) {
+				sender.sendMessage(Message.BOUNTY_PAGE_EMPTY.format(page));
+				return false;
+			}
+			
+			// assert bounty list is not empty
+			if(bountyListPage.isEmpty()) {
+				sender.sendMessage(Message.BOUNTY_LIST_EMPTY.format());
+				return true;
+			}
+			
+			// messages for bounty list
+			for(BountyListEntry entry : bountyListPage) {
+				OfflinePlayer victim = entry.getVictim();
+				double totalBounty = entry.getAmount();
+				
+				// get personal bounty
+				double hunterBounty = 0;
+				if(sender instanceof Player)
+					hunterBounty = plugin.getBountyManager().getBounty((Player) sender, victim);
+				
+				// create message for personal bounty
+				String personal = "";
+				if(hunterBounty > 0)
+					personal = Message.BOUNTY_PERSONAL.format(hunterBounty);
+				sender.sendMessage(Message.BOUNTY_TOTAL.format(victim.getName(), totalBounty, personal));
+			}
+			return true;
 		} else {
 			if(!(sender instanceof Player)) {
 				sender.sendMessage(Message.PLAYERS_ONLY.format("/bounty <TARGET> [AMOUNT/remove]"));
@@ -98,6 +146,12 @@ public class BountyExecutor implements CommandExecutor {
 					// permission
 					if(!sender.hasPermission("hunter.bounty.set")) {
 						sender.sendMessage(Message.PERMISSION.format("/bounty <TARGET> <AMOUNT>"));
+						return true;
+					}
+					
+					// assert bounty target is not the command sender
+					if(hunter.equals(victim)) {
+						sender.sendMessage(Message.BOUNTY_SET_SELF.format());
 						return true;
 					}
 					

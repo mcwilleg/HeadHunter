@@ -1,13 +1,22 @@
 package com.neo.headhunter.bounty;
 
-import com.neo.headhunter.config.ConfigAccessor;
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.config.ConfigAccessor;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.*;
+
 public class BountyManager extends ConfigAccessor<HeadHunter> {
+	private static final int LIST_PAGE_SIZE = 10;
+	
+	private List<BountyListEntry> bountyList;
+	
 	public BountyManager(HeadHunter plugin) {
 		super(plugin, true, "bounties.yml", "data");
+		this.bountyList = getBountyList();
+		Collections.sort(this.bountyList);
 	}
 	
 	// returns the total of all bounties on the victim
@@ -50,6 +59,21 @@ public class BountyManager extends ConfigAccessor<HeadHunter> {
 		return bounty;
 	}
 	
+	public List<BountyListEntry> getBountyListPage(int page) {
+		List<BountyListEntry> result = new ArrayList<>();
+		if(!bountyList.isEmpty()) {
+			int totalPages = (bountyList.size() - 1) / LIST_PAGE_SIZE + 1;
+			if(page <= totalPages) {
+				int fromIndex = Math.max(0, (page - 1) * LIST_PAGE_SIZE);
+				int toIndex = Math.min(bountyList.size(), page * LIST_PAGE_SIZE);
+				result.addAll(bountyList.subList(fromIndex, toIndex));
+				return result;
+			}
+			return null;
+		}
+		return result;
+	}
+	
 	private boolean hasBounties(OfflinePlayer victim) {
 		ConfigurationSection victimSection = config.getConfigurationSection(id(victim));
 		if(victimSection != null)
@@ -67,5 +91,25 @@ public class BountyManager extends ConfigAccessor<HeadHunter> {
 		if(player != null)
 			return player.getUniqueId().toString();
 		return null;
+	}
+	
+	private List<BountyListEntry> getBountyList() {
+		List<BountyListEntry> result = new ArrayList<>();
+		for(String victimIdString : config.getKeys(false)) {
+			UUID victimId = UUID.fromString(victimIdString);
+			OfflinePlayer victim;
+			if((victim = Bukkit.getPlayer(victimId)) == null)
+				victim = Bukkit.getOfflinePlayer(victimId);
+			double amount = getTotalBounty(victim);
+			result.add(new BountyListEntry(victim, amount));
+		}
+		return result;
+	}
+	
+	@Override
+	protected void saveConfig() {
+		super.saveConfig();
+		this.bountyList = getBountyList();
+		Collections.sort(this.bountyList);
 	}
 }

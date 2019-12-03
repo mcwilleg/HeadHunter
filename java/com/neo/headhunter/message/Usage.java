@@ -7,7 +7,8 @@ public enum Usage {
 	HUNTER_RELOAD("/hunter reload"),
 	HUNTER_WORLD("/hunter world [add/remove]"),
 	SELLHEAD("/sellhead [all]"),
-	BOUNTY("/bounty <TARGET> [AMOUNT/remove]");
+	BOUNTY("/bounty <TARGET> [AMOUNT/remove]"),
+	BOUNTY_LIST("/bounty list [page = 1]");
 	
 	private final String message;
 	
