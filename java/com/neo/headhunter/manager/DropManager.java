@@ -33,12 +33,6 @@ public class DropManager implements Listener {
 	private static final String DROP_BALANCE_PERM = "hunter.drop-balance";
 	private static final double DEFAULT_DROP_BALANCE = 1.0;
 	
-	// the amount each Looting level improves the hunter's collect chance
-	private static final double LOOTING_EFFECT = 0.15;
-	
-	// the amount each Smite level increases the hunter's steal rate
-	private static final double SMITE_EFFECT = 0.05;
-	
 	private HeadHunter plugin;
 	
 	public DropManager(HeadHunter plugin) {
@@ -46,13 +40,13 @@ public class DropManager implements Listener {
 	}
 	
 	double performHeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
-		double balanceValue = getBalanceValue(victim) * getStealRate(hunter, weapon, victim);
+		double balanceValue = getBalance(victim) * getStealRate(hunter, weapon, victim);
 		double totalValue = balanceValue;
 		double withdrawValue = balanceValue;
 		if(victim instanceof Player) {
 			double bountyValue = plugin.getBountyManager().getTotalBounty((Player) victim);
 			if(bountyValue > 0) {
-				if(plugin.getSettings().isBalancePlusBounty())
+				if(plugin.getSettings().isCumulativeValue())
 					totalValue += bountyValue;
 				else {
 					totalValue = bountyValue;
@@ -64,6 +58,10 @@ public class DropManager implements Listener {
 		if(headLoot != null)
 			victim.getWorld().dropItemNaturally(victim.getEyeLocation(), headLoot);
 		return withdrawValue;
+	}
+	
+	HeadDrop getHeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
+		return new HeadDrop(hunter, weapon, victim);
 	}
 	
 	public ItemStack formatHead(ItemStack baseHead, double headPrice) {
@@ -93,8 +91,10 @@ public class DropManager implements Listener {
 		double dropChance = getBaseStealChance(hunter, victim);
 		
 		// hunter's weapon's looting effect
-		if(weapon != null && weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS))
-			dropChance += (LOOTING_EFFECT * weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS));
+		if(weapon != null && weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
+			double lootingEffect = plugin.getSettings().getLootingEffect();
+			dropChance += (lootingEffect * weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS));
+		}
 		
 		// victim's protection effect
 		double victimChance;
@@ -110,8 +110,10 @@ public class DropManager implements Listener {
 		double stealRate = getBaseStealBalance(hunter, victim);
 		
 		// hunter's weapon's smite effect
-		if(weapon != null && weapon.containsEnchantment(Enchantment.DAMAGE_UNDEAD))
-			stealRate += (SMITE_EFFECT * weapon.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD));
+		if(weapon != null && weapon.containsEnchantment(Enchantment.DAMAGE_UNDEAD)) {
+			double smiteEffect = plugin.getSettings().getSmiteEffect();
+			stealRate += (smiteEffect * weapon.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD));
+		}
 		
 		// victim's save effect
 		double victimRate = 1;
@@ -121,7 +123,7 @@ public class DropManager implements Listener {
 		return Math.min(1.0, stealRate * victimRate);
 	}
 	
-	private double getBalanceValue(LivingEntity victim) {
+	private double getBalance(LivingEntity victim) {
 		if(victim instanceof Player)
 			return plugin.getEconomy().getBalance((Player) victim);
 		return plugin.getMobLibrary().getMaxPrice(victim);
@@ -170,5 +172,51 @@ public class DropManager implements Listener {
 			}
 		}
 		return null;
+	}
+	
+	class HeadDrop {
+		private final Player hunter;
+		private final ItemStack weapon;
+		private final LivingEntity victim;
+		
+		private ItemStack baseHead;
+		private double sellValue = 0, balanceValue = 0, bountyValue = 0, withdrawValue = 0;
+		
+		HeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
+			this.hunter = hunter;
+			this.weapon = weapon;
+			this.victim = victim;
+			init();
+		}
+		
+		private void init() {
+			baseHead = plugin.getMobLibrary().getBaseHead(victim);
+			balanceValue = getBalance(victim) * getStealRate(hunter, weapon, victim);
+			if(victim instanceof Player) {
+				withdrawValue = balanceValue;
+				bountyValue = plugin.getBountyManager().getTotalBounty((Player) victim);
+				if(plugin.getSettings().isCumulativeValue())
+					sellValue = balanceValue + bountyValue;
+				else if(bountyValue > 0) {
+					sellValue = bountyValue;
+					withdrawValue = 0;
+				} else
+					sellValue = balanceValue;
+			}
+			if(sellValue < plugin.getSettings().getWorthlessValue())
+				sellValue = 0;
+		}
+		
+		ItemStack getBaseHead() {
+			return baseHead;
+		}
+		
+		double getSellValue() {
+			return sellValue;
+		}
+		
+		double getWithdrawValue() {
+			return withdrawValue;
+		}
 	}
 }

@@ -1,12 +1,28 @@
 worlds:
   ignored: true
   valid: []
-player-kills-only: true
-balance-plus-bounty: true
-minimum-bounty: 20
-bounty-broadcast: true
+head:
+  broadcast-sell: false
+  drop-worthless: false
+  worthless-value: 0
+  cumulative-value: true
+  player-kills-only: true
+  give-to-top-hunter: false
+  drop-spawner-mobs: true
+  drop-projectiles: true
+  drop-fire-damage: true
+bounty:
+  minimum-value: 20
+  broadcast-set: true
+  broadcast-claim: true
+enchantments:
+  looting-effect: 0.15
+  smite-effect: 0.05
 factions:
+  friendly-drops: false
   drop-in-wilderness: true
   drop-in-safezone: false
   drop-in-warzone: true
   drop-in-faction: false
+mob-stacking:
+  drop-each: true

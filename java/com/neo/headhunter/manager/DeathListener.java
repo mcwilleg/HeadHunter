@@ -76,12 +76,20 @@ public class DeathListener implements Listener {
 		
 		// perform drop rate check and drop
 		if(RANDOM.nextDouble() < plugin.getDropManager().getDropChance(hunter, weapon, victim)) {
-			double withdrawValue = plugin.getDropManager().performHeadDrop(hunter, weapon, victim);
+			DropManager.HeadDrop headDrop = plugin.getDropManager().getHeadDrop(hunter, weapon, victim);
+			
+			// if worthless drops are disabled, assert the head is valuable
+			if(!plugin.getSettings().isDropWorthless() && headDrop.getSellValue() <= 0)
+				return;
+			
+			// format and drop head
+			ItemStack head = plugin.getDropManager().formatHead(headDrop.getBaseHead(), headDrop.getSellValue());
+			victim.getWorld().dropItemNaturally(victim.getEyeLocation(), head);
 			
 			// manipulate money if a player died
 			if(victim instanceof Player) {
-				if(withdrawValue > 0)
-					plugin.getEconomy().withdrawPlayer((Player) victim, withdrawValue);
+				if(headDrop.getWithdrawValue() > 0)
+					plugin.getEconomy().withdrawPlayer((Player) victim, headDrop.getWithdrawValue());
 				
 				// manipulate bounties if the killer is a player
 				if(hunter != null) {
@@ -90,7 +98,7 @@ public class DeathListener implements Listener {
 						
 						// check broadcast setting and message
 						String hName = hunter.getName(), vName = victim.getName();
-						if (plugin.getSettings().isBountyBroadcast())
+						if (plugin.getSettings().isBroadcastClaim())
 							Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_CLAIM.format(hName, bounty, vName));
 						else
 							hunter.sendMessage(Message.BOUNTY_CLAIM.format(bounty, vName));
