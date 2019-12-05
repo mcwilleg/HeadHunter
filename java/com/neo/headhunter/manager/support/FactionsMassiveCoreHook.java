@@ -36,7 +36,7 @@ public class FactionsMassiveCoreHook extends ConfigAccessor<HeadHunter> implemen
 			if(faction.getId().equals(Factions.ID_SAFEZONE))
 				return config.getBoolean(FactionsPath.DROP_SAFEZONE, false);
 			if(faction.getId().equals(Factions.ID_WARZONE))
-				return config.getBoolean(FactionsPath.DROP_WARZONE, true);
+				return config.getBoolean(FactionsPath.DROP_WARZONE, false);
 		}
 		return true;
 	}

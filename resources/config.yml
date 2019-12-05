@@ -22,7 +22,7 @@ factions:
   friendly-drops: false
   drop-in-wilderness: true
   drop-in-safezone: false
-  drop-in-warzone: true
+  drop-in-warzone: false
   drop-in-faction: false
 mob-stacking:
   drop-each: true

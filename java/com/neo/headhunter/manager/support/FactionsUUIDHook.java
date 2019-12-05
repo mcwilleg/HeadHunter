@@ -32,7 +32,7 @@ public class FactionsUUIDHook extends ConfigAccessor<HeadHunter> implements Fact
 			if(faction.isSafeZone())
 				return config.getBoolean(FactionsPath.DROP_SAFEZONE, false);
 			if(faction.isWarZone())
-				return config.getBoolean(FactionsPath.DROP_WARZONE, true);
+				return config.getBoolean(FactionsPath.DROP_WARZONE, false);
 		}
 		return true;
 	}

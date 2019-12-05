@@ -35,7 +35,7 @@ public class FactionsBlueHook extends ConfigAccessor<HeadHunter> implements Fact
 			if(faction.isSafezone())
 				return config.getBoolean(FactionsPath.DROP_SAFEZONE, false);
 			if(faction.isWarzone())
-				return config.getBoolean(FactionsPath.DROP_WARZONE, true);
+				return config.getBoolean(FactionsPath.DROP_WARZONE, false);
 		}
 		return true;
 	}
