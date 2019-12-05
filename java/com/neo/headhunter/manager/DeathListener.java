@@ -75,34 +75,40 @@ public class DeathListener implements Listener {
 		}
 		
 		// perform drop rate check and drop
-		if(RANDOM.nextDouble() < plugin.getDropManager().getDropChance(hunter, weapon, victim)) {
-			DropManager.HeadDrop headDrop = plugin.getDropManager().getHeadDrop(hunter, weapon, victim);
+		DropManager.HeadDrop headDrop = plugin.getDropManager().getHeadDrop(hunter, weapon, victim);
+		
+		// if base head is null
+		if(headDrop.getBaseHead() == null)
+			return;
+		
+		// if worthless drops are disabled, assert the head is valuable
+		if(!plugin.getSettings().isDropWorthless() && headDrop.getSellValue() <= 0)
+			return;
+		
+		// check drop chance
+		if(!(RANDOM.nextDouble() < headDrop.getDropChance()))
+			return;
+		
+		// format and drop head
+		ItemStack head = plugin.getDropManager().formatHead(headDrop.getBaseHead(), headDrop.getSellValue());
+		victim.getWorld().dropItemNaturally(victim.getEyeLocation(), head);
+		
+		// manipulate money if a player died
+		if(victim instanceof Player) {
+			if(headDrop.getWithdrawValue() > 0)
+				plugin.getEconomy().withdrawPlayer((Player) victim, headDrop.getWithdrawValue());
 			
-			// if worthless drops are disabled, assert the head is valuable
-			if(!plugin.getSettings().isDropWorthless() && headDrop.getSellValue() <= 0)
-				return;
-			
-			// format and drop head
-			ItemStack head = plugin.getDropManager().formatHead(headDrop.getBaseHead(), headDrop.getSellValue());
-			victim.getWorld().dropItemNaturally(victim.getEyeLocation(), head);
-			
-			// manipulate money if a player died
-			if(victim instanceof Player) {
-				if(headDrop.getWithdrawValue() > 0)
-					plugin.getEconomy().withdrawPlayer((Player) victim, headDrop.getWithdrawValue());
-				
-				// manipulate bounties if the killer is a player
-				if(hunter != null) {
-					double bounty = plugin.getBountyManager().removeTotalBounty((Player) victim);
-					if (bounty > 0) {
-						
-						// check broadcast setting and message
-						String hName = hunter.getName(), vName = victim.getName();
-						if (plugin.getSettings().isBroadcastClaim())
-							Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_CLAIM.format(hName, bounty, vName));
-						else
-							hunter.sendMessage(Message.BOUNTY_CLAIM.format(bounty, vName));
-					}
+			// manipulate bounties if the killer is a player
+			if(hunter != null) {
+				double bounty = plugin.getBountyManager().removeTotalBounty((Player) victim);
+				if (bounty > 0) {
+					
+					// check broadcast setting and message
+					String hName = hunter.getName(), vName = victim.getName();
+					if (plugin.getSettings().isBroadcastClaim())
+						Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_CLAIM.format(hName, bounty, vName));
+					else
+						hunter.sendMessage(Message.BOUNTY_CLAIM.format(bounty, vName));
 				}
 			}
 		}

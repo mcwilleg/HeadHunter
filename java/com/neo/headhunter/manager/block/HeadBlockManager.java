@@ -58,7 +58,7 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
 			if(meta != null) {
 				double value = ((int) (getHeadStackValue(item) / item.getAmount() * 100)) / 100.0;
-				String mobPath = plugin.getMobLibrary().getConfigPath(item);
+				String mobPath = plugin.getHeadLibrary().getConfigPath(item);
 				if (mobPath == null) {
 					OfflinePlayer owner;
 					if(plugin.isVersionBefore(1, 13, 0))
@@ -90,11 +90,11 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 				if(headData.length == 3) {
 					UUID uuid = UUID.fromString(headData[1]);
 					value = Double.valueOf(headData[2]);
-					head = plugin.getMobLibrary().getPlayerHead(Bukkit.getOfflinePlayer(uuid));
+					head = plugin.getHeadLibrary().getPlayerHead(Bukkit.getOfflinePlayer(uuid));
 				} else if(headData.length == 2) {
 					String mobPath = headData[0].replace(";", ".");
 					value = Double.valueOf(headData[1]);
-					head = plugin.getMobLibrary().getMobHead(mobPath);
+					head = plugin.getHeadLibrary().getMobHead(mobPath);
 				}
 				head = plugin.getDropManager().formatHead(head, value);
 				

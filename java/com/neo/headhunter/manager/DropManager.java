@@ -39,27 +39,6 @@ public class DropManager implements Listener {
 		this.plugin = plugin;
 	}
 	
-	double performHeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
-		double balanceValue = getBalance(victim) * getStealRate(hunter, weapon, victim);
-		double totalValue = balanceValue;
-		double withdrawValue = balanceValue;
-		if(victim instanceof Player) {
-			double bountyValue = plugin.getBountyManager().getTotalBounty((Player) victim);
-			if(bountyValue > 0) {
-				if(plugin.getSettings().isCumulativeValue())
-					totalValue += bountyValue;
-				else {
-					totalValue = bountyValue;
-					withdrawValue = 0;
-				}
-			}
-		}
-		ItemStack headLoot = formatHead(plugin.getMobLibrary().getBaseHead(victim), totalValue);
-		if(headLoot != null)
-			victim.getWorld().dropItemNaturally(victim.getEyeLocation(), headLoot);
-		return withdrawValue;
-	}
-	
 	HeadDrop getHeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
 		return new HeadDrop(hunter, weapon, victim);
 	}
@@ -86,23 +65,26 @@ public class DropManager implements Listener {
 		return baseHead;
 	}
 	
-	// chance (0.0 - 1.0) of 'victim' dropping a head if 'hunter' kills it with 'weapon'
-	double getDropChance(Player hunter, ItemStack weapon, LivingEntity victim) {
-		double dropChance = getBaseStealChance(hunter, victim);
-		
+	private double getLootingEffect(ItemStack weapon) {
 		// hunter's weapon's looting effect
 		if(weapon != null && weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
 			double lootingEffect = plugin.getSettings().getLootingEffect();
-			dropChance += (lootingEffect * weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS));
+			return lootingEffect * weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
 		}
-		
-		// victim's protection effect
-		double victimChance;
-		if(victim instanceof Player)
-			victimChance = getBaseDropChance((Player) victim);
-		else
-			victimChance = DEFAULT_DROP_CHANCE;
-		return Math.min(1.0, dropChance * victimChance);
+		return 0;
+	}
+	
+	private double getPlayerDropChance(Player hunter, ItemStack weapon, Player victim) {
+		double stealChance = getBasePlayerStealChance(hunter);
+		stealChance += getLootingEffect(weapon);
+		double dropChance = getBasePlayerDropChance(victim);
+		return Math.min(1.0, stealChance * dropChance);
+	}
+	
+	private double getMobDropChance(Player hunter, ItemStack weapon, String mobConfigPath) {
+		double stealChance = getBaseMobStealChance(hunter, mobConfigPath);
+		stealChance += getLootingEffect(weapon);
+		return Math.min(1.0, stealChance);
 	}
 	
 	// proportion (0.0 - 1.0) of 'victim''s balance being imparted to a head if 'hunter' kills it with 'weapon'
@@ -123,32 +105,30 @@ public class DropManager implements Listener {
 		return Math.min(1.0, stealRate * victimRate);
 	}
 	
-	private double getBalance(LivingEntity victim) {
-		if(victim instanceof Player)
-			return plugin.getEconomy().getBalance((Player) victim);
-		return plugin.getMobLibrary().getMaxPrice(victim);
-	}
-	
-	private double getBaseStealChance(Player hunter, LivingEntity victim) {
-		String stealChancePerm = STEAL_CHANCE_PERM;
-		if(!(victim instanceof Player)) {
-			String mobConfigPath = plugin.getMobLibrary().getConfigPath(victim);
-			if(mobConfigPath != null)
-				stealChancePerm = String.join(".", stealChancePerm, mobConfigPath.toLowerCase());
-		}
-		Double stealChance = getPermissionValue(hunter, stealChancePerm);
+	private double getBasePlayerStealChance(Player hunter) {
+		Double stealChance = getPermissionValue(hunter, STEAL_CHANCE_PERM);
 		return stealChance != null ? stealChance : DEFAULT_STEAL_CHANCE;
 	}
 	
-	private double getBaseDropChance(Player victim) {
+	private double getBasePlayerDropChance(Player victim) {
 		Double dropChance = getPermissionValue(victim, DROP_CHANCE_PERM);
 		return dropChance != null ? dropChance : DEFAULT_DROP_CHANCE;
+	}
+	
+	private double getBaseMobStealChance(Player hunter, String mobConfigPath) {
+		if(mobConfigPath != null) {
+			String stealChancePerm = String.join(".", STEAL_CHANCE_PERM, mobConfigPath.toLowerCase());
+			Double stealChance = getPermissionValue(hunter, stealChancePerm);
+			if(stealChance != null)
+				return stealChance;
+		}
+		return plugin.getHeadLibrary().getDropChance(mobConfigPath);
 	}
 	
 	private double getBaseStealBalance(Player hunter, LivingEntity victim) {
 		String stealBalancePerm = STEAL_BALANCE_PERM;
 		if(!(victim instanceof Player)) {
-			String mobConfigPath = plugin.getMobLibrary().getConfigPath(victim);
+			String mobConfigPath = plugin.getHeadLibrary().getConfigPath(victim);
 			if(mobConfigPath != null)
 				stealBalancePerm = String.join(".", stealBalancePerm, mobConfigPath.toLowerCase());
 		}
@@ -181,6 +161,7 @@ public class DropManager implements Listener {
 		
 		private ItemStack baseHead;
 		private double sellValue = 0, balanceValue = 0, bountyValue = 0, withdrawValue = 0;
+		private double dropChance = 0;
 		
 		HeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
 			this.hunter = hunter;
@@ -190,11 +171,12 @@ public class DropManager implements Listener {
 		}
 		
 		private void init() {
-			baseHead = plugin.getMobLibrary().getBaseHead(victim);
-			balanceValue = getBalance(victim) * getStealRate(hunter, weapon, victim);
 			if(victim instanceof Player) {
+				Player victimPlayer = (Player) victim;
+				baseHead = plugin.getHeadLibrary().getPlayerHead(victimPlayer);
+				balanceValue = plugin.getEconomy().getBalance(victimPlayer);
+				bountyValue = plugin.getBountyManager().getTotalBounty(victimPlayer);
 				withdrawValue = balanceValue;
-				bountyValue = plugin.getBountyManager().getTotalBounty((Player) victim);
 				if(plugin.getSettings().isCumulativeValue())
 					sellValue = balanceValue + bountyValue;
 				else if(bountyValue > 0) {
@@ -202,9 +184,17 @@ public class DropManager implements Listener {
 					withdrawValue = 0;
 				} else
 					sellValue = balanceValue;
+				if(sellValue < plugin.getSettings().getWorthlessValue()) {
+					sellValue = 0;
+					withdrawValue = 0;
+				}
+				dropChance = getPlayerDropChance(hunter, weapon, victimPlayer);
+			} else {
+				String mobConfigPath = plugin.getHeadLibrary().getConfigPath(victim);
+				baseHead = plugin.getHeadLibrary().getMobHead(mobConfigPath);
+				balanceValue = plugin.getHeadLibrary().getMaxPrice(mobConfigPath);
+				dropChance = getMobDropChance(hunter, weapon, mobConfigPath);
 			}
-			if(sellValue < plugin.getSettings().getWorthlessValue())
-				sellValue = 0;
 		}
 		
 		ItemStack getBaseHead() {
@@ -217,6 +207,10 @@ public class DropManager implements Listener {
 		
 		double getWithdrawValue() {
 			return withdrawValue;
+		}
+		
+		double getDropChance() {
+			return dropChance;
 		}
 	}
 }

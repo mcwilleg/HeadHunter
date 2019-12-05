@@ -17,32 +17,24 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MobLibrary extends ConfigAccessor<HeadHunter> {
+public class HeadLibrary extends ConfigAccessor<HeadHunter> {
 	private Map<String, ItemStack> library;
 	
-	public MobLibrary(HeadHunter plugin) {
+	public HeadLibrary(HeadHunter plugin) {
 		super(plugin, true, "mobs.yml");
 		initLibrary();
 	}
 	
-	double getMaxPrice(LivingEntity victim) {
-		String path = getConfigPath(victim);
-		if(path != null)
-			return config.getDouble(path + ".max-price", 0);
+	double getMaxPrice(String mobConfigPath) {
+		if(mobConfigPath != null)
+			return config.getDouble(mobConfigPath + ".max-price", 0);
 		return 0;
 	}
 	
-	// returns an ItemStack head object corresponding to the victim LivingEntity
-	// the returned ItemStack will include a colorless display name, and no lore or price
-	ItemStack getBaseHead(LivingEntity victim) {
-		String path = getConfigPath(victim);
-		if(path != null) {
-			if(path.equals("PLAYER"))
-				return getPlayerHead((Player) victim);
-			else
-				return getMobHead(path);
-		}
-		return null;
+	double getDropChance(String mobConfigPath) {
+		if(mobConfigPath != null)
+			return config.getDouble(mobConfigPath + ".drop-chance", 1);
+		return 0;
 	}
 	
 	// returns a new ItemStack head object for the given player
@@ -68,11 +60,10 @@ public class MobLibrary extends ConfigAccessor<HeadHunter> {
 		return head;
 	}
 	
+	// returns a new ItemStack head object for the given mob path
 	public ItemStack getMobHead(String mobConfigPath) {
 		ItemStack result = library.get(mobConfigPath);
-		if(result != null)
-			result = result.clone();
-		return result;
+		return result == null ? null : result.clone();
 	}
 	
 	// returns the mob config path used to create the specified head item

@@ -43,7 +43,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	private Settings settings;
 	private DropManager dropManager;
-	private MobLibrary mobLibrary;
+	private HeadLibrary headLibrary;
 	private WorldManager worldManager;
 	private ProjectileManager projectileManager;
 	private BountyManager bountyManager;
@@ -75,7 +75,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		// managers
 		settings = new Settings(this);
 		dropManager = new DropManager(this);
-		mobLibrary = new MobLibrary(this);
+		headLibrary = new HeadLibrary(this);
 		worldManager = new WorldManager(this);
 		projectileManager = new ProjectileManager(this);
 		bountyManager = new BountyManager(this);
@@ -114,7 +114,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public void reloadAll() {
 		settings.reloadConfig();
-		mobLibrary.reloadConfig();
+		headLibrary.reloadConfig();
 		worldManager.reloadConfig();
 		bountyManager.reloadConfig();
 		headBlockManager.reloadConfig();
@@ -201,8 +201,8 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		return dropManager;
 	}
 	
-	public MobLibrary getMobLibrary() {
-		return mobLibrary;
+	public HeadLibrary getHeadLibrary() {
+		return headLibrary;
 	}
 	
 	public WorldManager getWorldManager() {
