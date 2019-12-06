@@ -77,7 +77,7 @@ public final class Settings extends ConfigAccessor<HeadHunter> {
 	
 	// the amount each Looting level improves the hunter's collect chance
 	public double getLootingEffect() {
-		return config.getDouble(LOOTING_EFFECT, 0.15);
+		return config.getDouble(LOOTING_EFFECT, 0.8);
 	}
 	
 	// the amount each Smite level increases the hunter's steal rate

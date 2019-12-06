@@ -16,7 +16,7 @@ bounty:
   broadcast-set: true
   broadcast-claim: true
 enchantments:
-  looting-effect: 0.15
+  looting-effect: 0.8
   smite-effect: 0.05
 factions:
   friendly-drops: false
