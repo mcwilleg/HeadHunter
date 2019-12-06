@@ -87,7 +87,7 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 				String[] headData = headDataString.split(" ");
 				ItemStack head = null;
 				double value = 0;
-				if(headData.length == 3) {
+				if(headData.length == 3 && headData[0].equals("PLAYER")) {
 					UUID uuid = UUID.fromString(headData[1]);
 					value = Double.valueOf(headData[2]);
 					head = plugin.getHeadLibrary().getPlayerHead(Bukkit.getOfflinePlayer(uuid));
@@ -110,7 +110,7 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 		}
 	}
 	
-	private boolean isHead(ItemStack head) {
+	public boolean isHead(ItemStack head) {
 		return head != null && HEAD_MATERIALS.contains(head.getType());
 	}
 	

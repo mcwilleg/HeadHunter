@@ -27,7 +27,7 @@ public class DeathListener implements Listener {
 	}
 	
 	// Death listener for all entities
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onEntityDeath(EntityDeathEvent event) {
 		LivingEntity victim = event.getEntity();
 		
@@ -93,8 +93,8 @@ public class DeathListener implements Listener {
 		ItemStack head = plugin.getDropManager().formatHead(headDrop.getBaseHead(), headDrop.getSellValue());
 		victim.getWorld().dropItemNaturally(victim.getEyeLocation(), head);
 		
-		// manipulate money if a player died
 		if(victim instanceof Player) {
+			// manipulate money if a player died
 			if(headDrop.getWithdrawValue() > 0)
 				plugin.getEconomy().withdrawPlayer((Player) victim, headDrop.getWithdrawValue());
 			
@@ -111,6 +111,9 @@ public class DeathListener implements Listener {
 						hunter.sendMessage(Message.BOUNTY_CLAIM.format(bounty, vName));
 				}
 			}
+		} else {
+			// manipulate drops if a mob died
+			event.getDrops().removeIf(drop -> plugin.getHeadBlockManager().isHead(drop));
 		}
 	}
 }

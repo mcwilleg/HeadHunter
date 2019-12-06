@@ -32,7 +32,7 @@ public final class Settings extends ConfigAccessor<HeadHunter> {
 	}
 	
 	public boolean isDropWorthless() {
-		return config.getBoolean(DROP_WORTHLESS, false);
+		return config.getBoolean(DROP_WORTHLESS, true);
 	}
 	
 	public double getWorthlessValue() {

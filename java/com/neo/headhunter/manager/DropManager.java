@@ -211,6 +211,7 @@ public class DropManager implements Listener {
 				String path = plugin.getHeadLibrary().getConfigPath(victim);
 				baseHead = plugin.getHeadLibrary().getMobHead(path);
 				balanceValue = getMobDropBalance(hunter, weapon, path) * plugin.getHeadLibrary().getMaxPrice(path);
+				sellValue = balanceValue;
 				dropChance = getMobDropChance(hunter, weapon, path);
 			}
 		}

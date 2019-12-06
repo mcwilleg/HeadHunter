@@ -3,7 +3,7 @@ worlds:
   valid: []
 head:
   broadcast-sell: false
-  drop-worthless: false
+  drop-worthless: true
   worthless-value: 0
   cumulative-value: true
   player-kills-only: true
