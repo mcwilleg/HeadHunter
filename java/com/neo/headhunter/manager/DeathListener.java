@@ -34,6 +34,9 @@ public class DeathListener implements Listener {
 		if(!plugin.getWorldManager().isValidWorld(victim.getWorld()))
 			return;
 		
+		if(plugin.getEntityManager().isFromSpawner(victim) && !plugin.getSettings().isDropSpawnerMobs())
+			return;
+		
 		Player hunter = null;
 		ItemStack weapon = null;
 		
@@ -51,6 +54,7 @@ public class DeathListener implements Listener {
 			} else if(lastDamageEntityCause.getDamager() instanceof Projectile) {
 				// victim was killed by a projectile
 				
+				// check drop-projectiles option
 				if(!plugin.getSettings().isDropProjectiles())
 					return;
 				
