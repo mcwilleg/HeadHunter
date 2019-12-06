@@ -39,4 +39,17 @@ public class FactionsBlueHook extends ConfigAccessor<HeadHunter> implements Fact
 		}
 		return true;
 	}
+	
+	@Override
+	public boolean isValidHunter(Player hunter, Player victim) {
+		FPlayer hFPlayer = FactionsApi.getFPlayer(hunter);
+		FPlayer vFPlayer = FactionsApi.getFPlayer(victim);
+		if(hFPlayer != null && vFPlayer != null && hFPlayer.hasFaction() && vFPlayer.hasFaction()) {
+			Faction hunterFaction = hFPlayer.getFaction();
+			Faction victimFaction = vFPlayer.getFaction();
+			if(hunterFaction.equals(victimFaction))
+				return config.getBoolean(FactionsPath.DROP_FRIENDLY, false);
+		}
+		return true;
+	}
 }

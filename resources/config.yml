@@ -19,7 +19,7 @@ enchantments:
   looting-effect: 0.8
   smite-effect: 0.05
 factions:
-  friendly-drops: false
+  friendly-kills: false
   drop-in-wilderness: true
   drop-in-safezone: false
   drop-in-warzone: false

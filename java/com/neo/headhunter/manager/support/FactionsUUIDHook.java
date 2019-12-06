@@ -36,4 +36,17 @@ public class FactionsUUIDHook extends ConfigAccessor<HeadHunter> implements Fact
 		}
 		return true;
 	}
+	
+	@Override
+	public boolean isValidHunter(Player hunter, Player victim) {
+		FPlayer hFPlayer = FPlayers.getInstance().getByPlayer(hunter);
+		FPlayer vFPlayer = FPlayers.getInstance().getByPlayer(victim);
+		if(hFPlayer != null && vFPlayer != null && hFPlayer.hasFaction() && vFPlayer.hasFaction()) {
+			Faction hunterFaction = hFPlayer.getFaction();
+			Faction victimFaction = vFPlayer.getFaction();
+			if(hunterFaction.equals(victimFaction))
+				return config.getBoolean(FactionsPath.DROP_FRIENDLY, false);
+		}
+		return false;
+	}
 }

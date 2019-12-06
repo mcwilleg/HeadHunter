@@ -72,6 +72,8 @@ public class DeathListener implements Listener {
 				return;
 			if(!factionsHook.isValidZone(victim.getLocation()))
 				return;
+			if(!factionsHook.isValidHunter(hunter, (Player) victim))
+				return;
 		}
 		
 		// perform drop rate check and drop

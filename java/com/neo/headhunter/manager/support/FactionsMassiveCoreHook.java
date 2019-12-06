@@ -40,4 +40,17 @@ public class FactionsMassiveCoreHook extends ConfigAccessor<HeadHunter> implemen
 		}
 		return true;
 	}
+	
+	@Override
+	public boolean isValidHunter(Player hunter, Player victim) {
+		MPlayer hFPlayer = MPlayer.get(hunter);
+		MPlayer vFPlayer = MPlayer.get(victim);
+		if(hFPlayer != null && vFPlayer != null && hFPlayer.hasFaction() && vFPlayer.hasFaction()) {
+			Faction hunterFaction = hFPlayer.getFaction();
+			Faction victimFaction = vFPlayer.getFaction();
+			if(hunterFaction.equals(victimFaction))
+				return config.getBoolean(FactionsPath.DROP_FRIENDLY, false);
+		}
+		return true;
+	}
 }
