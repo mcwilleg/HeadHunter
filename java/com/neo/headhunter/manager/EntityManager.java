@@ -12,12 +12,12 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.projectiles.ProjectileSource;
 
-public class ProjectileManager implements Listener {
+public class EntityManager implements Listener {
 	private static final String WEAPON_META_KEY = "headhunter_weapon";
 	
 	private HeadHunter plugin;
 	
-	public ProjectileManager(HeadHunter plugin) {
+	public EntityManager(HeadHunter plugin) {
 		this.plugin = plugin;
 	}
 	

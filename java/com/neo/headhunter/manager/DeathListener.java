@@ -51,12 +51,15 @@ public class DeathListener implements Listener {
 			} else if(lastDamageEntityCause.getDamager() instanceof Projectile) {
 				// victim was killed by a projectile
 				
+				if(!plugin.getSettings().isDropProjectiles())
+					return;
+				
 				Projectile projectile = (Projectile) lastDamageEntityCause.getDamager();
 				if(projectile.getShooter() instanceof Player) {
 					// victim was killed by a projectile launched by a player
 					
 					hunter = (Player) projectile.getShooter();
-					weapon = plugin.getProjectileManager().getWeapon(projectile);
+					weapon = plugin.getEntityManager().getWeapon(projectile);
 				}
 			}
 		}

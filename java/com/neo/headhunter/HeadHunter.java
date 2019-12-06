@@ -45,7 +45,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private DropManager dropManager;
 	private HeadLibrary headLibrary;
 	private WorldManager worldManager;
-	private ProjectileManager projectileManager;
+	private EntityManager entityManager;
 	private BountyManager bountyManager;
 	private HeadBlockManager headBlockManager;
 	private SellExecutor sellExecutor;
@@ -77,7 +77,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		dropManager = new DropManager(this);
 		headLibrary = new HeadLibrary(this);
 		worldManager = new WorldManager(this);
-		projectileManager = new ProjectileManager(this);
+		entityManager = new EntityManager(this);
 		bountyManager = new BountyManager(this);
 		headBlockManager = new HeadBlockManager(this);
 		sellExecutor = new SellExecutor(this);
@@ -88,7 +88,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			registerListener(this);
 		registerListener(dropManager);
 		registerListener(new DeathListener(this));
-		registerListener(projectileManager);
+		registerListener(entityManager);
 		registerListener(headBlockManager);
 		registerListener(new SignBlockManager(this));
 		
@@ -209,8 +209,8 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		return worldManager;
 	}
 	
-	public ProjectileManager getProjectileManager() {
-		return projectileManager;
+	public EntityManager getEntityManager() {
+		return entityManager;
 	}
 	
 	public BountyManager getBountyManager() {
