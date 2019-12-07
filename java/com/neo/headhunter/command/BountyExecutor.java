@@ -10,15 +10,20 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BountyExecutor implements CommandExecutor {
 	private HeadHunter plugin;
+	private Map<Player, CooldownRunnable> cooldownTimers;
 	
 	public BountyExecutor(HeadHunter plugin) {
 		this.plugin = plugin;
+		this.cooldownTimers = new HashMap<>();
 	}
 	
 	@Override
@@ -162,6 +167,13 @@ public class BountyExecutor implements CommandExecutor {
 						return true;
 					}
 					
+					// assert hunter is off bounty cooldown
+					if(cooldownTimers.containsKey(hunter)) {
+						CooldownRunnable runnable = cooldownTimers.get(hunter);
+						sender.sendMessage(Message.BOUNTY_SET_COOLDOWN.format(formatTime(runnable.cooldown)));
+						return false;
+					}
+					
 					// assert new bounty is above minimum threshold
 					double amount = Double.valueOf(bountyString);
 					if(amount < plugin.getSettings().getMinimumBounty()) {
@@ -185,6 +197,12 @@ public class BountyExecutor implements CommandExecutor {
 						Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_SET.format(hName, amount, vName));
 					else
 						sender.sendMessage(Message.BOUNTY_SET.format(vName, amount));
+					
+					// set bounty cooldown
+					long defCooldown = plugin.getSettings().getBountyCooldown();
+					CooldownRunnable runnable = new CooldownRunnable(hunter, defCooldown);
+					cooldownTimers.put(hunter, runnable);
+					runnable.runTaskTimer(plugin, 0L, 20L);
 					return true;
 				} else {
 					sender.sendMessage(Message.BOUNTY_AMOUNT_INVALID.format(bountyString));
@@ -193,6 +211,25 @@ public class BountyExecutor implements CommandExecutor {
 			} else {
 				sender.sendMessage(Usage.BOUNTY.toString());
 				return false;
+			}
+		}
+	}
+	
+	private class CooldownRunnable extends BukkitRunnable {
+		private Player hunter;
+		private long cooldown;
+		
+		private CooldownRunnable(Player hunter, long cooldown) {
+			this.hunter = hunter;
+			this.cooldown = cooldown;
+		}
+		
+		@Override
+		public void run() {
+			cooldown--;
+			if(cooldown <= 0) {
+				cooldownTimers.remove(hunter);
+				cancel();
 			}
 		}
 	}
@@ -211,5 +248,37 @@ public class BountyExecutor implements CommandExecutor {
 				return p;
 		}
 		return null;
+	}
+	
+	private String formatTime(long seconds) {
+		long days = seconds / 86400;
+		long hours = seconds / 3600;
+		long minutes = seconds / 60;
+		long remaining = seconds % 60;
+		
+		StringBuilder builder = new StringBuilder();
+		if(days > 0) {
+			builder.append(days);
+			builder.append(" day");
+			if(days != 1)
+				builder.append("s");
+		} else if(hours > 0) {
+			builder.append(hours);
+			builder.append(" hour");
+			if(hours != 1)
+				builder.append("s");
+		} else if(minutes > 0) {
+			builder.append(minutes);
+			builder.append(" minute");
+			if(minutes != 1)
+				builder.append("s");
+		} else {
+			builder.append(remaining);
+			builder.append(" second");
+			if(remaining != 1)
+				builder.append("s");
+		}
+		
+		return builder.toString();
 	}
 }

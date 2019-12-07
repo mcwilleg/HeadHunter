@@ -23,6 +23,7 @@ public enum Message {
 	BOUNTY_SET("&eSuccessfully set your bounty on &c%s &eto &6$%.2f&e."),
 	BOUNTY_SET_AFFORD("&cYou do not have enough money to set a bounty of $%.2f."),
 	BOUNTY_SET_SELF("&cYou cannot set a bounty on yourself."),
+	BOUNTY_SET_COOLDOWN("&cYou cannot set another bounty for %s."),
 	BOUNTY_REMOVED("&eSuccessfully removed your bounty on &c%s&e."),
 	BOUNTY_REMOVE_FAIL("&3You do not have a bounty on &b%s&3."),
 	BOUNTY_TARGET_INVALID("&c\"%s\" is an invalid bounty target."),

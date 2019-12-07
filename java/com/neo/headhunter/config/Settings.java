@@ -16,6 +16,7 @@ public final class Settings extends ConfigAccessor<HeadHunter> {
 	
 	private static final String
 			MINIMUM_BOUNTY = "bounty.minimum-value",
+			BOUNTY_COOLDOWN = "bounty.set-cooldown",
 			BROADCAST_SET = "bounty.broadcast-set",
 			BROADCAST_CLAIM = "bounty.broadcast-claim";
 	
@@ -65,6 +66,10 @@ public final class Settings extends ConfigAccessor<HeadHunter> {
 	
 	public double getMinimumBounty() {
 		return config.getDouble(MINIMUM_BOUNTY, 20);
+	}
+	
+	public long getBountyCooldown() {
+		return config.getLong(BOUNTY_COOLDOWN, 300L);
 	}
 	
 	public boolean isBroadcastSet() {

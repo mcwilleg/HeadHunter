@@ -13,6 +13,7 @@ head:
   drop-fire-damage: true
 bounty:
   minimum-value: 20
+  set-cooldown: 300
   broadcast-set: true
   broadcast-claim: true
 enchantments:
