@@ -95,7 +95,23 @@ public class HeadLibrary extends ConfigAccessor<HeadHunter> {
 				variant = ((Fox) victim).getFoxType().name();
 				break;
 			case "HORSE":
-				variant = ((Horse) victim).getColor().name();
+				if(plugin.isVersionBefore(1, 11, 0)) {
+					String horseVariant = ((Horse) victim).getVariant().name();
+					switch(horseVariant) {
+					case "UNDEAD_HORSE":
+						type = "ZOMBIE_HORSE";
+						break;
+					case "HORSE":
+					case "LLAMA":
+						variant = ((Horse) victim).getColor().name();
+					case "DONKEY":
+					case "MULE":
+					case "SKELETON_HORSE":
+						type = horseVariant;
+						break;
+					}
+				} else
+					variant = ((Horse) victim).getColor().name();
 				break;
 			case "LLAMA":
 			case "TRADER_LLAMA":
