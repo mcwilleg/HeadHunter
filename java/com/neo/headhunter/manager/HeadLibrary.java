@@ -158,7 +158,10 @@ public class HeadLibrary extends ConfigAccessor<HeadHunter> {
 				variant = ((Parrot) victim).getVariant().name();
 				break;
 			case "RABBIT":
-				variant = ((Rabbit) victim).getRabbitType().name();
+				if(plugin.isVersionBefore(1, 9, 0))
+					variant = "SALT_AND_PEPPER";
+				else
+					variant = ((Rabbit) victim).getRabbitType().name();
 				break;
 			case "SKELETON":
 				switch(((Skeleton) victim).getSkeletonType().name()) {

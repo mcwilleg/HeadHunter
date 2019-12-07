@@ -642,7 +642,7 @@ RABBIT:
       meta-type: SKULL
       internal: H4sIAAAAAAAAAE2OTW6DMBhEv1aqRFGP0S2SMQHCIouqWcQoOCWhEHvHjwm4No0IVIFT9Yhl2eXMmyeNCWDCy+lrVOqj/65bJQx4JBW8Iuwjp0Cl5fpOba3QClt5YBeW5wa5E6ztwkVrE8xFuop+aMXtGYxB3IexFzcTAB4MeEpzNQr4FVOI+LlB1TlU5US8JScnpA5EXn3SpVPxTjyiF7578/ZT8G/rDnnmKuaEDe/isdAp2jtHJXZHu9SfP1xzxXCEmUwV1WlDM6r4tkRsjjFPShzJquUJ1dH2MlEZTRTzliUER/MFs5lLNperpZ/pHKpDFkrS2UEdbzbLe/gD1o9xnhgBAAA=
       skull-owner: RabbitSaltAndPepper
-      display-name: Salt and Pepper Rabbit Head
+      display-name: Rabbit Head
   THE_KILLER_BUNNY:
     ==: org.bukkit.inventory.ItemStack
     type: SKULL_ITEM

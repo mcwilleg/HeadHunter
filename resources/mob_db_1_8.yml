@@ -256,6 +256,16 @@ MUSHROOM_COW:
       meta-type: SKULL
       skull-owner: MHF_MushroomCow
       display-name: Mooshroom Head
+RABBIT:
+  SALT_AND_PEPPER:
+    ==: org.bukkit.inventory.ItemStack
+    type: SKULL_ITEM
+    damage: 3
+    meta:
+      ==: ItemMeta
+      meta-type: SKULL
+      skull-owner: MHF_Rabbit
+      display-name: Rabbit Head
 VILLAGER:
   PLAINS:
     ==: org.bukkit.inventory.ItemStack
