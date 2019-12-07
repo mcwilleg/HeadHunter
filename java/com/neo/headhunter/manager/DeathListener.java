@@ -41,6 +41,9 @@ public class DeathListener implements Listener {
 		ItemStack weapon = null;
 		
 		EntityDamageEvent lastDamageCause = victim.getLastDamageCause();
+		if(lastDamageCause == null)
+			return;
+		
 		if(lastDamageCause instanceof EntityDamageByEntityEvent) {
 			// victim was killed by an entity
 			
@@ -63,9 +66,17 @@ public class DeathListener implements Listener {
 					// victim was killed by a projectile launched by a player
 					
 					hunter = (Player) projectile.getShooter();
-					weapon = plugin.getEntityManager().getWeapon(projectile);
+					weapon = plugin.getEntityManager().getProjectileWeapon(projectile);
 				}
 			}
+		} else if(lastDamageCause.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
+			// victim was killed by burning
+			if(plugin.getSettings().isDropFireDamage()) {
+				// assign kill credit for killing with Flame or Fire Aspect
+				hunter = plugin.getEntityManager().getCombuster(victim);
+				weapon = plugin.getEntityManager().getCombusterWeapon(victim);
+			}
+			plugin.getEntityManager().stopFireTickTimer(victim);
 		}
 		
 		// check player-kills-only option
