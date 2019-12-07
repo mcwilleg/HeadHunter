@@ -74,6 +74,25 @@ public class BountyManager extends ConfigAccessor<HeadHunter> {
 		return result;
 	}
 	
+	public OfflinePlayer getTopHunter(OfflinePlayer victim) {
+		String victimPath = id(victim);
+		ConfigurationSection hunterSection = config.getConfigurationSection(victimPath);
+		String topHunterPath = null;
+		double maxBounty = 0;
+		if(hunterSection != null) {
+			for (String hunterPath : hunterSection.getKeys(false)) {
+				double bounty = hunterSection.getDouble(hunterPath);
+				if(maxBounty < bounty || maxBounty == 0) {
+					topHunterPath = hunterPath;
+					maxBounty = bounty;
+				}
+			}
+		}
+		if(topHunterPath != null)
+			return Bukkit.getOfflinePlayer(UUID.fromString(topHunterPath));
+		return null;
+	}
+	
 	private boolean hasBounties(OfflinePlayer victim) {
 		ConfigurationSection victimSection = config.getConfigurationSection(id(victim));
 		if(victimSection != null)

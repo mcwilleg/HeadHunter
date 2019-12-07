@@ -4,6 +4,8 @@ import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.manager.support.FactionsHook;
 import com.neo.headhunter.message.Message;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -109,9 +111,7 @@ public class DeathListener implements Listener {
 		if(!(RANDOM.nextDouble() < headDrop.getDropChance()))
 			return;
 		
-		// format and drop head
-		ItemStack head = plugin.getDropManager().formatHead(headDrop.getBaseHead(), headDrop.getSellValue());
-		victim.getWorld().dropItemNaturally(victim.getEyeLocation(), head);
+		Location dropLocation = victim.getEyeLocation();
 		
 		if(victim instanceof Player) {
 			// manipulate money if a player died
@@ -120,8 +120,15 @@ public class DeathListener implements Listener {
 			
 			// manipulate bounties if the killer is a player
 			if(hunter != null) {
+				OfflinePlayer topHunterOffline = headDrop.getTopHunter();
 				double bounty = plugin.getBountyManager().removeTotalBounty((Player) victim);
 				if (bounty > 0) {
+					// check drop location setting
+					if(plugin.getSettings().isTopHunterMode() && topHunterOffline != null) {
+						Player topHunter = topHunterOffline.getPlayer();
+						if(topHunter != null)
+							dropLocation = topHunter.getEyeLocation();
+					}
 					
 					// check broadcast setting and message
 					String hName = hunter.getName(), vName = victim.getName();
@@ -135,5 +142,9 @@ public class DeathListener implements Listener {
 			// manipulate drops if a mob died
 			event.getDrops().removeIf(drop -> plugin.getHeadBlockManager().isHead(drop));
 		}
+		
+		// format and drop head
+		ItemStack head = plugin.getDropManager().formatHead(headDrop.getBaseHead(), headDrop.getSellValue());
+		victim.getWorld().dropItemNaturally(dropLocation, head);
 	}
 }

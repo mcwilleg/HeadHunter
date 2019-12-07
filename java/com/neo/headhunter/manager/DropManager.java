@@ -2,6 +2,7 @@ package com.neo.headhunter.manager;
 
 import com.neo.headhunter.HeadHunter;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -180,6 +181,7 @@ public class DropManager implements Listener {
 		private ItemStack baseHead;
 		private double sellValue = 0, balanceValue = 0, bountyValue = 0, withdrawValue = 0;
 		private double dropChance = 0;
+		private OfflinePlayer topHunter = null;
 		
 		HeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
 			this.hunter = hunter;
@@ -207,6 +209,7 @@ public class DropManager implements Listener {
 					withdrawValue = 0;
 				}
 				dropChance = getPlayerDropChance(hunter, weapon, vPlayer);
+				topHunter = plugin.getBountyManager().getTopHunter(vPlayer);
 			} else {
 				String path = plugin.getHeadLibrary().getConfigPath(victim);
 				baseHead = plugin.getHeadLibrary().getMobHead(path);
@@ -230,6 +233,10 @@ public class DropManager implements Listener {
 		
 		double getDropChance() {
 			return dropChance;
+		}
+		
+		OfflinePlayer getTopHunter() {
+			return topHunter;
 		}
 	}
 }
