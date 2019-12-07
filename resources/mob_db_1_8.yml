@@ -236,6 +236,16 @@ ZOMBIE:
     ==: ItemMeta
     meta-type: SKULL
     display-name: Zombie Head
+HORSE:
+  CREAMY:
+    ==: org.bukkit.inventory.ItemStack
+    type: SKULL_ITEM
+    damage: 3
+    meta:
+      ==: ItemMeta
+      meta-type: SKULL
+      skull-owner: gavertoso
+      display-name: Horse Head
 MUSHROOM_COW:
   RED:
     ==: org.bukkit.inventory.ItemStack

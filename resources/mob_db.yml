@@ -624,7 +624,7 @@ HORSE:
     meta:
       ==: ItemMeta
       meta-type: SKULL
-      display-name: Creamy Horse Head
+      display-name: Horse Head
       internal: H4sIAAAAAAAAAE2PwU6DQBiEf01MkPgYXklggW059GCs2CVdKpTSsjfoLoHtgk0LjfBcPqDoydtMvvkOowPo8LQ99Up9XD7LWgkN7gmHZ+yKecFtZODSmRtO4SEjL6ZUCivnHBd4xi0d9Ek6i0tXi+sjaJ346vqLuOoAcKfBQ5qrXsC3GAKTHSqTHwJ1HAieerI11YbI84y06VC8Ekyaia9e8Hrw/m3dLt+7KrODirVRXzSpubZjJVaxdWx2t1AShy39KpNxzRJfUVnVISJmKP2GvadVuMzGzS8fKaLozWZJKum4c+meulM+UZk5FLE/NxtVk6FoJK3lldFiMT2AH4nu880cAQAA
   DARK_BROWN:
     ==: org.bukkit.inventory.ItemStack

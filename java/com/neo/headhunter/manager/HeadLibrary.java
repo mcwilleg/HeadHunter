@@ -103,7 +103,10 @@ public class HeadLibrary extends ConfigAccessor<HeadHunter> {
 						break;
 					case "HORSE":
 					case "LLAMA":
-						variant = ((Horse) victim).getColor().name();
+						if(plugin.isVersionBefore(1, 9, 0))
+							variant = "CREAMY";
+						else
+							variant = ((Horse) victim).getColor().name();
 					case "DONKEY":
 					case "MULE":
 					case "SKELETON_HORSE":
