@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 
@@ -60,7 +61,9 @@ public class SellExecutor implements CommandExecutor {
 	
 	public void sellHeads(Player hunter, boolean all) {
 		PlayerInventory inventory = hunter.getInventory();
+		String hName = hunter.getName();
 		if(all) {
+			String displayName = null;
 			double totalValue = 0;
 			int totalAmount = 0;
 			for(int i = 0; i < 36; i++) {
@@ -69,31 +72,53 @@ public class SellExecutor implements CommandExecutor {
 				if(currentItem != null && itemStackValue > 0) {
 					totalValue += itemStackValue;
 					totalAmount += currentItem.getAmount();
+					ItemMeta meta = currentItem.getItemMeta();
+					displayName = currentItem.getType().name();
+					if(meta != null)
+						displayName = meta.getDisplayName();
 					inventory.clear(i);
 				}
 			}
 			if(totalAmount > 0) {
 				plugin.getEconomy().depositPlayer(hunter, totalValue);
 				
-				if(totalAmount == 1)
+				// send sell messages
+				if(plugin.getSettings().isBroadcastSell()) {
+					if(totalAmount == 1)
+						hunter.sendMessage(Message.SELL_SINGLE_BROADCAST.format(hName, displayName, 1, totalValue));
+					else
+						hunter.sendMessage(Message.SELL_MULTIPLE_BROADCAST.format(hName, totalAmount, totalValue));
+				} else if(totalAmount == 1)
 					hunter.sendMessage(Message.SELL_SINGLE.format(1, totalValue));
 				else
 					hunter.sendMessage(Message.SELL_MULTIPLE.format(totalAmount, totalValue));
+				
 			} else
 				hunter.sendMessage(Message.SELL_FAIL.format());
 		} else {
 			int heldSlot = inventory.getHeldItemSlot();
 			ItemStack heldItem = inventory.getItem(heldSlot);
-			double headStackvalue = plugin.getHeadBlockManager().getHeadStackValue(heldItem);
-			if(heldItem != null && headStackvalue > 0) {
+			double stackValue = plugin.getHeadBlockManager().getHeadStackValue(heldItem);
+			if(heldItem != null && stackValue > 0) {
 				int amount = heldItem.getAmount();
-				plugin.getEconomy().depositPlayer(hunter, headStackvalue);
+				plugin.getEconomy().depositPlayer(hunter, stackValue);
 				inventory.clear(heldSlot);
 				
-				if(amount == 1)
-					hunter.sendMessage(Message.SELL_SINGLE.format(1, headStackvalue));
+				// send sell messages
+				if(plugin.getSettings().isBroadcastSell()) {
+					ItemMeta meta = heldItem.getItemMeta();
+					String displayName = heldItem.getType().name();
+					if(meta != null)
+						displayName = meta.getDisplayName();
+					if(amount == 1)
+						hunter.sendMessage(Message.SELL_SINGLE_BROADCAST.format(hName, displayName, 1, stackValue));
+					else
+						hunter.sendMessage(Message.SELL_MULTIPLE_BROADCAST.format(hName, amount, stackValue));
+				} else if(amount == 1)
+					hunter.sendMessage(Message.SELL_SINGLE.format(1, stackValue));
 				else
-					hunter.sendMessage(Message.SELL_MULTIPLE.format(amount, headStackvalue));
+					hunter.sendMessage(Message.SELL_MULTIPLE.format(amount, stackValue));
+				
 			} else
 				hunter.sendMessage(Message.SELL_FAIL.format());
 		}

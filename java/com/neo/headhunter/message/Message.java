@@ -30,7 +30,9 @@ public enum Message {
 	BOUNTY_AMOUNT_LOW("&cThat bounty is too low. Bounties must be at least $%.2f."),
 	SELL_FAIL("&cYou are not holding any valuable heads."),
 	SELL_SINGLE("&eSold &6%d &ehead for &6$%.2f&e."),
-	SELL_MULTIPLE("&eSold &6%d &eheads for a total of &6$%.2f&e.");
+	SELL_MULTIPLE("&eSold &6%d &eheads for a total of &6$%.2f&e."),
+	SELL_SINGLE_BROADCAST("&6%s &esold &3%s (&b%d&3) &efor &6$%.2f&e!"),
+	SELL_MULTIPLE_BROADCAST("&6%s &esold &6%d &eheads for a total of &6$%.2f&e!");
 	
 	private final String message;
 	
