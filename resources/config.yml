@@ -25,5 +25,3 @@ factions:
   drop-in-safezone: false
   drop-in-warzone: false
   drop-in-faction: false
-mob-stacking:
-  drop-each: true
