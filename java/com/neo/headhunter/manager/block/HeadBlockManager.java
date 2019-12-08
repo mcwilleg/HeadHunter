@@ -126,10 +126,11 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 				if(lore != null && !lore.isEmpty()) {
 					String priceString = lore.get(0);
 					priceString = ChatColor.stripColor(priceString);
-					priceString = priceString.replace("Sell Price: $", "");
-					if(priceString.matches("\\d+([.]\\d{0,2})?")) {
+					priceString = priceString.replace(plugin.getDropManager().getCurrencySymbol(), "");
+					priceString = priceString.replaceAll("[^\\d.,]+", "");
+					priceString = priceString.replace(",", ".");
+					if(priceString.matches("\\d+([.]\\d{0,2})?"))
 						return Double.valueOf(priceString) * head.getAmount();
-					}
 				}
 			}
 		}

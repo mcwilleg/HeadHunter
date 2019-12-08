@@ -1,5 +1,6 @@
 package com.neo.headhunter;
 
+import com.earth2me.essentials.Essentials;
 import com.neo.headhunter.bounty.BountyManager;
 import com.neo.headhunter.command.BountyExecutor;
 import com.neo.headhunter.command.HunterExecutor;
@@ -8,6 +9,7 @@ import com.neo.headhunter.config.Settings;
 import com.neo.headhunter.manager.*;
 import com.neo.headhunter.manager.block.HeadBlockManager;
 import com.neo.headhunter.manager.block.SignBlockManager;
+import com.neo.headhunter.manager.support.EssentialsHook;
 import com.neo.headhunter.manager.support.factions.FactionsBlueHook;
 import com.neo.headhunter.manager.support.factions.FactionsHook;
 import com.neo.headhunter.manager.support.factions.FactionsMassiveCoreHook;
@@ -39,6 +41,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private int[] version = new int[3];
 	
 	private Economy economy;
+	private EssentialsHook essentialsHook;
 	private FactionsHook factionsHook;
 	
 	private Settings settings;
@@ -70,6 +73,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			return;
 		}
 		
+		essentialsHook = connectEssentials();
 		factionsHook = connectFactions();
 		
 		// managers
@@ -114,6 +118,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public void reloadAll() {
 		settings.reloadConfig();
+		dropManager.reload();
 		headLibrary.reloadConfig();
 		worldManager.reloadConfig();
 		bountyManager.reloadConfig();
@@ -129,6 +134,15 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 			return null;
 		
 		return rsp.getProvider();
+	}
+	
+	private EssentialsHook connectEssentials() {
+		if(Bukkit.getPluginManager().isPluginEnabled("Essentials")) {
+			Essentials essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+			if(essentials != null)
+				return new EssentialsHook(essentials);
+		}
+		return null;
 	}
 	
 	private FactionsHook connectFactions() {
@@ -187,6 +201,10 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public Economy getEconomy() {
 		return economy;
+	}
+	
+	public EssentialsHook getEssentialsHook() {
+		return essentialsHook;
 	}
 	
 	public FactionsHook getFactionsHook() {

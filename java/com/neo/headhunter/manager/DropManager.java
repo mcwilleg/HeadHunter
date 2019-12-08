@@ -1,6 +1,7 @@
 package com.neo.headhunter.manager;
 
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.manager.support.EssentialsHook;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
@@ -16,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DropManager implements Listener {
-	private static final DecimalFormat DF_MONEY = new DecimalFormat("$0.00");
-	
 	// chance of a hunter to collect the victim's head when killing
 	private static final String STEAL_CHANCE_PERM = "hunter.steal-chance";
 	private static final double DEFAULT_STEAL_CHANCE = 1.0;
@@ -35,9 +34,13 @@ public class DropManager implements Listener {
 	private static final double DEFAULT_DROP_BALANCE = 1.0;
 	
 	private HeadHunter plugin;
+	private String currencySymbol;
+	private DecimalFormat DF_MONEY;
 	
 	public DropManager(HeadHunter plugin) {
 		this.plugin = plugin;
+		reload();
+		DF_MONEY = new DecimalFormat(currencySymbol + "0.00");
 	}
 	
 	HeadDrop getHeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
@@ -57,7 +60,10 @@ public class DropManager implements Listener {
 				// don't attach lore if the head is worthless
 				if(headPrice > 0) {
 					List<String> lore = new ArrayList<>();
-					lore.add(textColor + "Sell Price: " + valueColor + DF_MONEY.format(headPrice));
+					
+					String valueLore = textColor + "Sell Price: " + valueColor + DF_MONEY.format(headPrice);
+					
+					lore.add(valueLore);
 					meta.setLore(lore);
 				}
 				baseHead.setItemMeta(meta);
@@ -238,5 +244,17 @@ public class DropManager implements Listener {
 		OfflinePlayer getTopHunter() {
 			return topHunter;
 		}
+	}
+	
+	public void reload() {
+		currencySymbol = "$";
+		
+		EssentialsHook essentialsHook = plugin.getEssentialsHook();
+		if(essentialsHook != null)
+			currencySymbol = essentialsHook.getCurrencySymbol();
+	}
+	
+	public String getCurrencySymbol() {
+		return currencySymbol;
 	}
 }
