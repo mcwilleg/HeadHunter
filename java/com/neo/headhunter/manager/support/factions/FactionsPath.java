@@ -1,4 +1,4 @@
-package com.neo.headhunter.manager.support;
+package com.neo.headhunter.manager.support.factions;
 
 class FactionsPath {
 	static final String

@@ -1,7 +1,7 @@
 package com.neo.headhunter.manager;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.manager.support.FactionsHook;
+import com.neo.headhunter.manager.support.factions.FactionsHook;
 import com.neo.headhunter.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

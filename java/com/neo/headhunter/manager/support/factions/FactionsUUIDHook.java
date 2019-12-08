@@ -1,23 +1,20 @@
-package com.neo.headhunter.manager.support;
+package com.neo.headhunter.manager.support.factions;
 
+import com.massivecraft.factions.*;
 import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.config.ConfigAccessor;
-import me.zysea.factions.api.FactionsApi;
-import me.zysea.factions.faction.FPlayer;
-import me.zysea.factions.faction.Faction;
-import me.zysea.factions.objects.Claim;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class FactionsBlueHook extends ConfigAccessor<HeadHunter> implements FactionsHook {
-	public FactionsBlueHook(HeadHunter plugin) {
+public class FactionsUUIDHook extends ConfigAccessor<HeadHunter> implements FactionsHook {
+	public FactionsUUIDHook(HeadHunter plugin) {
 		super(plugin, true, "config.yml");
 	}
 	
 	@Override
 	public boolean isValidTerritory(Player victim) {
-		Faction faction = FactionsApi.getOwner(new Claim(victim.getLocation()));
-		FPlayer fPlayer = FactionsApi.getFPlayer(victim);
+		Faction faction = Board.getInstance().getFactionAt(new FLocation(victim));
+		FPlayer fPlayer = FPlayers.getInstance().getByPlayer(victim);
 		if(faction != null && fPlayer != null && fPlayer.hasFaction()) {
 			Faction ownedFaction = fPlayer.getFaction();
 			if(faction.equals(ownedFaction))
@@ -28,13 +25,13 @@ public class FactionsBlueHook extends ConfigAccessor<HeadHunter> implements Fact
 	
 	@Override
 	public boolean isValidZone(Location location) {
-		Faction faction = FactionsApi.getOwner(new Claim(location));
+		Faction faction = Board.getInstance().getFactionAt(new FLocation(location));
 		if(faction != null) {
 			if(faction.isWilderness())
 				return config.getBoolean(FactionsPath.DROP_WILDERNESS, true);
-			if(faction.isSafezone())
+			if(faction.isSafeZone())
 				return config.getBoolean(FactionsPath.DROP_SAFEZONE, false);
-			if(faction.isWarzone())
+			if(faction.isWarZone())
 				return config.getBoolean(FactionsPath.DROP_WARZONE, false);
 		}
 		return true;
@@ -42,14 +39,14 @@ public class FactionsBlueHook extends ConfigAccessor<HeadHunter> implements Fact
 	
 	@Override
 	public boolean isValidHunter(Player hunter, Player victim) {
-		FPlayer hFPlayer = FactionsApi.getFPlayer(hunter);
-		FPlayer vFPlayer = FactionsApi.getFPlayer(victim);
+		FPlayer hFPlayer = FPlayers.getInstance().getByPlayer(hunter);
+		FPlayer vFPlayer = FPlayers.getInstance().getByPlayer(victim);
 		if(hFPlayer != null && vFPlayer != null && hFPlayer.hasFaction() && vFPlayer.hasFaction()) {
 			Faction hunterFaction = hFPlayer.getFaction();
 			Faction victimFaction = vFPlayer.getFaction();
 			if(hunterFaction.equals(victimFaction))
 				return config.getBoolean(FactionsPath.DROP_FRIENDLY, false);
 		}
-		return true;
+		return false;
 	}
 }

@@ -1,4 +1,4 @@
-package com.neo.headhunter.manager.support;
+package com.neo.headhunter.manager.support.factions;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
