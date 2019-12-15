@@ -51,19 +51,11 @@ public class DropManager implements Listener {
 		if(baseHead != null) {
 			SkullMeta meta = (SkullMeta) baseHead.getItemMeta();
 			if (meta != null) {
-				// get colors from settings here
-				ChatColor displayNameColor = ChatColor.DARK_AQUA;
-				ChatColor textColor = ChatColor.DARK_GRAY;
-				ChatColor valueColor = ChatColor.GOLD;
-				
-				meta.setDisplayName(displayNameColor + meta.getDisplayName());
+				meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&3" + meta.getDisplayName()));
 				// don't attach lore if the head is worthless
 				if(headPrice > 0) {
 					List<String> lore = new ArrayList<>();
-					
-					String valueLore = textColor + "Sell Price: " + valueColor + DF_MONEY.format(headPrice);
-					
-					lore.add(valueLore);
+					lore.add(ChatColor.translateAlternateColorCodes('&', "&8Sell Price: &6" + formatMoney(headPrice)));
 					meta.setLore(lore);
 				}
 				baseHead.setItemMeta(meta);
@@ -256,5 +248,9 @@ public class DropManager implements Listener {
 	
 	public String getCurrencySymbol() {
 		return currencySymbol;
+	}
+	
+	public String formatMoney(double amount) {
+		return DF_MONEY.format(amount);
 	}
 }

@@ -21,10 +21,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
@@ -32,10 +29,11 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 import java.util.logging.Level;
 
 public final class HeadHunter extends JavaPlugin implements Listener, CommandExecutor {
-	private static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 	private static final int MAJOR_VER = 0, MINOR_VER = 1, PATCH_VER = 2;
 	
 	private int[] version = new int[3];
@@ -51,6 +49,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private EntityManager entityManager;
 	private BountyManager bountyManager;
 	private HeadBlockManager headBlockManager;
+	private SignBlockManager signBlockManager;
 	private SellExecutor sellExecutor;
 	private BountyExecutor bountyExecutor;
 	
@@ -84,6 +83,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		entityManager = new EntityManager(this);
 		bountyManager = new BountyManager(this);
 		headBlockManager = new HeadBlockManager(this);
+		signBlockManager = new SignBlockManager(this);
 		sellExecutor = new SellExecutor(this);
 		bountyExecutor = new BountyExecutor(this);
 		
@@ -94,7 +94,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		registerListener(new DeathListener(this));
 		registerListener(entityManager);
 		registerListener(headBlockManager);
-		registerListener(new SignBlockManager(this));
+		registerListener(signBlockManager);
 		
 		// register commands
 		if(DEBUG)
@@ -160,14 +160,6 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		return null;
 	}
 	
-	@EventHandler
-	public void onDebug(PlayerInteractEvent event) {
-		if(event.getAction() == Action.RIGHT_CLICK_AIR) {
-			// debug statements here
-			event.getPlayer().performCommand("hunter sellhead");
-		}
-	}
-	
 	@Override
 	public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
 		if(sender instanceof Player && args.length == 2) {
@@ -185,6 +177,14 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 					p.getWorld().dropItemNaturally(p.getLocation(), item);
 				else
 					p.sendMessage("Attempted item drop with null item.");
+			} else if(args[0].equalsIgnoreCase("ping")) {
+				PlayerInventory inv = p.getInventory();
+				ItemStack heldItem = inv.getItem(inv.getHeldItemSlot());
+				if(heldItem != null) {
+					Map<String, Object> s = heldItem.serialize();
+					for(Map.Entry<String, Object> entry : s.entrySet())
+						System.out.println(entry.getKey() + " -> " + entry.getValue());
+				}
 			}
 		}
 		return false;
@@ -237,6 +237,10 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public HeadBlockManager getHeadBlockManager() {
 		return headBlockManager;
+	}
+	
+	public SignBlockManager getSignBlockManager() {
+		return signBlockManager;
 	}
 	
 	public SellExecutor getSellExecutor() {

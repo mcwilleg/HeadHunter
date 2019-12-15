@@ -151,6 +151,7 @@ public class BountyExecutor implements CommandExecutor {
 						Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_REMOVE.format(hName, amount, vName));
 					else
 						sender.sendMessage(Message.BOUNTY_REMOVED.format(vName));
+					plugin.getSignBlockManager().requestUpdate();
 					return true;
 				} else if(bountyString.matches("\\d+([.]\\d{0,2})?")){
 					// set bounty
@@ -162,7 +163,7 @@ public class BountyExecutor implements CommandExecutor {
 					}
 					
 					// assert bounty target is not the command sender
-					if(hunter.equals(victim)) {
+					if(hunter.equals(victim) && !HeadHunter.DEBUG) {
 						sender.sendMessage(Message.BOUNTY_SET_SELF.format());
 						return true;
 					}
@@ -203,6 +204,9 @@ public class BountyExecutor implements CommandExecutor {
 					CooldownRunnable runnable = new CooldownRunnable(hunter, defCooldown);
 					cooldownTimers.put(hunter, runnable);
 					runnable.runTaskTimer(plugin, 0L, 20L);
+					
+					// update bounty signs
+					plugin.getSignBlockManager().requestUpdate();
 					return true;
 				} else {
 					sender.sendMessage(Message.BOUNTY_AMOUNT_INVALID.format(bountyString));

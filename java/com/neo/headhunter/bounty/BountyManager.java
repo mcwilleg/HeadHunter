@@ -53,10 +53,19 @@ public class BountyManager extends ConfigAccessor<HeadHunter> {
 	public double removeBounty(OfflinePlayer hunter, OfflinePlayer victim) {
 		double bounty = getBounty(hunter, victim);
 		config.set(bountyPath(hunter, victim), null);
-		if(hasBounties(victim))
+		ConfigurationSection victimSection = config.getConfigurationSection(id(victim));
+		if(victimSection == null || victimSection.getKeys(false).isEmpty())
 			config.set(id(victim), null);
 		saveConfig();
 		return bounty;
+	}
+	
+	public BountyListEntry getListEntry(int index) {
+		try {
+			return bountyList.get(index);
+		} catch(IndexOutOfBoundsException ex) {
+			return null;
+		}
 	}
 	
 	public List<BountyListEntry> getBountyListPage(int page) {

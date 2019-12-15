@@ -81,7 +81,7 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 	public void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
 		if(isHeadBlock(block)) {
-			String headDataString = getBlockData(block);
+			String headDataString = (String) getBlockData(block);
 			if(headDataString != null) {
 				block.setType(Material.AIR);
 				String[] headData = headDataString.split(" ");

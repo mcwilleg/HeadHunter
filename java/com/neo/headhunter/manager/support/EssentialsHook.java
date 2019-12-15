@@ -1,12 +1,11 @@
 package com.neo.headhunter.manager.support;
 
 import com.earth2me.essentials.Essentials;
-import com.sun.istack.internal.NotNull;
 
 public class EssentialsHook {
 	private Essentials essentials;
 	
-	public EssentialsHook(@NotNull Essentials essentials) {
+	public EssentialsHook(Essentials essentials) {
 		this.essentials = essentials;
 	}
 	
