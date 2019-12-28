@@ -2,19 +2,23 @@ worlds:
   ignored: true
   valid: []
 head:
+  steal-on-sell: false
   broadcast-sell: false
   drop-worthless: true
   worthless-value: 0
-  cumulative-value: true
   player-kills-only: true
   give-to-top-hunter: false
   drop-spawner-mobs: true
   drop-projectiles: true
   drop-fire-damage: true
+  format:
+    value: '&8Head Value'
+    bounty: '&8Bounty'
+    worthless: '&r&c&oWorthless'
 bounty:
   minimum-value: 20
-  set-cooldown: 300
-  broadcast-set: true
+  place-cooldown: 300
+  broadcast-place: true
   broadcast-claim: true
 enchantments:
   looting-effect: 0.8

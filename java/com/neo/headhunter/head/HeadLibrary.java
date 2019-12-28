@@ -1,7 +1,8 @@
-package com.neo.headhunter.manager;
+package com.neo.headhunter.head;
 
 import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.config.ConfigAccessor;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -14,8 +15,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class HeadLibrary extends ConfigAccessor<HeadHunter> {
 	private Map<String, ItemStack> library;
@@ -31,15 +31,30 @@ public class HeadLibrary extends ConfigAccessor<HeadHunter> {
 		return 0;
 	}
 	
-	double getDropChance(String mobConfigPath) {
+	public double getDropChance(String mobConfigPath) {
 		if(mobConfigPath != null)
 			return config.getDouble(mobConfigPath + ".drop-chance", 1);
 		return 0;
 	}
 	
+	ItemStack getBaseHeadFromOwner(String ownerData) {
+		if(library.containsKey(ownerData))
+			return getMobHead(ownerData);
+		else {
+			try {
+				UUID ownerUUID = UUID.fromString(ownerData);
+				OfflinePlayer owner = Bukkit.getOfflinePlayer(ownerUUID);
+				return getPlayerHead(owner);
+			} catch(IllegalArgumentException ex) {
+				// ignore and return null
+			}
+		}
+		return null;
+	}
+	
 	// returns a new ItemStack head object for the given player
 	@SuppressWarnings("deprecation")
-	public ItemStack getPlayerHead(OfflinePlayer owner) {
+	ItemStack getPlayerHead(OfflinePlayer owner) {
 		ItemStack head;
 		if(plugin.isVersionBefore(1, 13, 0))
 			head = new ItemStack(Material.valueOf("SKULL_ITEM"), 1, (short) 3);
@@ -61,19 +76,30 @@ public class HeadLibrary extends ConfigAccessor<HeadHunter> {
 	}
 	
 	// returns a new ItemStack head object for the given mob path
-	public ItemStack getMobHead(String mobConfigPath) {
+	ItemStack getMobHead(String mobConfigPath) {
 		ItemStack result = library.get(mobConfigPath);
 		return result == null ? null : result.clone();
 	}
 	
 	// returns the mob config path used to create the specified head item
-	public String getConfigPath(ItemStack head) {
+	String getConfigPath(ItemStack head) {
 		for(Map.Entry<String, ItemStack> entry : library.entrySet()) {
-			ItemMeta headMeta = head.getItemMeta(), libMeta = entry.getValue().getItemMeta();
-			if(headMeta != null && libMeta != null) {
-				String headName = ChatColor.stripColor(headMeta.getDisplayName());
-				String libName = ChatColor.stripColor(libMeta.getDisplayName());
-				if(headName.equals(libName))
+			ItemStack input = head.clone(), compare = entry.getValue().clone();
+			ItemMeta inputMeta = input.getItemMeta(), compareMeta = compare.getItemMeta();
+			if(inputMeta != null && compareMeta != null) {
+				// remove color from display name
+				String inputName = ChatColor.stripColor(inputMeta.getDisplayName());
+				inputMeta.setDisplayName(inputName);
+				
+				// remove lore
+				List<String> dummyLore = new ArrayList<>();
+				inputMeta.setLore(dummyLore);
+				compareMeta.setLore(dummyLore);
+				
+				input.setItemMeta(inputMeta);
+				compare.setItemMeta(compareMeta);
+				
+				if(input.isSimilar(compare))
 					return entry.getKey();
 			}
 		}

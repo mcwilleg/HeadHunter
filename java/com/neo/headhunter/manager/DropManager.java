@@ -2,19 +2,13 @@ package com.neo.headhunter.manager;
 
 import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.manager.support.EssentialsHook;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DropManager implements Listener {
 	// chance of a hunter to collect the victim's head when killing
@@ -43,27 +37,6 @@ public class DropManager implements Listener {
 		DF_MONEY = new DecimalFormat(currencySymbol + "0.00");
 	}
 	
-	HeadDrop getHeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
-		return new HeadDrop(hunter, weapon, victim);
-	}
-	
-	public ItemStack formatHead(ItemStack baseHead, double headPrice) {
-		if(baseHead != null) {
-			SkullMeta meta = (SkullMeta) baseHead.getItemMeta();
-			if (meta != null) {
-				meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&3" + meta.getDisplayName()));
-				// don't attach lore if the head is worthless
-				if(headPrice > 0) {
-					List<String> lore = new ArrayList<>();
-					lore.add(ChatColor.translateAlternateColorCodes('&', "&8Sell Price: &6" + formatMoney(headPrice)));
-					meta.setLore(lore);
-				}
-				baseHead.setItemMeta(meta);
-			}
-		}
-		return baseHead;
-	}
-	
 	private double getLootingEffect(ItemStack weapon) {
 		// hunter's weapon's looting effect
 		if(weapon != null && weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
@@ -83,7 +56,7 @@ public class DropManager implements Listener {
 	}
 	
 	// overall drop chance for PvP kills
-	private double getPlayerDropChance(Player hunter, ItemStack weapon, Player victim) {
+	public double getPlayerDropChance(Player hunter, ItemStack weapon, Player victim) {
 		double stealChance = getBasePlayerStealChance(hunter);
 		stealChance += getLootingEffect(weapon);
 		double dropChance = getBasePlayerDropChance(victim);
@@ -91,14 +64,14 @@ public class DropManager implements Listener {
 	}
 	
 	// overall drop chance for PvE kills
-	private double getMobDropChance(Player hunter, ItemStack weapon, String mobConfigPath) {
+	public double getMobDropChance(Player hunter, ItemStack weapon, String mobConfigPath) {
 		double stealChance = getBaseMobStealChance(hunter, mobConfigPath);
 		stealChance += getLootingEffect(weapon);
 		return Math.min(1.0, stealChance);
 	}
 	
 	// overall drop balance for PvP kills
-	private double getPlayerDropBalance(Player hunter, ItemStack weapon, Player victim) {
+	public double getPlayerDropBalance(Player hunter, ItemStack weapon, Player victim) {
 		double stealBalance = getBasePlayerStealBalance(hunter);
 		stealBalance += getSmiteEffect(weapon);
 		double dropBalance = getBasePlayerDropBalance(victim);
@@ -106,7 +79,7 @@ public class DropManager implements Listener {
 	}
 	
 	// overall drop balance for PvE kills
-	private double getMobDropBalance(Player hunter, ItemStack weapon, String mobConfigPath) {
+	public double getMobDropBalance(Player hunter, ItemStack weapon, String mobConfigPath) {
 		double stealBalance = getBaseMobStealBalance(hunter, mobConfigPath);
 		stealBalance += getSmiteEffect(weapon);
 		return Math.min(1.0, stealBalance);
@@ -169,73 +142,6 @@ public class DropManager implements Listener {
 			}
 		}
 		return null;
-	}
-	
-	class HeadDrop {
-		private final Player hunter;
-		private final ItemStack weapon;
-		private final LivingEntity victim;
-		
-		private ItemStack baseHead;
-		private double sellValue = 0, balanceValue = 0, bountyValue = 0, withdrawValue = 0;
-		private double dropChance = 0;
-		private OfflinePlayer topHunter = null;
-		
-		HeadDrop(Player hunter, ItemStack weapon, LivingEntity victim) {
-			this.hunter = hunter;
-			this.weapon = weapon;
-			this.victim = victim;
-			init();
-		}
-		
-		private void init() {
-			if(victim instanceof Player) {
-				Player vPlayer = (Player) victim;
-				baseHead = plugin.getHeadLibrary().getPlayerHead(vPlayer);
-				balanceValue = getPlayerDropBalance(hunter, weapon, vPlayer) * plugin.getEconomy().getBalance(vPlayer);
-				bountyValue = plugin.getBountyManager().getTotalBounty(vPlayer);
-				withdrawValue = balanceValue;
-				if(plugin.getSettings().isCumulativeValue())
-					sellValue = balanceValue + bountyValue;
-				else if(bountyValue > 0) {
-					sellValue = bountyValue;
-					withdrawValue = 0;
-				} else
-					sellValue = balanceValue;
-				if(sellValue < plugin.getSettings().getWorthlessValue()) {
-					sellValue = 0;
-					withdrawValue = 0;
-				}
-				dropChance = getPlayerDropChance(hunter, weapon, vPlayer);
-				topHunter = plugin.getBountyManager().getTopHunter(vPlayer);
-			} else {
-				String path = plugin.getHeadLibrary().getConfigPath(victim);
-				baseHead = plugin.getHeadLibrary().getMobHead(path);
-				balanceValue = getMobDropBalance(hunter, weapon, path) * plugin.getHeadLibrary().getMaxPrice(path);
-				sellValue = balanceValue;
-				dropChance = getMobDropChance(hunter, weapon, path);
-			}
-		}
-		
-		ItemStack getBaseHead() {
-			return baseHead;
-		}
-		
-		double getSellValue() {
-			return sellValue;
-		}
-		
-		double getWithdrawValue() {
-			return withdrawValue;
-		}
-		
-		double getDropChance() {
-			return dropChance;
-		}
-		
-		OfflinePlayer getTopHunter() {
-			return topHunter;
-		}
 	}
 	
 	public void reload() {

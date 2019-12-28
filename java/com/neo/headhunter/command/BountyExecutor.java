@@ -147,7 +147,7 @@ public class BountyExecutor implements CommandExecutor {
 					
 					// refund money and message for bounty remove
 					plugin.getEconomy().depositPlayer(hunter, amount);
-					if(plugin.getSettings().isBroadcastSet())
+					if(plugin.getSettings().isBroadcastPlace())
 						Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_REMOVE.format(hName, amount, vName));
 					else
 						sender.sendMessage(Message.BOUNTY_REMOVED.format(vName));
@@ -194,7 +194,7 @@ public class BountyExecutor implements CommandExecutor {
 					plugin.getEconomy().depositPlayer(hunter, current);
 					plugin.getBountyManager().setBounty(hunter, victim, amount);
 					plugin.getEconomy().withdrawPlayer(hunter, amount);
-					if (plugin.getSettings().isBroadcastSet())
+					if (plugin.getSettings().isBroadcastPlace())
 						Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_SET.format(hName, amount, vName));
 					else
 						sender.sendMessage(Message.BOUNTY_SET.format(vName, amount));

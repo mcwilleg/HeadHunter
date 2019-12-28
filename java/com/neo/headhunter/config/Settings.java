@@ -4,10 +4,10 @@ import com.neo.headhunter.HeadHunter;
 
 public final class Settings extends ConfigAccessor<HeadHunter> {
 	private static final String
+			STEAL_ON_SELL = "head.steal-on-sell",
 			BROADCAST_SELL = "head.broadcast-sell",
 			DROP_WORTHLESS = "head.drop-worthless",
 			WORTHLESS_VALUE = "head.worthless-value",
-			CUMULATIVE_VALUE = "head.cumulative-value",
 			PLAYER_KILLS_ONLY = "head.player-kills-only",
 			TOP_HUNTER_MODE = "head.give-to-top-hunter",
 			DROP_SPAWNER_MOBS = "head.drop-spawner-mobs",
@@ -15,9 +15,14 @@ public final class Settings extends ConfigAccessor<HeadHunter> {
 			DROP_FIRE_DAMAGE = "head.drop-fire-damage";
 	
 	private static final String
+			FORMAT_HEAD_VALUE = "head.format.value",
+			FORMAT_HEAD_BOUNTY = "head.format.bounty",
+			FORMAT_WORTHLESS = "head.format.worthless";
+	
+	private static final String
 			MINIMUM_BOUNTY = "bounty.minimum-value",
-			BOUNTY_COOLDOWN = "bounty.set-cooldown",
-			BROADCAST_SET = "bounty.broadcast-set",
+			BOUNTY_COOLDOWN = "bounty.place-cooldown",
+			BROADCAST_SET = "bounty.broadcast-place",
 			BROADCAST_CLAIM = "bounty.broadcast-claim";
 	
 	private static final String
@@ -26,6 +31,10 @@ public final class Settings extends ConfigAccessor<HeadHunter> {
 	
 	public Settings(HeadHunter plugin) {
 		super(plugin, true, "config.yml");
+	}
+	
+	public boolean isStealOnSell() {
+		return config.getBoolean(STEAL_ON_SELL, false);
 	}
 	
 	public boolean isBroadcastSell() {
@@ -38,10 +47,6 @@ public final class Settings extends ConfigAccessor<HeadHunter> {
 	
 	public double getWorthlessValue() {
 		return config.getDouble(WORTHLESS_VALUE, 0);
-	}
-	
-	public boolean isCumulativeValue() {
-		return config.getBoolean(CUMULATIVE_VALUE, true);
 	}
 	
 	public boolean isPlayerKillsOnly() {
@@ -64,6 +69,18 @@ public final class Settings extends ConfigAccessor<HeadHunter> {
 		return config.getBoolean(DROP_FIRE_DAMAGE, true);
 	}
 	
+	public String getHeadValueFormat() {
+		return config.getString(FORMAT_HEAD_VALUE, "&8Head Value");
+	}
+	
+	public String getHeadBountyFormat() {
+		return config.getString(FORMAT_HEAD_BOUNTY, "&8Bounty");
+	}
+	
+	public String getWorthlessFormat() {
+		return config.getString(FORMAT_WORTHLESS, "&r&c&oWorthless");
+	}
+	
 	public double getMinimumBounty() {
 		return config.getDouble(MINIMUM_BOUNTY, 20);
 	}
@@ -72,7 +89,7 @@ public final class Settings extends ConfigAccessor<HeadHunter> {
 		return config.getLong(BOUNTY_COOLDOWN, 300L);
 	}
 	
-	public boolean isBroadcastSet() {
+	public boolean isBroadcastPlace() {
 		return config.getBoolean(BROADCAST_SET, true);
 	}
 	

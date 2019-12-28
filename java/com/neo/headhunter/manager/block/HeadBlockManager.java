@@ -2,7 +2,10 @@ package com.neo.headhunter.manager.block;
 
 import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.config.BlockConfigAccessor;
-import org.bukkit.*;
+import com.neo.headhunter.head.HeadData;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,7 +18,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements Listener {
 	private static final List<Material> HEAD_MATERIALS = new ArrayList<>();
@@ -55,25 +57,9 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 	public void onBlockPlace(BlockPlaceEvent event) {
 		ItemStack item = event.getItemInHand();
 		if(isHead(item) && event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-			SkullMeta meta = (SkullMeta) item.getItemMeta();
-			if(meta != null) {
-				double value = ((int) (getHeadStackValue(item) / item.getAmount() * 100)) / 100.0;
-				String mobPath = plugin.getHeadLibrary().getConfigPath(item);
-				if (mobPath == null) {
-					OfflinePlayer owner;
-					if(plugin.isVersionBefore(1, 13, 0))
-						owner = plugin.getBountyExecutor().getPlayer(meta.getOwner());
-					else
-						owner = meta.getOwningPlayer();
-					if(owner != null) {
-						setBlockData(event.getBlock(), "PLAYER " + owner.getUniqueId().toString() + " " + value);
-						saveConfig();
-					}
-				} else {
-					setBlockData(event.getBlock(), mobPath.replace(".", ";") + " " + value);
-					saveConfig();
-				}
-			}
+			String headDataString = (new HeadData(plugin, item)).getDataString();
+			setBlockData(event.getBlock(), headDataString);
+			saveConfig();
 		}
 	}
 	
@@ -84,19 +70,8 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 			String headDataString = (String) getBlockData(block);
 			if(headDataString != null) {
 				block.setType(Material.AIR);
-				String[] headData = headDataString.split(" ");
-				ItemStack head = null;
-				double value = 0;
-				if(headData.length == 3 && headData[0].equals("PLAYER")) {
-					UUID uuid = UUID.fromString(headData[1]);
-					value = Double.valueOf(headData[2]);
-					head = plugin.getHeadLibrary().getPlayerHead(Bukkit.getOfflinePlayer(uuid));
-				} else if(headData.length == 2) {
-					String mobPath = headData[0].replace(";", ".");
-					value = Double.valueOf(headData[1]);
-					head = plugin.getHeadLibrary().getMobHead(mobPath);
-				}
-				head = plugin.getDropManager().formatHead(head, value);
+				
+				ItemStack head = (new HeadData(plugin, headDataString)).getFormattedHead();
 				
 				if(head != null) {
 					if(plugin.isVersionBefore(1, 12, 0) || event.isDropItems()) {
@@ -110,11 +85,11 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 		}
 	}
 	
-	public boolean isHead(ItemStack head) {
+	public static boolean isHead(ItemStack head) {
 		return head != null && HEAD_MATERIALS.contains(head.getType());
 	}
 	
-	private boolean isHeadBlock(Block headBlock) {
+	private static boolean isHeadBlock(Block headBlock) {
 		return headBlock != null && (HEAD_MATERIALS.contains(headBlock.getType()));
 	}
 	
@@ -127,7 +102,7 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 					String priceString = lore.get(0);
 					priceString = ChatColor.stripColor(priceString);
 					priceString = priceString.replace(plugin.getDropManager().getCurrencySymbol(), "");
-					priceString = priceString.replaceAll("[^\\d.,]+", "");
+					priceString = priceString.replaceAll("[^\\d.,%]+", "");
 					priceString = priceString.replace(",", ".");
 					if(priceString.matches("\\d+([.]\\d{0,2})?"))
 						return Double.valueOf(priceString) * head.getAmount();

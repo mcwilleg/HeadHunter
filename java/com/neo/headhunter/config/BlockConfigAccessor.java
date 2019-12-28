@@ -117,6 +117,15 @@ public class BlockConfigAccessor<T extends JavaPlugin> extends ConfigAccessor<T>
 		return result;
 	}
 	
+	protected String getPath(Block block) {
+		if(block == null)
+			throw new IllegalArgumentException("block cannot be null");
+		String worldPath = getWorldPath(block);
+		String chunkPath = getChunkPath(block);
+		String blockPath = getBlockPath(block);
+		return String.join(".", worldPath, chunkPath, blockPath);
+	}
+	
 	private Block getBlock(String worldKey, String chunkKey, String blockKey) {
 		World world = Bukkit.getWorld(UUID.fromString(worldKey));
 		if(world != null) {

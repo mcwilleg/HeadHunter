@@ -1,6 +1,8 @@
 package com.neo.headhunter.manager;
 
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.head.HeadDrop;
+import com.neo.headhunter.manager.block.HeadBlockManager;
 import com.neo.headhunter.manager.support.factions.FactionsHook;
 import com.neo.headhunter.message.Message;
 import org.bukkit.Bukkit;
@@ -97,14 +99,16 @@ public class DeathListener implements Listener {
 		}
 		
 		// perform drop rate check and drop
-		DropManager.HeadDrop headDrop = plugin.getDropManager().getHeadDrop(hunter, weapon, victim);
+		HeadDrop headDrop = HeadDrop.create(plugin, hunter, weapon, victim);
 		
 		// if base head is null
 		if(headDrop.getBaseHead() == null)
 			return;
 		
+		// call HeadDropEvent here
+		
 		// if worthless drops are disabled, assert the head is valuable
-		if(!plugin.getSettings().isDropWorthless() && headDrop.getSellValue() <= 0)
+		if(!plugin.getSettings().isDropWorthless() && headDrop.isWorthless())
 			return;
 		
 		// check drop chance
@@ -115,8 +119,8 @@ public class DeathListener implements Listener {
 		
 		if(victim instanceof Player) {
 			// manipulate money if a player died
-			if(headDrop.getWithdrawValue() > 0)
-				plugin.getEconomy().withdrawPlayer((Player) victim, headDrop.getWithdrawValue());
+			if(headDrop.getStolenValue() > 0)
+				plugin.getEconomy().withdrawPlayer((Player) victim, headDrop.getStolenValue());
 			
 			// manipulate bounties if the killer is a player
 			if(hunter != null) {
@@ -140,11 +144,10 @@ public class DeathListener implements Listener {
 			}
 		} else {
 			// manipulate drops if a mob died
-			event.getDrops().removeIf(drop -> plugin.getHeadBlockManager().isHead(drop));
+			event.getDrops().removeIf(HeadBlockManager::isHead);
 		}
 		
-		// format and drop head
-		ItemStack head = plugin.getDropManager().formatHead(headDrop.getBaseHead(), headDrop.getSellValue());
-		victim.getWorld().dropItemNaturally(dropLocation, head);
+		// drop head
+		victim.getWorld().dropItemNaturally(dropLocation, headDrop.getFormattedHead());
 	}
 }
