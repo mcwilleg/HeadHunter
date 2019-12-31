@@ -33,7 +33,7 @@ public enum Message {
 	BOUNTY_LINK_ABORT("&cBounty sign link aborted."),
 	BOUNTY_HEAD_LINK("&eBounty sign successfully linked to head."),
 	SELL_FAIL("&cYou are not holding any valuable heads."),
-	SELL_SINGLE("&eSold &6%d &ehead for &6$%.2f&e."),
+	SELL_SINGLE("&eSold &3%s (&b%d&3) for &6$%.2f&e."),
 	SELL_MULTIPLE("&eSold &6%d &eheads for a total of &6$%.2f&e."),
 	SELL_SINGLE_BROADCAST("&6%s &esold &3%s (&b%d&3) &efor &6$%.2f&e!"),
 	SELL_MULTIPLE_BROADCAST("&6%s &esold &6%d &eheads for a total of &6$%.2f&e!");

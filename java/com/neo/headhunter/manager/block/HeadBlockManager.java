@@ -3,7 +3,6 @@ package com.neo.headhunter.manager.block;
 import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.config.BlockConfigAccessor;
 import com.neo.headhunter.head.HeadData;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -13,7 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,24 +89,5 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 	
 	private static boolean isHeadBlock(Block headBlock) {
 		return headBlock != null && (HEAD_MATERIALS.contains(headBlock.getType()));
-	}
-	
-	public double getHeadStackValue(ItemStack head) {
-		if(isHead(head)) {
-			SkullMeta meta = (SkullMeta) head.getItemMeta();
-			if(meta != null) {
-				List<String> lore = meta.getLore();
-				if(lore != null && !lore.isEmpty()) {
-					String priceString = lore.get(0);
-					priceString = ChatColor.stripColor(priceString);
-					priceString = priceString.replace(plugin.getDropManager().getCurrencySymbol(), "");
-					priceString = priceString.replaceAll("[^\\d.,%]+", "");
-					priceString = priceString.replace(",", ".");
-					if(priceString.matches("\\d+([.]\\d{0,2})?"))
-						return Double.valueOf(priceString) * head.getAmount();
-				}
-			}
-		}
-		return 0;
 	}
 }

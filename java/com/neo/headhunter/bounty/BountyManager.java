@@ -102,13 +102,6 @@ public class BountyManager extends ConfigAccessor<HeadHunter> {
 		return null;
 	}
 	
-	private boolean hasBounties(OfflinePlayer victim) {
-		ConfigurationSection victimSection = config.getConfigurationSection(id(victim));
-		if(victimSection != null)
-			return !victimSection.getKeys(false).isEmpty();
-		return false;
-	}
-	
 	// helper method to improve readability
 	private String bountyPath(OfflinePlayer hunter, OfflinePlayer victim) {
 		return id(victim) + "." + id(hunter);

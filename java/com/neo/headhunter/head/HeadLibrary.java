@@ -81,6 +81,10 @@ public class HeadLibrary extends ConfigAccessor<HeadHunter> {
 		return result == null ? null : result.clone();
 	}
 	
+	boolean isMobHeadOwner(String ownerData) {
+		return library.containsKey(ownerData);
+	}
+	
 	// returns the mob config path used to create the specified head item
 	String getConfigPath(ItemStack head) {
 		for(Map.Entry<String, ItemStack> entry : library.entrySet()) {

@@ -12,7 +12,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-// @SuppressWarnings("unused")
+@SuppressWarnings("unused")
 public final class HeadDrop {
 	private static DecimalFormat
 			DF_MONEY = new DecimalFormat("0.00"),
@@ -65,7 +65,7 @@ public final class HeadDrop {
 			ItemMeta meta = baseHead.getItemMeta();
 			if(meta != null) {
 				String balanceString;
-				if (plugin.getSettings().isStealOnSell())
+				if (plugin.getSettings().isStealOnSell() && victim instanceof Player)
 					balanceString = DF_PERCENT.format(stealBalance) + "%";
 				else
 					balanceString = DF_MONEY.format(stolenValue);
@@ -157,7 +157,7 @@ public final class HeadDrop {
 				
 				// balance value
 				String balanceValueLore = plugin.getSettings().getHeadValueFormat() + ": &6";
-				if (balanceString.equals("0.00") || balanceString.equals("0.0%"))
+				if (balanceString == null || balanceString.equals("0.00") || balanceString.equals("0.0%"))
 					balanceValueLore += plugin.getSettings().getWorthlessFormat();
 				else {
 					if (!balanceString.endsWith("%"))

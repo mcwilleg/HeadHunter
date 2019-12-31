@@ -12,18 +12,36 @@ import java.util.List;
 public class HeadData {
 	private HeadHunter plugin;
 	private ItemStack head;
-	private String ownerString, balanceString, bountyString;
+	private String ownerString, balanceString, bountyString, dataString;
+	private boolean mobHead;
+	
+	private HeadData(HeadHunter plugin, ItemStack head, String headData) {
+		this.plugin = plugin;
+		if((head == null) == (headData == null))
+			throw new IllegalArgumentException("exactly one argument must not be null");
+		if(head != null)
+			loadData(head);
+		else
+			loadData(headData);
+		
+		// create data string
+		String result = String.join(" ", ownerString, balanceString);
+		if(bountyString != null)
+			result = String.join(" ", result, bountyString);
+		this.dataString = result;
+		
+		// determine mob head
+		this.mobHead = plugin.getHeadLibrary().isMobHeadOwner(ownerString);
+	}
 	
 	// constructor for heads being placed
 	public HeadData(HeadHunter plugin, ItemStack head) {
-		this.plugin = plugin;
-		loadData(head);
+		this(plugin, head, null);
 	}
 	
 	// constructor for heads being broken
 	public HeadData(HeadHunter plugin, String headData) {
-		this.plugin = plugin;
-		loadData(headData);
+		this(plugin, null, headData);
 	}
 	
 	// called when heads are broken
@@ -33,7 +51,12 @@ public class HeadData {
 	
 	// called when heads are placed
 	public String getDataString() {
-		return String.join(" ", ownerString, balanceString, bountyString);
+		return dataString;
+	}
+	
+	// called when heads are sold
+	public String getOwnerString() {
+		return ownerString;
 	}
 	
 	// called when heads are sold
@@ -44,6 +67,10 @@ public class HeadData {
 	// called when heads are sold
 	public String getBountyString() {
 		return bountyString;
+	}
+	
+	public boolean isMobHead() {
+		return mobHead;
 	}
 	
 	// convert head ItemStack into head data String
@@ -103,6 +130,8 @@ public class HeadData {
 	private String isolateValueString(String lore) {
 		lore = ChatColor.stripColor(lore);
 		lore = lore.replaceAll(".*\\Q: \\E[^0-9.,%]*", "");
+		if(!lore.matches("[0-9]+[.][0-9]{2}[%]?"))
+			lore = null;
 		return lore;
 	}
 }

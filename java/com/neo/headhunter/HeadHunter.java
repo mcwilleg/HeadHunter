@@ -236,10 +236,6 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		return bountyManager;
 	}
 	
-	public HeadBlockManager getHeadBlockManager() {
-		return headBlockManager;
-	}
-	
 	public SignBlockManager getSignBlockManager() {
 		return signBlockManager;
 	}

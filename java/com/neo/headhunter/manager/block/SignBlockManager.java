@@ -59,7 +59,10 @@ public class SignBlockManager extends BlockConfigAccessor<HeadHunter> implements
 				return;
 			}
 			
-			plugin.getSellExecutor().sellHeads(hunter, hunter.isSneaking());
+			if(hunter.isSneaking())
+				plugin.getSellExecutor().sellAllStacks(hunter);
+			else
+				plugin.getSellExecutor().sellHeldStack(hunter);
 			return;
 		}
 		
