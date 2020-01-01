@@ -91,19 +91,8 @@ public class HeadLibrary extends ConfigAccessor<HeadHunter> {
 			ItemStack input = head.clone(), compare = entry.getValue().clone();
 			ItemMeta inputMeta = input.getItemMeta(), compareMeta = compare.getItemMeta();
 			if(inputMeta != null && compareMeta != null) {
-				// remove color from display name
-				String inputName = ChatColor.stripColor(inputMeta.getDisplayName());
-				inputMeta.setDisplayName(inputName);
-				
-				// remove lore
-				List<String> dummyLore = new ArrayList<>();
-				inputMeta.setLore(dummyLore);
-				compareMeta.setLore(dummyLore);
-				
-				input.setItemMeta(inputMeta);
-				compare.setItemMeta(compareMeta);
-				
-				if(input.isSimilar(compare))
+				// remove display names
+				if(compareMeta.getDisplayName().equals(ChatColor.stripColor(inputMeta.getDisplayName())))
 					return entry.getKey();
 			}
 		}
