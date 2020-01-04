@@ -71,19 +71,19 @@ public class SellExecutor implements CommandExecutor {
 		for(int slot = 0; slot < 36; slot++) {
 			HeadStackValue current = getStackValue(inv, slot);
 			if(current != null) {
-				ItemStack item = inv.getItem(slot);
-				if(itemName == null)
-					itemName = Utils.getDisplayName(item);
-				
-				if(current.withdraw && current.headOwner != null && current.balanceValue > 0)
-					plugin.getEconomy().withdrawPlayer(current.headOwner, current.balanceValue);
-				plugin.getEconomy().depositPlayer(hunter, current.balanceValue + current.bountyValue);
-				inv.clear(slot);
-				
-				if(total == null)
-					total = current;
-				else
-					total.add(current);
+				double currentTotalValue = current.balanceValue + current.bountyValue;
+				if(currentTotalValue > 0) {
+					if (total == null) {
+						total = current;
+						itemName = Utils.getDisplayName(inv.getItem(slot));
+					} else
+						total.add(current);
+					
+					if (current.withdraw && current.headOwner != null && current.balanceValue > 0)
+						plugin.getEconomy().withdrawPlayer(current.headOwner, current.balanceValue);
+					plugin.getEconomy().depositPlayer(hunter, currentTotalValue);
+					inv.clear(slot);
+				}
 			}
 		}
 		
@@ -101,15 +101,16 @@ public class SellExecutor implements CommandExecutor {
 		if(value != null) {
 			ItemStack item = inv.getItem(slot);
 			String itemName = Utils.getDisplayName(item);
-			if(itemName != null) {
+			double totalValue = value.balanceValue + value.bountyValue;
+			if(itemName != null && totalValue > 0) {
 				if(value.withdraw && value.headOwner != null && value.balanceValue > 0)
 					plugin.getEconomy().withdrawPlayer(value.headOwner, value.balanceValue);
-				double totalValue = value.balanceValue + value.bountyValue;
 				plugin.getEconomy().depositPlayer(hunter, totalValue);
 				inv.clear(slot);
 				
 				sendSellMessage(hunter, itemName, value.individualAmount, totalValue, value.singleStack);
-			}
+			} else
+				hunter.sendMessage(Message.SELL_FAIL.format());
 		} else
 			hunter.sendMessage(Message.SELL_FAIL.format());
 	}

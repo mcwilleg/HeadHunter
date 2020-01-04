@@ -48,7 +48,6 @@ public final class HeadDrop {
 			
 			// player victim specific
 			bountyValue = plugin.getBountyManager().getTotalBounty(victimPlayer);
-			System.out.println("bountyValue initialized: " + bountyValue);
 			topHunter = plugin.getBountyManager().getTopHunter(victimPlayer);
 		} else {
 			String mobConfigPath = plugin.getHeadLibrary().getConfigPath(victim);
