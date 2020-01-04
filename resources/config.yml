@@ -12,8 +12,8 @@ head:
   drop-projectiles: true
   drop-fire-damage: true
   format:
-    value: '&8Head Value'
-    bounty: '&8Bounty'
+    value: '&eHead Value'
+    bounty: '&eBounty'
     worthless: '&r&c&oWorthless'
 bounty:
   minimum-value: 20

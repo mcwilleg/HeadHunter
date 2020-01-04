@@ -119,15 +119,16 @@ public class DeathListener implements Listener {
 		
 		if(victim instanceof Player) {
 			// manipulate money if a player died
-			if(headDrop.getStolenValue() > 0)
+			if(!headDrop.isStealOnSell() && headDrop.getStolenValue() > 0)
 				plugin.getEconomy().withdrawPlayer((Player) victim, headDrop.getStolenValue());
 			
 			// manipulate bounties if the killer is a player
 			if(hunter != null) {
-				OfflinePlayer topHunterOffline = headDrop.getTopHunter();
 				double bounty = plugin.getBountyManager().removeTotalBounty((Player) victim);
+				plugin.getSignBlockManager().requestUpdate();
 				if (bounty > 0) {
 					// check drop location setting
+					OfflinePlayer topHunterOffline = headDrop.getTopHunter();
 					if(plugin.getSettings().isTopHunterMode() && topHunterOffline != null) {
 						Player topHunter = topHunterOffline.getPlayer();
 						if(topHunter != null)

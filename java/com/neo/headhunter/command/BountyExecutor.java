@@ -201,9 +201,11 @@ public class BountyExecutor implements CommandExecutor {
 					
 					// set bounty cooldown
 					long defCooldown = plugin.getSettings().getBountyCooldown();
-					CooldownRunnable runnable = new CooldownRunnable(hunter, defCooldown);
-					cooldownTimers.put(hunter, runnable);
-					runnable.runTaskTimer(plugin, 0L, 20L);
+					if(defCooldown > 0) {
+						CooldownRunnable runnable = new CooldownRunnable(hunter, defCooldown);
+						cooldownTimers.put(hunter, runnable);
+						runnable.runTaskTimer(plugin, 0L, 20L);
+					}
 					
 					// update bounty signs
 					plugin.getSignBlockManager().requestUpdate();

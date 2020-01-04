@@ -27,6 +27,7 @@ public final class HeadDrop {
 	private ItemStack baseHead;
 	private double stealBalance, dropChance, stolenValue, bountyValue;
 	private OfflinePlayer topHunter = null;
+	private boolean stealOnSell = false;
 	
 	private HeadDrop(HeadHunter plugin, Player hunter, ItemStack weapon, LivingEntity victim) {
 		this.plugin = plugin;
@@ -47,6 +48,7 @@ public final class HeadDrop {
 			
 			// player victim specific
 			bountyValue = plugin.getBountyManager().getTotalBounty(victimPlayer);
+			System.out.println("bountyValue initialized: " + bountyValue);
 			topHunter = plugin.getBountyManager().getTopHunter(victimPlayer);
 		} else {
 			String mobConfigPath = plugin.getHeadLibrary().getConfigPath(victim);
@@ -56,22 +58,22 @@ public final class HeadDrop {
 			dropChance = plugin.getDropManager().getMobDropChance(hunter, weapon, mobConfigPath);
 		}
 		stolenValue = balance * stealBalance;
+		stealOnSell = plugin.getSettings().isStealOnSell();
 	}
 	
 	// called when a head is dropped
 	public ItemStack getFormattedHead() {
-		initialize();
 		if(baseHead != null) {
 			ItemMeta meta = baseHead.getItemMeta();
 			if(meta != null) {
 				String balanceString;
-				if (plugin.getSettings().isStealOnSell() && victim instanceof Player)
-					balanceString = DF_PERCENT.format(stealBalance) + "%";
+				if (stealOnSell && victim instanceof Player)
+					balanceString = DF_PERCENT.format(stealBalance * 100) + "%";
 				else
 					balanceString = DF_MONEY.format(stolenValue);
 				
 				String bountyString = null;
-				if(bountyValue > 0)
+				if(hunter != null && bountyValue > 0)
 					bountyString = DF_MONEY.format(bountyValue);
 				
 				return format(plugin, baseHead, balanceString, bountyString);
@@ -142,6 +144,10 @@ public final class HeadDrop {
 	
 	public void setTopHunter(OfflinePlayer topHunter) {
 		this.topHunter = topHunter;
+	}
+	
+	public boolean isStealOnSell() {
+		return stealOnSell;
 	}
 	
 	public static HeadDrop create(HeadHunter plugin, Player hunter, ItemStack weapon, LivingEntity victim) {

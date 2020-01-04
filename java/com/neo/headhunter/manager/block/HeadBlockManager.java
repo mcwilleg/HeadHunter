@@ -38,12 +38,28 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 			"WITHER_SKELETON_WALL_SKULL"
 	);
 	
+	private static final List<Material> AIR_MATERIALS = new ArrayList<>();
+	private static final List<String> AIR_MATERIAL_NAMES = Arrays.asList(
+			"AIR",
+			"LEGACY_AIR",
+			"CAVE_AIR",
+			"VOID_AIR"
+	);
+	
 	public HeadBlockManager(HeadHunter plugin) {
 		super(plugin, "placed_heads.yml", "data");
 		for(String materialName : HEAD_MATERIAL_NAMES) {
 			try {
 				Material headMaterial = Material.valueOf(materialName);
 				HEAD_MATERIALS.add(headMaterial);
+			} catch(IllegalArgumentException ex) {
+				// ignore
+			}
+		}
+		for(String materialName : AIR_MATERIAL_NAMES) {
+			try {
+				Material airMaterial = Material.valueOf(materialName);
+				AIR_MATERIALS.add(airMaterial);
 			} catch(IllegalArgumentException ex) {
 				// ignore
 			}
@@ -84,10 +100,18 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 	}
 	
 	public static boolean isHead(ItemStack head) {
-		return head != null && HEAD_MATERIALS.contains(head.getType());
+		if(head != null) {
+			Material type = head.getType();
+			return !AIR_MATERIALS.contains(type) && HEAD_MATERIALS.contains(type);
+		}
+		return false;
 	}
 	
 	private static boolean isHeadBlock(Block headBlock) {
-		return headBlock != null && (HEAD_MATERIALS.contains(headBlock.getType()));
+		if(headBlock != null) {
+			Material type = headBlock.getType();
+			return !AIR_MATERIALS.contains(type) && HEAD_MATERIALS.contains(type);
+		}
+		return false;
 	}
 }

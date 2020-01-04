@@ -70,11 +70,11 @@ public final class Settings extends ConfigAccessor<HeadHunter> {
 	}
 	
 	public String getHeadValueFormat() {
-		return config.getString(FORMAT_HEAD_VALUE, "&8Head Value");
+		return config.getString(FORMAT_HEAD_VALUE, "&eHead Value");
 	}
 	
 	public String getHeadBountyFormat() {
-		return config.getString(FORMAT_HEAD_BOUNTY, "&8Bounty");
+		return config.getString(FORMAT_HEAD_BOUNTY, "&eBounty");
 	}
 	
 	public String getWorthlessFormat() {

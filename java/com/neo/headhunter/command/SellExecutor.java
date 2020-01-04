@@ -147,28 +147,31 @@ public class SellExecutor implements CommandExecutor {
 			this.singleStack = true;
 			
 			HeadData data = new HeadData(plugin, head);
-			if(!data.isMobHead())
+			if(!data.isMobHead() && data.getOwnerString() != null)
 				this.headOwner = Bukkit.getOfflinePlayer(UUID.fromString(data.getOwnerString()));
 			String balanceString = data.getBalanceString();
 			if(balanceString != null) {
 				if (balanceString.endsWith("%")) {
+					balanceString = balanceString.replace("%", "");
 					this.withdraw = true;
-					try {
-						double balance = plugin.getEconomy().getBalance(headOwner);
-						this.balanceValue = balance * Double.valueOf(balanceString.replace("%", ""));
-					} catch(IllegalArgumentException ex) {
-						this.balanceValue = 0;
+					double balance = plugin.getEconomy().getBalance(headOwner);
+					double stealBalance = Double.valueOf(balanceString) / 100.0;
+					this.balanceValue = 0;
+					for(int i = 0; i < this.individualAmount; i++) {
+						double stolenValue = balance * stealBalance;
+						this.balanceValue += stolenValue;
+						balance -= stolenValue;
 					}
-				} else
+				} else {
 					this.balanceValue = Double.valueOf(balanceString);
+					this.balanceValue *= this.individualAmount;
+				}
 			} else
 				this.balanceValue = 0;
 			
 			String bountyString = data.getBountyString();
 			if(bountyString != null)
 				this.bountyValue = Double.valueOf(bountyString);
-			
-			this.balanceValue *= this.individualAmount;
 			this.bountyValue *= this.individualAmount;
 		}
 		

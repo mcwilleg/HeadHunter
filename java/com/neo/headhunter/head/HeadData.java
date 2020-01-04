@@ -130,7 +130,7 @@ public class HeadData {
 	private String isolateValueString(String lore) {
 		lore = ChatColor.stripColor(lore);
 		lore = lore.replaceAll(".*\\Q: \\E[^0-9.,%]*", "");
-		if(!lore.matches("[0-9]+[.][0-9]{2}[%]?"))
+		if(!lore.matches("[0-9]+[.][0-9]{1,2}[%]?"))
 			lore = null;
 		return lore;
 	}

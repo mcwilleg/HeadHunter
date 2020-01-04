@@ -15,7 +15,9 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class HeadLibrary extends ConfigAccessor<HeadHunter> {
 	private Map<String, ItemStack> library;
@@ -88,11 +90,11 @@ public class HeadLibrary extends ConfigAccessor<HeadHunter> {
 	// returns the mob config path used to create the specified head item
 	String getConfigPath(ItemStack head) {
 		for(Map.Entry<String, ItemStack> entry : library.entrySet()) {
-			ItemStack input = head.clone(), compare = entry.getValue().clone();
-			ItemMeta inputMeta = input.getItemMeta(), compareMeta = compare.getItemMeta();
-			if(inputMeta != null && compareMeta != null) {
-				// remove display names
-				if(compareMeta.getDisplayName().equals(ChatColor.stripColor(inputMeta.getDisplayName())))
+			ItemMeta inputMeta = head.getItemMeta(), libMeta = entry.getValue().getItemMeta();
+			if(inputMeta != null && libMeta != null) {
+				String inputName = ChatColor.stripColor(inputMeta.getDisplayName());
+				String libName = libMeta.getDisplayName();
+				if(inputName.equals(libName))
 					return entry.getKey();
 			}
 		}
@@ -191,6 +193,10 @@ public class HeadLibrary extends ConfigAccessor<HeadHunter> {
 					type = "STRAY";
 					break;
 				}
+				break;
+			case "WANDERING_TRADER":
+				type = "VILLAGER";
+				variant = "PLAINS";
 				break;
 			case "VILLAGER":
 				if(plugin.isVersionBefore(1, 14, 0))
