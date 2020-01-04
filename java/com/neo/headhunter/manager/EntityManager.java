@@ -101,7 +101,7 @@ public class EntityManager implements Listener {
 		
 		Entity combuster = event.getCombuster();
 		if(combuster instanceof Projectile) {
-			ProjectileSource source = (ProjectileSource) combuster;
+			ProjectileSource source = ((Projectile) combuster).getShooter();
 			if(source instanceof Player) {
 				hunter = (Player) source;
 				weapon = getProjectileWeapon((Projectile) combuster);
