@@ -7,11 +7,16 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class HunterExecutor implements CommandExecutor {
+public class HunterExecutor implements CommandExecutor, TabCompleter {
 	private HeadHunter plugin;
 	
 	public HunterExecutor(HeadHunter plugin) {
@@ -94,5 +99,20 @@ public class HunterExecutor implements CommandExecutor {
 			sender.sendMessage(Usage.HUNTER.toString());
 			return false;
 		}
+	}
+	
+	@Override
+	public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
+		final List<String> result = new ArrayList<>();
+		if(args.length == 1) {
+			Iterable<String> completions = Arrays.asList("reload", "world");
+			StringUtil.copyPartialMatches(args[0], completions, result);
+		} else if(args.length == 2) {
+			if(args[0].equalsIgnoreCase("world")) {
+				Iterable<String> completions = Arrays.asList("add", "remove");
+				StringUtil.copyPartialMatches(args[1], completions, result);
+			}
+		}
+		return result;
 	}
 }

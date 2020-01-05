@@ -17,10 +17,7 @@ import com.neo.headhunter.manager.support.factions.FactionsMassiveCoreHook;
 import com.neo.headhunter.manager.support.factions.FactionsUUIDHook;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -111,9 +108,11 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	private void registerCommand(String name, CommandExecutor executor) {
 		PluginCommand command = getCommand(name);
-		if(command != null)
+		if(command != null) {
 			command.setExecutor(executor);
-		else
+			if(executor instanceof TabCompleter)
+				command.setTabCompleter((TabCompleter) executor);
+		} else
 			getLogger().log(Level.SEVERE, "Could not register command: /" + name);
 	}
 	

@@ -11,14 +11,16 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.util.StringUtil;
 
 import javax.annotation.Nonnull;
-import java.util.UUID;
+import java.util.*;
 
-public class SellExecutor implements CommandExecutor {
+public class SellExecutor implements CommandExecutor, TabCompleter {
 	private HeadHunter plugin;
 	
 	public SellExecutor(HeadHunter plugin) {
@@ -26,7 +28,7 @@ public class SellExecutor implements CommandExecutor {
 	}
 	
 	@Override
-	public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
+	public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
 		if(args.length == 0) {
 			// permission
 			if(!sender.hasPermission("hunter.sellhead.hand")) {
@@ -62,6 +64,16 @@ public class SellExecutor implements CommandExecutor {
 		} else
 			sender.sendMessage(Usage.SELLHEAD.toString());
 		return false;
+	}
+	
+	@Override
+	public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
+		final List<String> result = new ArrayList<>();
+		if(args.length == 1) {
+			Iterable<String> completions = Collections.singleton("all");
+			StringUtil.copyPartialMatches(args[0], completions, result);
+		}
+		return result;
 	}
 	
 	public void sellAllStacks(Player hunter) {

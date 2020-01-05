@@ -9,15 +9,15 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.StringUtil;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class BountyExecutor implements CommandExecutor {
+public class BountyExecutor implements CommandExecutor, TabCompleter {
 	private HeadHunter plugin;
 	private Map<Player, CooldownRunnable> cooldownTimers;
 	
@@ -219,6 +219,22 @@ public class BountyExecutor implements CommandExecutor {
 				return false;
 			}
 		}
+	}
+	
+	@Override
+	public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
+		final List<String> result = new ArrayList<>();
+		if(args.length == 1) {
+			List<String> completions = new ArrayList<>();
+			for(Player p : Bukkit.getOnlinePlayers())
+				completions.add(p.getName());
+			StringUtil.copyPartialMatches(args[0], completions, result);
+			Collections.sort(result);
+		} else if(args.length == 2) {
+			Iterable<String> completions = Arrays.asList("remove", "0");
+			StringUtil.copyPartialMatches(args[1], completions, result);
+		}
+		return result;
 	}
 	
 	private class CooldownRunnable extends BukkitRunnable {
