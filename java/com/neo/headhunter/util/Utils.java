@@ -1,4 +1,4 @@
-package com.neo.headhunter;
+package com.neo.headhunter.util;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
