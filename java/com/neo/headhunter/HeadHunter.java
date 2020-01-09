@@ -18,7 +18,6 @@ import com.neo.headhunter.manager.support.factions.FactionsBlueHook;
 import com.neo.headhunter.manager.support.factions.FactionsHook;
 import com.neo.headhunter.manager.support.factions.FactionsMassiveCoreHook;
 import com.neo.headhunter.manager.support.factions.FactionsUUIDHook;
-import com.neo.headhunter.util.Metrics;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
@@ -35,7 +34,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public final class HeadHunter extends JavaPlugin implements Listener, CommandExecutor {
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	private static final int MAJOR_VER = 0, MINOR_VER = 1, PATCH_VER = 2;
 	
 	private int[] version = new int[3];
@@ -54,8 +53,6 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	private SignBlockManager signBlockManager;
 	private SellExecutor sellExecutor;
 	private BountyExecutor bountyExecutor;
-	
-	private Metrics metrics;
 	
 	@Override
 	public void onEnable() {
@@ -106,8 +103,6 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		registerCommand("hunter", new HunterExecutor(this));
 		registerCommand("sellhead", sellExecutor);
 		registerCommand("bounty", bountyExecutor);
-		
-		metrics = new Metrics(this);
 	}
 	
 	private void registerListener(Listener listener) {

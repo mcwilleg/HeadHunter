@@ -99,17 +99,17 @@ public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements
 		}
 	}
 	
-	public static boolean isHead(ItemStack head) {
-		if(head != null) {
-			Material type = head.getType();
+	private boolean isHeadBlock(Block headBlock) {
+		if(headBlock != null) {
+			Material type = headBlock.getType();
 			return !AIR_MATERIALS.contains(type) && HEAD_MATERIALS.contains(type);
 		}
 		return false;
 	}
 	
-	private static boolean isHeadBlock(Block headBlock) {
-		if(headBlock != null) {
-			Material type = headBlock.getType();
+	public static boolean isHead(ItemStack head) {
+		if(head != null) {
+			Material type = head.getType();
 			return !AIR_MATERIALS.contains(type) && HEAD_MATERIALS.contains(type);
 		}
 		return false;

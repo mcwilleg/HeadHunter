@@ -57,7 +57,7 @@ public class BountyExecutor implements CommandExecutor, TabCompleter {
 				}
 				
 				page = Integer.valueOf(args[1]);
-				if(page < 0) {
+				if(page <= 0) {
 					sender.sendMessage(Message.BOUNTY_PAGE_INVALID.format(args[1]));
 					return false;
 				}

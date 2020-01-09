@@ -8,8 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import java.text.DecimalFormat;
-
 public class DropManager implements Listener {
 	// chance of a hunter to collect the victim's head when killing
 	private static final String STEAL_CHANCE_PERM = "hunter.steal-chance";
@@ -29,30 +27,10 @@ public class DropManager implements Listener {
 	
 	private HeadHunter plugin;
 	private String currencySymbol;
-	private DecimalFormat DF_MONEY;
 	
 	public DropManager(HeadHunter plugin) {
 		this.plugin = plugin;
 		reload();
-		DF_MONEY = new DecimalFormat(currencySymbol + "0.00");
-	}
-	
-	private double getLootingEffect(ItemStack weapon) {
-		// hunter's weapon's looting effect
-		if(weapon != null && weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
-			double lootingEffect = plugin.getSettings().getLootingEffect();
-			return lootingEffect * weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
-		}
-		return 0;
-	}
-	
-	private double getSmiteEffect(ItemStack weapon) {
-		// hunter's weapon's smite effect
-		if(weapon != null && weapon.containsEnchantment(Enchantment.DAMAGE_UNDEAD)) {
-			double smiteEffect = plugin.getSettings().getSmiteEffect();
-			return smiteEffect * weapon.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD);
-		}
-		return 0;
 	}
 	
 	// overall drop chance for PvP kills
@@ -83,6 +61,24 @@ public class DropManager implements Listener {
 		double stealBalance = getBaseMobStealBalance(hunter, mobConfigPath);
 		stealBalance += getSmiteEffect(weapon);
 		return Math.min(1.0, stealBalance);
+	}
+	
+	private double getLootingEffect(ItemStack weapon) {
+		// hunter's weapon's looting effect
+		if(weapon != null && weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
+			double lootingEffect = plugin.getSettings().getLootingEffect();
+			return lootingEffect * weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+		}
+		return 0;
+	}
+	
+	private double getSmiteEffect(ItemStack weapon) {
+		// hunter's weapon's smite effect
+		if(weapon != null && weapon.containsEnchantment(Enchantment.DAMAGE_UNDEAD)) {
+			double smiteEffect = plugin.getSettings().getSmiteEffect();
+			return smiteEffect * weapon.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD);
+		}
+		return 0;
 	}
 	
 	// probability of the hunter causing a head to drop
@@ -154,9 +150,5 @@ public class DropManager implements Listener {
 	
 	public String getCurrencySymbol() {
 		return currencySymbol;
-	}
-	
-	public String formatMoney(double amount) {
-		return DF_MONEY.format(amount);
 	}
 }

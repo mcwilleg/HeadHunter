@@ -1,7 +1,6 @@
 package com.neo.headhunter.command;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.util.Utils;
 import com.neo.headhunter.head.HeadData;
 import com.neo.headhunter.manager.block.HeadBlockManager;
 import com.neo.headhunter.message.Message;
@@ -15,10 +14,14 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.StringUtil;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 public class SellExecutor implements CommandExecutor, TabCompleter {
 	private HeadHunter plugin;
@@ -87,7 +90,7 @@ public class SellExecutor implements CommandExecutor, TabCompleter {
 				if(currentTotalValue > 0) {
 					if (total == null) {
 						total = current;
-						itemName = Utils.getDisplayName(inv.getItem(slot));
+						itemName = getDisplayName(inv.getItem(slot));
 					} else
 						total.add(current);
 					
@@ -112,7 +115,7 @@ public class SellExecutor implements CommandExecutor, TabCompleter {
 		HeadStackValue value = getStackValue(inv, slot);
 		if(value != null) {
 			ItemStack item = inv.getItem(slot);
-			String itemName = Utils.getDisplayName(item);
+			String itemName = getDisplayName(item);
 			double totalValue = value.balanceValue + value.bountyValue;
 			if(itemName != null && totalValue > 0) {
 				if(value.withdraw && value.headOwner != null && value.balanceValue > 0)
@@ -137,6 +140,15 @@ public class SellExecutor implements CommandExecutor, TabCompleter {
 			hunter.sendMessage(Message.SELL_MULTIPLE_BROADCAST.format(hunter.getName(), amount, value));
 		else
 			hunter.sendMessage(Message.SELL_MULTIPLE.format(amount, value));
+	}
+	
+	private String getDisplayName(ItemStack item) {
+		if(item != null) {
+			ItemMeta meta = item.getItemMeta();
+			if(meta != null)
+				return meta.getDisplayName();
+		}
+		return null;
 	}
 	
 	private HeadStackValue getStackValue(PlayerInventory inv, int slot) {

@@ -3,6 +3,7 @@ package com.neo.headhunter.manager.block;
 import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.bounty.BountyListEntry;
 import com.neo.headhunter.config.BlockConfigAccessor;
+import com.neo.headhunter.head.HeadDrop;
 import com.neo.headhunter.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -212,7 +213,7 @@ public class SignBlockManager extends BlockConfigAccessor<HeadHunter> implements
 				String amountLine = "";
 				if(bounty != null) {
 					victimLine = bounty.getVictim().getName();
-					amountLine = plugin.getDropManager().formatMoney(bounty.getAmount());
+					amountLine = HeadDrop.formatMoney(plugin, bounty.getAmount());
 					if(skull != null) {
 						if (plugin.isVersionBefore(1, 13, 0))
 							skull.setOwner(bounty.getVictim().getName());

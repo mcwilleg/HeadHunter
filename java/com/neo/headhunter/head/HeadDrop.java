@@ -186,4 +186,8 @@ public final class HeadDrop {
 		}
 		return null;
 	}
+	
+	public static String formatMoney(HeadHunter plugin, double value) {
+		return plugin.getDropManager().getCurrencySymbol() + DF_MONEY.format(value);
+	}
 }
