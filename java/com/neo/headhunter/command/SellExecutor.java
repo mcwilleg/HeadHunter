@@ -1,7 +1,7 @@
 package com.neo.headhunter.command;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.head.HeadData;
+import com.neo.headhunter.manager.head.HeadData;
 import com.neo.headhunter.manager.block.HeadBlockManager;
 import com.neo.headhunter.message.Message;
 import com.neo.headhunter.message.Usage;

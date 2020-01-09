@@ -1,4 +1,4 @@
-package com.neo.headhunter.bounty;
+package com.neo.headhunter.manager.bounty;
 
 import org.bukkit.OfflinePlayer;
 

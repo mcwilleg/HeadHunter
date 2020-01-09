@@ -1,12 +1,12 @@
 package com.neo.headhunter;
 
 import com.earth2me.essentials.Essentials;
-import com.neo.headhunter.bounty.BountyManager;
+import com.neo.headhunter.manager.bounty.BountyManager;
 import com.neo.headhunter.command.BountyExecutor;
 import com.neo.headhunter.command.HunterExecutor;
 import com.neo.headhunter.command.SellExecutor;
 import com.neo.headhunter.config.Settings;
-import com.neo.headhunter.head.HeadLibrary;
+import com.neo.headhunter.manager.head.HeadLibrary;
 import com.neo.headhunter.manager.DeathListener;
 import com.neo.headhunter.manager.DropManager;
 import com.neo.headhunter.manager.EntityManager;

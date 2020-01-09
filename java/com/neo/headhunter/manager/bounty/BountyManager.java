@@ -1,4 +1,4 @@
-package com.neo.headhunter.bounty;
+package com.neo.headhunter.manager.bounty;
 
 import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.config.ConfigAccessor;

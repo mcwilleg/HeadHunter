@@ -1,7 +1,7 @@
 package com.neo.headhunter.manager;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.head.HeadDrop;
+import com.neo.headhunter.manager.head.HeadDrop;
 import com.neo.headhunter.manager.block.HeadBlockManager;
 import com.neo.headhunter.manager.support.factions.FactionsHook;
 import com.neo.headhunter.message.Message;

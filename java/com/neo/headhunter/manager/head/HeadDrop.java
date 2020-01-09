@@ -1,4 +1,4 @@
-package com.neo.headhunter.head;
+package com.neo.headhunter.manager.head;
 
 import com.neo.headhunter.HeadHunter;
 import org.bukkit.ChatColor;

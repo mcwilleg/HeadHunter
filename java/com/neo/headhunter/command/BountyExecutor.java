@@ -1,7 +1,7 @@
 package com.neo.headhunter.command;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.bounty.BountyListEntry;
+import com.neo.headhunter.manager.bounty.BountyListEntry;
 import com.neo.headhunter.message.Message;
 import com.neo.headhunter.message.Usage;
 import org.bukkit.Bukkit;
