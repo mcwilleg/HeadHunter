@@ -20,9 +20,8 @@ public class BlockConfigAccessor<T extends JavaPlugin> extends ConfigAccessor<T>
 		if(block == null)
 			throw new IllegalArgumentException("block cannot be null");
 		String worldPath = getWorldPath(block);
-		String chunkPath = getChunkPath(block);
 		String blockPath = getBlockPath(block);
-		String mainPath = String.join(".", worldPath, chunkPath, blockPath);
+		String mainPath = String.join(".", worldPath, blockPath);
 		
 		// add prefix and/or suffix
 		String path = mainPath;
@@ -44,15 +43,6 @@ public class BlockConfigAccessor<T extends JavaPlugin> extends ConfigAccessor<T>
 				path = String.join(".", prefix, path);
 			ConfigurationSection blockSection = config.getConfigurationSection(path);
 			if(blockSection == null || blockSection.getKeys(false).isEmpty())
-				config.set(path, null);
-			else return;
-			
-			// if there is no chunk data left, remove the section
-			path = String.join(".", worldPath, chunkPath);
-			if(prefix != null)
-				path = String.join(".", prefix, path);
-			ConfigurationSection chunkSection = config.getConfigurationSection(path);
-			if(chunkSection == null || chunkSection.getKeys(false).isEmpty())
 				config.set(path, null);
 			else return;
 			
@@ -79,10 +69,9 @@ public class BlockConfigAccessor<T extends JavaPlugin> extends ConfigAccessor<T>
 			throw new IllegalArgumentException("block cannot be null");
 		
 		String worldPath = getWorldPath(block);
-		String chunkPath = getChunkPath(block);
 		String blockPath = getBlockPath(block);
 		
-		String path = String.join(".", worldPath, chunkPath, blockPath);
+		String path = String.join(".", worldPath, blockPath);
 		if(prefix != null)
 			path = String.join(".", prefix, path);
 		if(suffix != null)
@@ -100,67 +89,39 @@ public class BlockConfigAccessor<T extends JavaPlugin> extends ConfigAccessor<T>
 		if(worlds == null)
 			return result;
 		for(String worldKey : worlds.getKeys(false)) {
-			ConfigurationSection chunks = worlds.getConfigurationSection(worldKey);
-			if(chunks == null)
+			ConfigurationSection blocks = worlds.getConfigurationSection(worldKey);
+			if(blocks == null)
 				continue;
-			for(String chunkKey : chunks.getKeys(false)) {
-				ConfigurationSection blocks = chunks.getConfigurationSection(chunkKey);
-				if(blocks == null)
-					continue;
-				for(String blockKey : blocks.getKeys(false)) {
-					Block block = getBlock(worldKey, chunkKey, blockKey);
-					if(block != null)
-						result.add(block);
-				}
+			for(String blockKey : blocks.getKeys(false)) {
+				Block block = getBlock(worldKey, blockKey);
+				if(block != null)
+					result.add(block);
 			}
 		}
 		return result;
 	}
 	
-	protected String getPath(Block block) {
-		if(block == null)
-			throw new IllegalArgumentException("block cannot be null");
-		String worldPath = getWorldPath(block);
-		String chunkPath = getChunkPath(block);
-		String blockPath = getBlockPath(block);
-		return String.join(".", worldPath, chunkPath, blockPath);
-	}
-	
-	private Block getBlock(String worldKey, String chunkKey, String blockKey) {
+	protected Block getBlock(String worldKey, String blockKey) {
 		World world = Bukkit.getWorld(UUID.fromString(worldKey));
 		if(world != null) {
-			String[] chunkSplit = chunkKey.split(";");
-			int chunkX = Integer.valueOf(chunkSplit[0], 16);
-			int chunkZ = Integer.valueOf(chunkSplit[1], 16);
-			
 			String[] blockSplit = blockKey.split(";");
-			int blockX = Integer.valueOf(blockSplit[0], 16);
-			int blockZ = Integer.valueOf(blockSplit[1], 16);
-			int blockY = Integer.valueOf(blockSplit[2], 16);
+			int blockX = Integer.parseInt(blockSplit[0]);
+			int blockZ = Integer.parseInt(blockSplit[1]);
+			int blockY = Integer.parseInt(blockSplit[2]);
 			
-			blockX = (chunkX << 4) | blockX;
-			blockZ = (chunkZ << 4) | blockZ;
 			Location location = new Location(world, blockX, blockY, blockZ);
 			return location.getBlock();
 		}
 		return null;
 	}
 	
-	private String getWorldPath(Block block) {
+	protected String getWorldPath(Block block) {
 		if(block == null)
 			throw new IllegalArgumentException("block cannot be null");
 		return block.getWorld().getUID().toString();
 	}
 	
-	private String getChunkPath(Block block) {
-		if(block == null)
-			throw new IllegalArgumentException("block cannot be null");
-		return String.format("%H;%H", block.getX() >> 4, block.getZ() >> 4);
-	}
-	
-	private String getBlockPath(Block block) {
-		if(block == null)
-			throw new IllegalArgumentException("block cannot be null");
-		return String.format("%H;%H;%H", block.getX() & 0xF, block.getZ() & 0xF, (byte) block.getY());
+	protected String getBlockPath(Block block) {
+		return String.format("%d;%d;%d", block.getX(), block.getZ(), block.getY());
 	}
 }

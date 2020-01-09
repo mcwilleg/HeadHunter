@@ -1,14 +1,11 @@
 package com.neo.headhunter.manager.block;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.manager.bounty.BountyListEntry;
 import com.neo.headhunter.config.BlockConfigAccessor;
+import com.neo.headhunter.manager.bounty.BountyListEntry;
 import com.neo.headhunter.manager.head.HeadDrop;
 import com.neo.headhunter.message.Message;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
@@ -19,8 +16,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -82,7 +79,9 @@ public class SignBlockManager extends BlockConfigAccessor<HeadHunter> implements
 			if (block.getState() instanceof Skull) {
 				Skull skullBlock = (Skull) block.getState();
 				Sign bountySign = signLinkMap.get(hunter);
-				setBlockData("bounty", bountySign.getBlock(), "head", convert(skullBlock));
+				String worldPath = getWorldPath(skullBlock.getBlock());
+				String blockPath = getBlockPath(skullBlock.getBlock());
+				setBlockData("bounty", bountySign.getBlock(), "head", String.join(";", worldPath, blockPath));
 				saveConfig();
 				hunter.sendMessage(Message.BOUNTY_HEAD_LINK.format());
 				requestUpdate();
@@ -138,7 +137,7 @@ public class SignBlockManager extends BlockConfigAccessor<HeadHunter> implements
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-	public void onBlockExplode(BlockExplodeEvent event) {
+	public void onEntityExplode(EntityExplodeEvent event) {
 		for(Block block : event.blockList()) {
 			if(block != null && block.getState() instanceof Sign)
 				removeBlock(block);
@@ -158,29 +157,6 @@ public class SignBlockManager extends BlockConfigAccessor<HeadHunter> implements
 		saveConfig();
 	}
 	
-	private String convert(BlockState state) {
-		if(state == null)
-			return null;
-		String worldUUID = state.getWorld().getUID().toString();
-		String x = Integer.toHexString(state.getX());
-		String y = Integer.toHexString(state.getY());
-		String z = Integer.toHexString(state.getZ());
-		return String.join(";", worldUUID, x, y, z);
-	}
-	
-	private BlockState convert(String data) {
-		if(data == null)
-			return null;
-		String[] split = data.split(";");
-		World world = Bukkit.getWorld(UUID.fromString(split[0]));
-		if(world == null)
-			return null;
-		int x = Integer.valueOf(split[1], 16);
-		int y = Integer.valueOf(split[2], 16);
-		int z = Integer.valueOf(split[3], 16);
-		return (new Location(world, x, y, z)).getBlock().getState();
-	}
-	
 	private class BountySignUpdateRunnable extends BukkitRunnable {
 		private Set<Sign> signs;
 		
@@ -197,7 +173,12 @@ public class SignBlockManager extends BlockConfigAccessor<HeadHunter> implements
 			Iterator<Sign> iterator = signs.iterator();
 			while(iterator.hasNext()) {
 				Sign sign = iterator.next();
-				BlockState blockState = convert((String) getBlockData("bounty", sign.getBlock(), "head"));
+				String signData = (String) getBlockData("bounty", sign.getBlock(), "head");
+				if(signData == null)
+					continue;
+				
+				String[] signDataSplit = signData.split(";", 2);
+				BlockState blockState = getBlock(signDataSplit[0], signDataSplit[1]).getState();
 				Skull skull = null;
 				if(blockState instanceof Skull)
 					skull = (Skull) blockState;
