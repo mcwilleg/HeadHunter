@@ -19,7 +19,7 @@ import java.util.*;
 
 public final class BountyExecutor implements CommandExecutor, TabCompleter {
 	private HeadHunter plugin;
-	private Map<Player, CooldownRunnable> cooldownTimers;
+	private Map<String, CooldownRunnable> cooldownTimers;
 	
 	public BountyExecutor(HeadHunter plugin) {
 		this.plugin = plugin;
@@ -169,8 +169,8 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 					}
 					
 					// assert hunter is off bounty cooldown
-					if(cooldownTimers.containsKey(hunter)) {
-						CooldownRunnable runnable = cooldownTimers.get(hunter);
+					if(cooldownTimers.containsKey(hunter.getUniqueId().toString())) {
+						CooldownRunnable runnable = cooldownTimers.get(hunter.getUniqueId().toString());
 						sender.sendMessage(Message.BOUNTY_SET_COOLDOWN.format(formatTime(runnable.cooldown)));
 						return false;
 					}
@@ -203,7 +203,7 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 					long defCooldown = plugin.getSettings().getBountyCooldown();
 					if(defCooldown > 0) {
 						CooldownRunnable runnable = new CooldownRunnable(hunter, defCooldown);
-						cooldownTimers.put(hunter, runnable);
+						cooldownTimers.put(hunter.getUniqueId().toString(), runnable);
 						runnable.runTaskTimer(plugin, 0L, 20L);
 					}
 					
@@ -238,11 +238,11 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 	}
 	
 	private class CooldownRunnable extends BukkitRunnable {
-		private Player hunter;
+		private String hunterID;
 		private long cooldown;
 		
 		private CooldownRunnable(Player hunter, long cooldown) {
-			this.hunter = hunter;
+			this.hunterID = hunter.getUniqueId().toString();
 			this.cooldown = cooldown;
 		}
 		
@@ -250,7 +250,7 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 		public void run() {
 			cooldown--;
 			if(cooldown <= 0) {
-				cooldownTimers.remove(hunter);
+				cooldownTimers.remove(hunterID);
 				cancel();
 			}
 		}
