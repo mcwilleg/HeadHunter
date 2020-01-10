@@ -18,7 +18,7 @@ public class FactionsUUIDHook extends ConfigAccessor<HeadHunter> implements Fact
 		if(faction != null && fPlayer != null && fPlayer.hasFaction()) {
 			Faction ownedFaction = fPlayer.getFaction();
 			if(faction.equals(ownedFaction))
-				return config.getBoolean(FactionsPath.DROP_HOME, false);
+				return plugin.getSettings().isFactionsDropHome();
 		}
 		return true;
 	}
@@ -28,11 +28,11 @@ public class FactionsUUIDHook extends ConfigAccessor<HeadHunter> implements Fact
 		Faction faction = Board.getInstance().getFactionAt(new FLocation(location));
 		if(faction != null) {
 			if(faction.isWilderness())
-				return config.getBoolean(FactionsPath.DROP_WILDERNESS, true);
+				return plugin.getSettings().isFactionsDropWilderness();
 			if(faction.isSafeZone())
-				return config.getBoolean(FactionsPath.DROP_SAFEZONE, false);
+				return plugin.getSettings().isFactionsDropSafezone();
 			if(faction.isWarZone())
-				return config.getBoolean(FactionsPath.DROP_WARZONE, false);
+				return plugin.getSettings().isFactionsDropWarzone();
 		}
 		return true;
 	}
@@ -45,7 +45,7 @@ public class FactionsUUIDHook extends ConfigAccessor<HeadHunter> implements Fact
 			Faction hunterFaction = hFPlayer.getFaction();
 			Faction victimFaction = vFPlayer.getFaction();
 			if(hunterFaction.equals(victimFaction))
-				return config.getBoolean(FactionsPath.DROP_FRIENDLY, false);
+				return plugin.getSettings().isFactionsDropFriendly();
 		}
 		return false;
 	}

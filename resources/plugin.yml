@@ -1,10 +1,10 @@
 name: HeadHunter
-version: 0.6.2-beta
+version: 0.6.3-beta
 main: com.neo.headhunter.HeadHunter
 api-version: 1.13
 prefix: HeadHunter
 depend: [Vault]
-softdepend: [Essentials, Factions, FactionsBlue]
+softdepend: [Essentials, MassiveCore, Factions, FactionsBlue]
 authors: [Neo]
 description: Take the heads of your victims and sell them!
 commands:

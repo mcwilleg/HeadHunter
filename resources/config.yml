@@ -21,11 +21,11 @@ bounty:
   broadcast-place: true
   broadcast-claim: true
 enchantments:
-  looting-effect: 0.8
+  looting-effect: 0.08
   smite-effect: 0.05
 factions:
-  friendly-kills: false
   drop-in-wilderness: true
   drop-in-safezone: false
   drop-in-warzone: false
   drop-in-faction: false
+  friendly-kills: false

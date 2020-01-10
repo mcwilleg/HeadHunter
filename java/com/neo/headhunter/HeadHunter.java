@@ -150,14 +150,14 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	private FactionsHook connectFactions() {
 		if(Bukkit.getPluginManager().isPluginEnabled("FactionsBlue"))
-			factionsHook = new FactionsBlueHook(this);
+			return new FactionsBlueHook(this);
 		else if(Bukkit.getPluginManager().isPluginEnabled("Factions")) {
 			Plugin factionsPlugin = Bukkit.getPluginManager().getPlugin("Factions");
 			if(factionsPlugin != null) {
 				if(factionsPlugin.getDescription().getDepend().contains("MassiveCore"))
-					factionsHook = new FactionsMassiveCoreHook(this);
+					return new FactionsMassiveCoreHook(this);
 				else
-					factionsHook = new FactionsUUIDHook(this);
+					return new FactionsUUIDHook(this);
 			}
 		}
 		return null;

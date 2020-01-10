@@ -29,6 +29,13 @@ public final class Settings extends ConfigAccessor<HeadHunter> {
 			LOOTING_EFFECT = "enchantments.looting-effect",
 			SMITE_EFFECT = "enchantments.smite-effect";
 	
+	private static final String
+			FACTIONS_DROP_WILDERNESS = "factions.drop-in-wilderness",
+			FACTIONS_DROP_SAFEZONE = "factions.drop-in-safezone",
+			FACTIONS_DROP_WARZONE = "factions.drop-in-warzone",
+			FACTIONS_DROP_HOME = "factions.drop-in-faction",
+			FACTIONS_DROP_FRIENDLY = "factions.friendly-kills";
+	
 	public Settings(HeadHunter plugin) {
 		super(plugin, true, "config.yml");
 	}
@@ -99,11 +106,31 @@ public final class Settings extends ConfigAccessor<HeadHunter> {
 	
 	// the amount each Looting level improves the hunter's collect chance
 	public double getLootingEffect() {
-		return config.getDouble(LOOTING_EFFECT, 0.8);
+		return config.getDouble(LOOTING_EFFECT, 0.08);
 	}
 	
 	// the amount each Smite level increases the hunter's steal rate
 	public double getSmiteEffect() {
 		return config.getDouble(SMITE_EFFECT, 0.05);
+	}
+	
+	public boolean isFactionsDropWilderness() {
+		return config.getBoolean(FACTIONS_DROP_WILDERNESS, true);
+	}
+	
+	public boolean isFactionsDropSafezone() {
+		return config.getBoolean(FACTIONS_DROP_SAFEZONE, false);
+	}
+	
+	public boolean isFactionsDropWarzone() {
+		return config.getBoolean(FACTIONS_DROP_WARZONE, false);
+	}
+	
+	public boolean isFactionsDropHome() {
+		return config.getBoolean(FACTIONS_DROP_HOME, false);
+	}
+	
+	public boolean isFactionsDropFriendly() {
+		return config.getBoolean(FACTIONS_DROP_FRIENDLY, false);
 	}
 }

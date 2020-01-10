@@ -22,7 +22,7 @@ public class FactionsMassiveCoreHook extends ConfigAccessor<HeadHunter> implemen
 		if(faction != null && fPlayer != null && fPlayer.hasFaction()) {
 			Faction ownedFaction = fPlayer.getFaction();
 			if(faction.equals(ownedFaction))
-				return config.getBoolean(FactionsPath.DROP_HOME, false);
+				return plugin.getSettings().isFactionsDropHome();
 		}
 		return true;
 	}
@@ -32,11 +32,11 @@ public class FactionsMassiveCoreHook extends ConfigAccessor<HeadHunter> implemen
 		Faction faction = BoardColl.get().getFactionAt(PS.valueOf(location));
 		if(faction != null) {
 			if(faction.getId().equals(Factions.ID_NONE))
-				return config.getBoolean(FactionsPath.DROP_WILDERNESS, true);
+				return plugin.getSettings().isFactionsDropWilderness();
 			if(faction.getId().equals(Factions.ID_SAFEZONE))
-				return config.getBoolean(FactionsPath.DROP_SAFEZONE, false);
+				return plugin.getSettings().isFactionsDropSafezone();
 			if(faction.getId().equals(Factions.ID_WARZONE))
-				return config.getBoolean(FactionsPath.DROP_WARZONE, false);
+				return plugin.getSettings().isFactionsDropWarzone();
 		}
 		return true;
 	}
@@ -49,7 +49,7 @@ public class FactionsMassiveCoreHook extends ConfigAccessor<HeadHunter> implemen
 			Faction hunterFaction = hFPlayer.getFaction();
 			Faction victimFaction = vFPlayer.getFaction();
 			if(hunterFaction.equals(victimFaction))
-				return config.getBoolean(FactionsPath.DROP_FRIENDLY, false);
+				return plugin.getSettings().isFactionsDropFriendly();
 		}
 		return true;
 	}
