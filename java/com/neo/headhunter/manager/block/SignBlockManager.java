@@ -16,6 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -88,6 +89,14 @@ public class SignBlockManager extends BlockConfigAccessor<HeadHunter> implements
 			} else
 				hunter.sendMessage(Message.BOUNTY_LINK_ABORT.format());
 			signLinkMap.remove(hunter);
+		}
+	}
+	
+	@EventHandler(ignoreCancelled = true)
+	public void onBlockPlace(BlockPlaceEvent event) {
+		if(HeadBlockManager.isHeadBlock(event.getBlockPlaced())) {
+			if(getBlockData("sell-head", event.getBlockAgainst(), null) != null)
+				event.setCancelled(true);
 		}
 	}
 	
