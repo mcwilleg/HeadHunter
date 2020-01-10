@@ -205,7 +205,8 @@ public class SellExecutor implements CommandExecutor, TabCompleter {
 			this.balanceValue += value.balanceValue;
 			this.bountyValue += value.bountyValue;
 			this.withdraw = false;
-			this.singleStack = false;
+			if(headOwner != value.headOwner)
+				this.singleStack = false;
 		}
 	}
 }
