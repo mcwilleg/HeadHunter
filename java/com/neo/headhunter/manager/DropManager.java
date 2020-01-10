@@ -1,7 +1,6 @@
 package com.neo.headhunter.manager;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.manager.support.EssentialsHook;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -26,11 +25,9 @@ public class DropManager implements Listener {
 	private static final double DEFAULT_DROP_BALANCE = 1.0;
 	
 	private HeadHunter plugin;
-	private String currencySymbol;
 	
 	public DropManager(HeadHunter plugin) {
 		this.plugin = plugin;
-		reload();
 	}
 	
 	// overall drop chance for PvP kills
@@ -138,17 +135,5 @@ public class DropManager implements Listener {
 			}
 		}
 		return null;
-	}
-	
-	public void reload() {
-		currencySymbol = "$";
-		
-		EssentialsHook essentialsHook = plugin.getEssentialsHook();
-		if(essentialsHook != null)
-			currencySymbol = essentialsHook.getCurrencySymbol();
-	}
-	
-	public String getCurrencySymbol() {
-		return currencySymbol;
 	}
 }

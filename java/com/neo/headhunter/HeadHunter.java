@@ -121,7 +121,6 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	public void reloadAll() {
 		settings.reloadConfig();
-		dropManager.reload();
 		headLibrary.reloadConfig();
 		worldManager.reloadConfig();
 		bountyManager.reloadConfig();

@@ -14,6 +14,7 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public final class HeadDrop {
+	private static final String DEFAULT_CURRENCY = "$";
 	private static DecimalFormat
 			DF_MONEY = new DecimalFormat("0.00"),
 			DF_PERCENT = new DecimalFormat("0.0");
@@ -160,13 +161,18 @@ public final class HeadDrop {
 				meta.setDisplayName(ChatColor.DARK_AQUA + meta.getDisplayName());
 				List<String> lore = new ArrayList<>();
 				
+				// currency symbol
+				String currencySymbol = DEFAULT_CURRENCY;
+				if(plugin.getEssentialsHook() != null)
+					currencySymbol = plugin.getEssentialsHook().getCurrencySymbol();
+				
 				// balance value
 				String balanceValueLore = plugin.getSettings().getHeadValueFormat() + ": &6";
 				if (balanceString == null || balanceString.equals("0.00") || balanceString.equals("0.0%"))
 					balanceValueLore += plugin.getSettings().getWorthlessFormat();
 				else {
 					if (!balanceString.endsWith("%"))
-						balanceString = (plugin.getDropManager().getCurrencySymbol() + balanceString);
+						balanceString = (currencySymbol + balanceString);
 					balanceValueLore += balanceString;
 				}
 				lore.add(ChatColor.translateAlternateColorCodes('&', balanceValueLore));
@@ -174,7 +180,7 @@ public final class HeadDrop {
 				// bounty value
 				String bountyValueLore = plugin.getSettings().getHeadBountyFormat() + ": &6";
 				if (bountyString != null && !bountyString.equals("0.00")) {
-					bountyString = (plugin.getDropManager().getCurrencySymbol() + bountyString);
+					bountyString = (currencySymbol + bountyString);
 					bountyValueLore += bountyString;
 					lore.add(ChatColor.translateAlternateColorCodes('&', bountyValueLore));
 				}
@@ -188,6 +194,9 @@ public final class HeadDrop {
 	}
 	
 	public static String formatMoney(HeadHunter plugin, double value) {
-		return plugin.getDropManager().getCurrencySymbol() + DF_MONEY.format(value);
+		String currencySymbol = DEFAULT_CURRENCY;
+		if(plugin.getEssentialsHook() != null)
+			currencySymbol = plugin.getEssentialsHook().getCurrencySymbol();
+		return currencySymbol + DF_MONEY.format(value);
 	}
 }
