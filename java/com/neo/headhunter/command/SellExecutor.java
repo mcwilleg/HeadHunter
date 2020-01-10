@@ -82,16 +82,14 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 	public void sellAllStacks(Player hunter) {
 		PlayerInventory inv = hunter.getInventory();
 		HeadStackValue total = null;
-		String itemName = null;
 		for(int slot = 0; slot < 36; slot++) {
 			HeadStackValue current = getStackValue(inv, slot);
 			if(current != null) {
 				double currentTotalValue = current.balanceValue + current.bountyValue;
 				if(currentTotalValue > 0) {
-					if (total == null) {
+					if (total == null)
 						total = current;
-						itemName = getDisplayName(inv.getItem(slot));
-					} else
+					else
 						total.add(current);
 					
 					if (current.withdraw && current.headOwner != null && current.balanceValue > 0)
@@ -104,7 +102,7 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 		
 		if(total != null) {
 			double totalValue = total.balanceValue + total.bountyValue;
-			sendSellMessage(hunter, itemName, total.totalAmount, totalValue, total.singleStack);
+			sendSellMessage(hunter, total.stackName, total.totalAmount, totalValue);
 		} else
 			hunter.sendMessage(Message.SELL_FAIL.format());
 	}
@@ -114,24 +112,22 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 		int slot = inv.getHeldItemSlot();
 		HeadStackValue value = getStackValue(inv, slot);
 		if(value != null) {
-			ItemStack item = inv.getItem(slot);
-			String itemName = getDisplayName(item);
 			double totalValue = value.balanceValue + value.bountyValue;
-			if(itemName != null && totalValue > 0) {
+			if(value.stackName != null && totalValue > 0) {
 				if(value.withdraw && value.headOwner != null && value.balanceValue > 0)
 					plugin.getEconomy().withdrawPlayer(value.headOwner, value.balanceValue);
 				plugin.getEconomy().depositPlayer(hunter, totalValue);
 				inv.clear(slot);
 				
-				sendSellMessage(hunter, itemName, value.individualAmount, totalValue, value.singleStack);
+				sendSellMessage(hunter, value.stackName, value.individualAmount, totalValue);
 			} else
 				hunter.sendMessage(Message.SELL_FAIL.format());
 		} else
 			hunter.sendMessage(Message.SELL_FAIL.format());
 	}
 	
-	private void sendSellMessage(Player hunter, String itemName, int amount, double value, boolean singleStack) {
-		if(singleStack) {
+	private void sendSellMessage(Player hunter, String itemName, int amount, double value) {
+		if(itemName != null) {
 			if (plugin.getSettings().isBroadcastSell())
 				hunter.sendMessage(Message.SELL_SINGLE_BROADCAST.format(hunter.getName(), itemName, amount, value));
 			else
@@ -140,15 +136,6 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 			hunter.sendMessage(Message.SELL_MULTIPLE_BROADCAST.format(hunter.getName(), amount, value));
 		else
 			hunter.sendMessage(Message.SELL_MULTIPLE.format(amount, value));
-	}
-	
-	private String getDisplayName(ItemStack item) {
-		if(item != null) {
-			ItemMeta meta = item.getItemMeta();
-			if(meta != null)
-				return meta.getDisplayName();
-		}
-		return null;
 	}
 	
 	private HeadStackValue getStackValue(PlayerInventory inv, int slot) {
@@ -161,15 +148,19 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 	private class HeadStackValue {
 		private int individualAmount, totalAmount;
 		private double balanceValue, bountyValue;
-		private boolean withdraw, singleStack;
+		private boolean withdraw;
 		private OfflinePlayer headOwner;
+		private String stackName;
 		
 		private HeadStackValue(ItemStack head) {
 			this.individualAmount = head.getAmount();
 			this.totalAmount = this.individualAmount;
 			
 			this.withdraw = false;
-			this.singleStack = true;
+			
+			ItemMeta meta = head.getItemMeta();
+			if(meta != null)
+				this.stackName = meta.getDisplayName();
 			
 			HeadData data = new HeadData(plugin, head);
 			if(!data.isMobHead() && data.getOwnerString() != null)
@@ -205,8 +196,8 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 			this.balanceValue += value.balanceValue;
 			this.bountyValue += value.bountyValue;
 			this.withdraw = false;
-			if(headOwner != value.headOwner)
-				this.singleStack = false;
+			if(stackName != null && !stackName.equals(value.stackName))
+				this.stackName = null;
 		}
 	}
 }
