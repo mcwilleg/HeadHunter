@@ -9,7 +9,7 @@ import me.zysea.factions.objects.Claim;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class FactionsBlueHook extends ConfigAccessor<HeadHunter> implements FactionsHook {
+public final class FactionsBlueHook extends ConfigAccessor<HeadHunter> implements FactionsHook {
 	public FactionsBlueHook(HeadHunter plugin) {
 		super(plugin, true, "config.yml");
 	}

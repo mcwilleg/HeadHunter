@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class HeadLibrary extends ConfigAccessor<HeadHunter> {
+public final class HeadLibrary extends ConfigAccessor<HeadHunter> {
 	private Map<String, ItemStack> library;
 	
 	public HeadLibrary(HeadHunter plugin) {

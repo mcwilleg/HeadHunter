@@ -8,7 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.*;
 
-public class BountyManager extends ConfigAccessor<HeadHunter> {
+public final class BountyManager extends ConfigAccessor<HeadHunter> {
 	private static final int LIST_PAGE_SIZE = 10;
 	
 	private List<BountyListEntry> bountyList;

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements Listener {
+public final class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements Listener {
 	private static final List<Material> HEAD_MATERIALS = new ArrayList<>();
 	private static final List<String> HEAD_MATERIAL_NAMES = Arrays.asList(
 			"SKULL",

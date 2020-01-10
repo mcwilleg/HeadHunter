@@ -128,7 +128,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	}
 	
 	private Economy connectEconomy() {
-		if(Bukkit.getPluginManager().getPlugin("Vault") == null)
+		if(!Bukkit.getPluginManager().isPluginEnabled("Vault"))
 			return null;
 		
 		RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);

@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class SellExecutor implements CommandExecutor, TabCompleter {
+public final class SellExecutor implements CommandExecutor, TabCompleter {
 	private HeadHunter plugin;
 	
 	public SellExecutor(HeadHunter plugin) {

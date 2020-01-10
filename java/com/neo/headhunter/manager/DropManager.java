@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-public class DropManager implements Listener {
+public final class DropManager implements Listener {
 	// chance of a hunter to collect the victim's head when killing
 	private static final String STEAL_CHANCE_PERM = "hunter.steal-chance";
 	private static final double DEFAULT_STEAL_CHANCE = 1.0;

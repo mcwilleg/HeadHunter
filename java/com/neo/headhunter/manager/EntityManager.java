@@ -20,7 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EntityManager implements Listener {
+public final class EntityManager implements Listener {
 	private static final String
 			WEAPON_META_KEY = "headhunter_weapon",
 			SPAWNER_ENTITY = "headhunter_spawner";

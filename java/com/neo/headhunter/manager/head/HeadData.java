@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.List;
 
-public class HeadData {
+public final class HeadData {
 	private HeadHunter plugin;
 	private ItemStack head;
 	private String ownerString, balanceString, bountyString, dataString;

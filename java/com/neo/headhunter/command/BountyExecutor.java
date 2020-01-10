@@ -17,7 +17,7 @@ import org.bukkit.util.StringUtil;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class BountyExecutor implements CommandExecutor, TabCompleter {
+public final class BountyExecutor implements CommandExecutor, TabCompleter {
 	private HeadHunter plugin;
 	private Map<Player, CooldownRunnable> cooldownTimers;
 	

@@ -4,7 +4,7 @@ import org.bukkit.OfflinePlayer;
 
 import javax.annotation.Nonnull;
 
-public class BountyListEntry implements Comparable<BountyListEntry> {
+public final class BountyListEntry implements Comparable<BountyListEntry> {
 	private final OfflinePlayer victim;
 	private final double amount;
 	

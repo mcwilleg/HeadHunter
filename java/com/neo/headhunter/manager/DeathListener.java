@@ -21,7 +21,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.Random;
 
-public class DeathListener implements Listener {
+public final class DeathListener implements Listener {
 	private static final Random RANDOM = new Random(System.currentTimeMillis());
 	
 	private HeadHunter plugin;
@@ -104,8 +104,6 @@ public class DeathListener implements Listener {
 		// if base head is null
 		if(headDrop.getBaseHead() == null)
 			return;
-		
-		// call HeadDropEvent here
 		
 		// if worthless drops are disabled, assert the head is valuable
 		if(!plugin.getSettings().isDropWorthless() && headDrop.isWorthless())

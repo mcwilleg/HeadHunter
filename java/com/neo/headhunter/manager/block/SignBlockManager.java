@@ -25,7 +25,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-public class SignBlockManager extends BlockConfigAccessor<HeadHunter> implements Listener {
+public final class SignBlockManager extends BlockConfigAccessor<HeadHunter> implements Listener {
 	private BountySignUpdateRunnable bountyRunnable;
 	private Map<Player, Sign> signLinkMap;
 	
