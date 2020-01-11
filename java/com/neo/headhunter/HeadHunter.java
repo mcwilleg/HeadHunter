@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public final class HeadHunter extends JavaPlugin implements Listener, CommandExecutor {
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	private static final int MAJOR_VER = 0, MINOR_VER = 1, PATCH_VER = 2;
 	
 	private int[] version = new int[3];
