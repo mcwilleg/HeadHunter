@@ -47,6 +47,6 @@ public final class FactionsUUIDHook extends ConfigAccessor<HeadHunter> implement
 			if(hunterFaction.equals(victimFaction))
 				return plugin.getSettings().isFactionsDropFriendly();
 		}
-		return false;
+		return true;
 	}
 }
