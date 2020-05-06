@@ -115,26 +115,32 @@ public final class EntityManager implements Listener {
 		if(hunter != null && burning instanceof LivingEntity) {
 			FireTickRunnable runnable = new FireTickRunnable(hunter, weapon, (LivingEntity) burning);
 			burningTimers.put((LivingEntity) burning, runnable);
-			runnable.runTaskTimer(plugin, 0L, 1L);
+			runnable.runTaskTimer(plugin, 0L, 20 / FireTickRunnable.RUN_FREQUENCY);
 		}
 	}
-	
+
 	private class FireTickRunnable extends BukkitRunnable {
+	    private static final long RUN_FREQUENCY = 4; // runs per second
+	    private static final long MAX_SECONDS = 60; // max time this task can run
+
 		private final LivingEntity burning;
 		
 		private Player combuster;
 		private ItemStack weapon;
+		private long runningTime;
 		
 		private FireTickRunnable(Player combuster, ItemStack weapon, LivingEntity burning) {
 			this.burning = burning;
 			
 			this.combuster = combuster;
 			this.weapon = weapon;
+			this.runningTime = 0;
 		}
 		
 		@Override
 		public void run() {
-			if(burning == null) {
+		    runningTime++;
+			if(runningTime >= (RUN_FREQUENCY * MAX_SECONDS) || burning == null || burning.isDead()) {
 				cancel();
 				return;
 			}
