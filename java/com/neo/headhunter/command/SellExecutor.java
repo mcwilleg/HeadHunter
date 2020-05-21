@@ -1,10 +1,11 @@
 package com.neo.headhunter.command;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.manager.head.HeadData;
 import com.neo.headhunter.manager.block.HeadBlockManager;
+import com.neo.headhunter.manager.head.HeadData;
 import com.neo.headhunter.message.Message;
 import com.neo.headhunter.message.Usage;
+import com.neo.headhunter.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -171,7 +172,7 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 					balanceString = balanceString.replace("%", "");
 					this.withdraw = true;
 					double balance = plugin.getEconomy().getBalance(headOwner);
-					double stealBalance = Double.valueOf(balanceString) / 100.0;
+					double stealBalance = Utils.valueOf(balanceString) / 100.0;
 					this.balanceValue = 0;
 					for(int i = 0; i < this.individualAmount; i++) {
 						double stolenValue = balance * stealBalance;
@@ -179,7 +180,7 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 						balance -= stolenValue;
 					}
 				} else {
-					this.balanceValue = Double.valueOf(balanceString);
+				    this.balanceValue = Utils.valueOf(balanceString);
 					this.balanceValue *= this.individualAmount;
 				}
 			} else
@@ -187,7 +188,7 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 			
 			String bountyString = data.getBountyString();
 			if(bountyString != null)
-				this.bountyValue = Double.valueOf(bountyString);
+				this.bountyValue = Utils.valueOf(bountyString);
 			this.bountyValue *= this.individualAmount;
 		}
 		
