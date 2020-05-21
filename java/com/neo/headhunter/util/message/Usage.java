@@ -1,4 +1,4 @@
-package com.neo.headhunter.message;
+package com.neo.headhunter.util.message;
 
 import org.bukkit.ChatColor;
 

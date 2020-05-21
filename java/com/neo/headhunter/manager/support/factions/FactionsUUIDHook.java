@@ -2,7 +2,7 @@ package com.neo.headhunter.manager.support.factions;
 
 import com.massivecraft.factions.*;
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.config.ConfigAccessor;
+import com.neo.headhunter.util.config.ConfigAccessor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

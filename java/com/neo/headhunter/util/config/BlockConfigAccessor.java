@@ -1,4 +1,4 @@
-package com.neo.headhunter.config;
+package com.neo.headhunter.util.config;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

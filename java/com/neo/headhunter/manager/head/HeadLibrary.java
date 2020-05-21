@@ -1,7 +1,7 @@
 package com.neo.headhunter.manager.head;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.config.ConfigAccessor;
+import com.neo.headhunter.util.config.ConfigAccessor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

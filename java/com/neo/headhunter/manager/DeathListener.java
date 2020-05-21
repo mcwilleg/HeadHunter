@@ -4,7 +4,7 @@ import com.neo.headhunter.HeadHunter;
 import com.neo.headhunter.manager.head.HeadDrop;
 import com.neo.headhunter.manager.block.HeadBlockManager;
 import com.neo.headhunter.manager.support.factions.FactionsHook;
-import com.neo.headhunter.message.Message;
+import com.neo.headhunter.util.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;

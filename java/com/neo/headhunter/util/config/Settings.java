@@ -1,4 +1,4 @@
-package com.neo.headhunter.config;
+package com.neo.headhunter.util.config;
 
 import com.neo.headhunter.HeadHunter;
 

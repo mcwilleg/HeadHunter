@@ -1,7 +1,7 @@
 package com.neo.headhunter.manager.support.factions;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.config.ConfigAccessor;
+import com.neo.headhunter.util.config.ConfigAccessor;
 import me.zysea.factions.api.FactionsApi;
 import me.zysea.factions.faction.FPlayer;
 import me.zysea.factions.faction.Faction;

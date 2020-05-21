@@ -1,10 +1,10 @@
 package com.neo.headhunter.manager.block;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.config.BlockConfigAccessor;
+import com.neo.headhunter.util.config.BlockConfigAccessor;
 import com.neo.headhunter.manager.bounty.BountyListEntry;
 import com.neo.headhunter.manager.head.HeadDrop;
-import com.neo.headhunter.message.Message;
+import com.neo.headhunter.util.message.Message;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;

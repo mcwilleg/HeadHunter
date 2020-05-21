@@ -1,8 +1,8 @@
 package com.neo.headhunter.command;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.message.Message;
-import com.neo.headhunter.message.Usage;
+import com.neo.headhunter.util.message.Message;
+import com.neo.headhunter.util.message.Usage;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

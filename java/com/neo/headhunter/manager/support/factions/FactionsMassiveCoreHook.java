@@ -6,7 +6,7 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MPlayer;
 import com.massivecraft.massivecore.ps.PS;
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.config.ConfigAccessor;
+import com.neo.headhunter.util.config.ConfigAccessor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

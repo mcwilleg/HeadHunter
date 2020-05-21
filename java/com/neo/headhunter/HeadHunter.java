@@ -5,7 +5,7 @@ import com.neo.headhunter.manager.bounty.BountyManager;
 import com.neo.headhunter.command.BountyExecutor;
 import com.neo.headhunter.command.HunterExecutor;
 import com.neo.headhunter.command.SellExecutor;
-import com.neo.headhunter.config.Settings;
+import com.neo.headhunter.util.config.Settings;
 import com.neo.headhunter.manager.head.HeadLibrary;
 import com.neo.headhunter.manager.DeathListener;
 import com.neo.headhunter.manager.DropManager;

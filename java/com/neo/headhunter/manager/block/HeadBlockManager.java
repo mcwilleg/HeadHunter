@@ -1,7 +1,7 @@
 package com.neo.headhunter.manager.block;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.config.BlockConfigAccessor;
+import com.neo.headhunter.util.config.BlockConfigAccessor;
 import com.neo.headhunter.manager.head.HeadData;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
