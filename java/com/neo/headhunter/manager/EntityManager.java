@@ -113,6 +113,7 @@ public final class EntityManager implements Listener {
 		}
 		
 		if(hunter != null && burning instanceof LivingEntity) {
+            stopFireTickTimer((LivingEntity) burning);
 			FireTickRunnable runnable = new FireTickRunnable(hunter, weapon, (LivingEntity) burning);
 			burningTimers.put((LivingEntity) burning, runnable);
 			runnable.runTaskTimer(plugin, 0L, 20 / FireTickRunnable.RUN_FREQUENCY);
