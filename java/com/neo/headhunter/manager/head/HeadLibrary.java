@@ -231,9 +231,9 @@ public final class HeadLibrary extends ConfigAccessor<HeadHunter> {
 		if(plugin.isVersionBefore(1, 9, 0))
 			resource = plugin.getResource("mob_db_1_8.yml");
 		else if(plugin.isVersionBefore(1, 13, 0))
-			resource = plugin.getResource("mob_db_1_12.yml");
+			resource = plugin.getResource("mob_db_1_9.yml");
 		else
-			resource = plugin.getResource("mob_db.yml");
+			resource = plugin.getResource("mob_db_1_13.yml");
 		if(resource != null) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(new InputStreamReader(resource));
 			for(String key : config.getKeys(true)) {
