@@ -55,6 +55,9 @@ GIANT:
 GUARDIAN:
   max-price: 450
   drop-chance: 1.0
+HOGLIN:
+  max-price: 400
+  drop-chance: 1.0
 HUSK:
   max-price: 90
   drop-chance: 1.0
@@ -78,6 +81,9 @@ PHANTOM:
   drop-chance: 1.0
 PIG:
   max-price: 8
+  drop-chance: 1.0
+PIGLIN:
+  max-price: 50
   drop-chance: 1.0
 PIG_ZOMBIE:
   max-price: 40
@@ -127,6 +133,9 @@ SQUID:
 STRAY:
   max-price: 110
   drop-chance: 1.0
+STRIDER:
+  max-price: 1000
+  drop-chance: 1.0
 TROPICAL_FISH:
   max-price: 5
   drop-chance: 1.0
@@ -151,11 +160,17 @@ WITHER_SKELETON:
 WOLF:
   max-price: 80
   drop-chance: 1.0
+ZOGLIN:
+  max-price: 410
+  drop-chance: 1.0
 ZOMBIE:
   max-price: 15
   drop-chance: 1.0
 ZOMBIE_HORSE:
   max-price: 140
+  drop-chance: 1.0
+ZOMBIFIED_PIGLIN:
+  max-price: 40
   drop-chance: 1.0
 CAT:
   ALL_BLACK:
