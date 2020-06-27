@@ -18,8 +18,8 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public final class BountyExecutor implements CommandExecutor, TabCompleter {
-	private HeadHunter plugin;
-	private Map<String, CooldownRunnable> cooldownTimers;
+	private final HeadHunter plugin;
+	private final Map<String, CooldownRunnable> cooldownTimers;
 	
 	public BountyExecutor(HeadHunter plugin) {
 		this.plugin = plugin;
@@ -56,7 +56,7 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 					return false;
 				}
 				
-				page = Integer.valueOf(args[1]);
+				page = Integer.parseInt(args[1]);
 				if(page <= 0) {
 					sender.sendMessage(Message.BOUNTY_PAGE_INVALID.format(args[1]));
 					return false;
@@ -176,7 +176,7 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 					}
 					
 					// assert new bounty is above minimum threshold
-					double amount = Double.valueOf(bountyString);
+					double amount = Double.parseDouble(bountyString);
 					if(amount < plugin.getSettings().getMinimumBounty()) {
 						sender.sendMessage(Message.BOUNTY_AMOUNT_LOW.format(plugin.getSettings().getMinimumBounty()));
 						return true;
@@ -238,7 +238,7 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 	}
 	
 	private class CooldownRunnable extends BukkitRunnable {
-		private String hunterID;
+		private final String hunterID;
 		private long cooldown;
 		
 		private CooldownRunnable(Player hunter, long cooldown) {

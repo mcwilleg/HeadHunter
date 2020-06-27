@@ -25,8 +25,8 @@ public final class EntityManager implements Listener {
 			WEAPON_META_KEY = "headhunter_weapon",
 			SPAWNER_ENTITY = "headhunter_spawner";
 	
-	private HeadHunter plugin;
-	private Map<LivingEntity, FireTickRunnable> burningTimers;
+	private final HeadHunter plugin;
+	private final Map<LivingEntity, FireTickRunnable> burningTimers;
 	
 	public EntityManager(HeadHunter plugin) {
 		this.plugin = plugin;
@@ -35,29 +35,34 @@ public final class EntityManager implements Listener {
 	
 	Player getCombuster(LivingEntity burning) {
 		FireTickRunnable runnable = burningTimers.get(burning);
-		if(runnable != null)
+		if(runnable != null) {
 			return runnable.combuster;
+		}
 		return null;
 	}
 	
 	ItemStack getCombusterWeapon(LivingEntity burning) {
 		FireTickRunnable runnable = burningTimers.get(burning);
-		if(runnable != null)
+		if(runnable != null) {
 			return runnable.weapon;
+		}
 		return null;
 	}
 	
 	void stopFireTickTimer(LivingEntity victim) {
 		FireTickRunnable runnable = burningTimers.remove(victim);
-		if(runnable != null)
+		if(runnable != null) {
 			runnable.cancel();
+		}
 	}
 	
 	ItemStack getProjectileWeapon(Projectile projectile) {
 		if(projectile.hasMetadata(WEAPON_META_KEY)) {
 			for(MetadataValue metaWeapon : projectile.getMetadata(WEAPON_META_KEY)) {
-				if(metaWeapon.value() instanceof ItemStack)
-					return (ItemStack) metaWeapon.value();
+				Object value = metaWeapon.value();
+				if(value instanceof ItemStack) {
+					return (ItemStack) value;
+				}
 			}
 		}
 		return null;
@@ -66,8 +71,10 @@ public final class EntityManager implements Listener {
 	boolean isFromSpawner(LivingEntity entity) {
 		if(entity.hasMetadata(SPAWNER_ENTITY)) {
 			for(MetadataValue metaEntity : entity.getMetadata(SPAWNER_ENTITY)) {
-				if(metaEntity.value() instanceof Boolean)
-					return (boolean) metaEntity.value();
+				Object value = metaEntity.value();
+				if(value instanceof Boolean) {
+					return (boolean) value;
+				}
 			}
 		}
 		return false;
@@ -126,8 +133,8 @@ public final class EntityManager implements Listener {
 
 		private final LivingEntity burning;
 		
-		private Player combuster;
-		private ItemStack weapon;
+		private final Player combuster;
+		private final ItemStack weapon;
 		private long runningTime;
 		
 		private FireTickRunnable(Player combuster, ItemStack weapon, LivingEntity burning) {

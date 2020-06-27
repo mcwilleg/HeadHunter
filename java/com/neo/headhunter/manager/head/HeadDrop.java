@@ -15,11 +15,10 @@ import java.util.List;
 @SuppressWarnings("unused")
 public final class HeadDrop {
 	private static final String DEFAULT_CURRENCY = "$";
-	private static DecimalFormat
-			DF_MONEY = new DecimalFormat("0.00"),
-			DF_PERCENT = new DecimalFormat("0.0");
+	private static final DecimalFormat DF_MONEY = new DecimalFormat("0.00");
+	private static final DecimalFormat DF_PERCENT = new DecimalFormat("0.0");
 	
-	private HeadHunter plugin;
+	private final HeadHunter plugin;
 	
 	private final Player hunter;
 	private final ItemStack weapon;

@@ -24,7 +24,7 @@ import java.util.Random;
 public final class DeathListener implements Listener {
 	private static final Random RANDOM = new Random(System.currentTimeMillis());
 	
-	private HeadHunter plugin;
+	private final HeadHunter plugin;
 	
 	public DeathListener(HeadHunter plugin) {
 		this.plugin = plugin;

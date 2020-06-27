@@ -26,8 +26,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 
 public final class SignBlockManager extends BlockConfigAccessor<HeadHunter> implements Listener {
-	private BountySignUpdateRunnable bountyRunnable;
-	private Map<Player, Sign> signLinkMap;
+	private final BountySignUpdateRunnable bountyRunnable;
+	private final Map<Player, Sign> signLinkMap;
 	
 	public SignBlockManager(HeadHunter plugin) {
 		super(plugin, "signs.yml", "data");
@@ -127,7 +127,7 @@ public final class SignBlockManager extends BlockConfigAccessor<HeadHunter> impl
 			}
 			
 			if(lines[1] != null && lines[1].matches("[1-9]\\d*")) {
-				int bountyListIndex = Integer.valueOf(lines[1]) - 1;
+				int bountyListIndex = Integer.parseInt(lines[1]) - 1;
 				
 				setBlockData("bounty", event.getBlock(), "index", bountyListIndex);
 				saveConfig();
@@ -167,7 +167,7 @@ public final class SignBlockManager extends BlockConfigAccessor<HeadHunter> impl
 	}
 	
 	private class BountySignUpdateRunnable extends BukkitRunnable {
-		private Set<Sign> signs;
+		private final Set<Sign> signs;
 		
 		private BountySignUpdateRunnable() {
 			this.signs = new HashSet<>();

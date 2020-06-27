@@ -3,7 +3,7 @@ package com.neo.headhunter.manager.support;
 import com.earth2me.essentials.Essentials;
 
 public class EssentialsHook {
-	private Essentials essentials;
+	private final Essentials essentials;
 	
 	public EssentialsHook(Essentials essentials) {
 		this.essentials = essentials;

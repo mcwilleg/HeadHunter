@@ -1,23 +1,23 @@
 package com.neo.headhunter;
 
 import com.earth2me.essentials.Essentials;
-import com.neo.headhunter.manager.bounty.BountyManager;
 import com.neo.headhunter.command.BountyExecutor;
 import com.neo.headhunter.command.HunterExecutor;
 import com.neo.headhunter.command.SellExecutor;
-import com.neo.headhunter.util.config.Settings;
-import com.neo.headhunter.manager.head.HeadLibrary;
 import com.neo.headhunter.manager.DeathListener;
 import com.neo.headhunter.manager.DropManager;
 import com.neo.headhunter.manager.EntityManager;
 import com.neo.headhunter.manager.WorldManager;
 import com.neo.headhunter.manager.block.HeadBlockManager;
 import com.neo.headhunter.manager.block.SignBlockManager;
+import com.neo.headhunter.manager.bounty.BountyManager;
+import com.neo.headhunter.manager.head.HeadLibrary;
 import com.neo.headhunter.manager.support.EssentialsHook;
 import com.neo.headhunter.manager.support.factions.FactionsBlueHook;
 import com.neo.headhunter.manager.support.factions.FactionsHook;
 import com.neo.headhunter.manager.support.factions.FactionsMassiveCoreHook;
 import com.neo.headhunter.manager.support.factions.FactionsUUIDHook;
+import com.neo.headhunter.util.config.Settings;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
@@ -34,10 +34,10 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public final class HeadHunter extends JavaPlugin implements Listener, CommandExecutor {
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 	private static final int MAJOR_VER = 0, MINOR_VER = 1, PATCH_VER = 2;
 	
-	private int[] version = new int[3];
+	private final int[] version = new int[3];
 	
 	private Economy economy;
 	private EssentialsHook essentialsHook;
@@ -62,9 +62,9 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		String minorVer = split[1]; // For 1.10 will be "10"
 		String patchVer = split.length > 2 ? split[2] : "0"; // For 1.10 will be "0", for 1.9.4 will be "4"
 		
-		version[MAJOR_VER] = Integer.valueOf(majorVer);
-		version[MINOR_VER] = Integer.valueOf(minorVer);
-		version[PATCH_VER] = Integer.valueOf(patchVer);
+		version[MAJOR_VER] = Integer.parseInt(majorVer);
+		version[MINOR_VER] = Integer.parseInt(minorVer);
+		version[PATCH_VER] = Integer.parseInt(patchVer);
 		
 		// connections
 		economy = connectEconomy();

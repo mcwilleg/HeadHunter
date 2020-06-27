@@ -10,10 +10,13 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.List;
 
 public final class HeadData {
-	private HeadHunter plugin;
+	private final HeadHunter plugin;
 	private ItemStack head;
-	private String ownerString, balanceString, bountyString, dataString;
-	private boolean mobHead;
+	private String ownerString;
+	private String balanceString;
+	private String bountyString;
+	private final String dataString;
+	private final boolean mobHead;
 	
 	private HeadData(HeadHunter plugin, ItemStack head, String headData) {
 		this.plugin = plugin;

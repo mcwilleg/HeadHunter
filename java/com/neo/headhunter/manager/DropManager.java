@@ -24,7 +24,7 @@ public final class DropManager implements Listener {
 	private static final String DROP_BALANCE_PERM = "hunter.drop-balance";
 	private static final double DEFAULT_DROP_BALANCE = 1.0;
 	
-	private HeadHunter plugin;
+	private final HeadHunter plugin;
 	
 	public DropManager(HeadHunter plugin) {
 		this.plugin = plugin;

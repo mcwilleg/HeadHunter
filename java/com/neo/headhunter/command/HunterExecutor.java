@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class HunterExecutor implements CommandExecutor, TabCompleter {
-	private HeadHunter plugin;
+	private final HeadHunter plugin;
 	
 	public HunterExecutor(HeadHunter plugin) {
 		this.plugin = plugin;

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 public final class SellExecutor implements CommandExecutor, TabCompleter {
-	private HeadHunter plugin;
+	private final HeadHunter plugin;
 	
 	public SellExecutor(HeadHunter plugin) {
 		this.plugin = plugin;
@@ -147,7 +147,8 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 	}
 	
 	private class HeadStackValue {
-		private int individualAmount, totalAmount;
+		private final int individualAmount;
+		private int totalAmount;
 		private double balanceValue, bountyValue;
 		private boolean withdraw;
 		private OfflinePlayer headOwner;

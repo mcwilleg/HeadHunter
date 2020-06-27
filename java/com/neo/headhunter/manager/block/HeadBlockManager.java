@@ -67,7 +67,6 @@ public final class HeadBlockManager extends BlockConfigAccessor<HeadHunter> impl
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-	@SuppressWarnings("deprecation")
 	public void onBlockPlace(BlockPlaceEvent event) {
 		ItemStack item = event.getItemInHand();
 		if(isHead(item) && event.getPlayer().getGameMode() != GameMode.CREATIVE) {

@@ -4,7 +4,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 public class Utils {
-    private static NumberFormat localFormatter = NumberFormat.getInstance();
+    private static final NumberFormat localFormatter = NumberFormat.getInstance();
 
     public static double valueOf(String valueString) {
         try {
