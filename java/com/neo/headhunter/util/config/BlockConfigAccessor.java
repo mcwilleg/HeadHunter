@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class BlockConfigAccessor<T extends JavaPlugin> extends ConfigAccessor<T> {
-	public BlockConfigAccessor(T plugin, String fileName, String... ancestry) {
+public class BlockConfigAccessor extends ConfigAccessor {
+	public BlockConfigAccessor(JavaPlugin plugin, String fileName, String... ancestry) {
 		super(plugin, true, fileName, ancestry);
 	}
 	

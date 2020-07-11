@@ -1,7 +1,6 @@
 package com.neo.headhunter.manager.support.factions;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.util.config.ConfigAccessor;
 import me.zysea.factions.api.FactionsApi;
 import me.zysea.factions.faction.FPlayer;
 import me.zysea.factions.faction.Faction;
@@ -9,9 +8,11 @@ import me.zysea.factions.objects.Claim;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public final class FactionsBlueHook extends ConfigAccessor<HeadHunter> implements FactionsHook {
+public final class FactionsBlueHook implements FactionsHook {
+	private final HeadHunter plugin;
+
 	public FactionsBlueHook(HeadHunter plugin) {
-		super(plugin, true, "config.yml");
+		this.plugin = plugin;
 	}
 	
 	@Override

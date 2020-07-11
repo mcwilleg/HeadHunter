@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class HeadBlockManager extends BlockConfigAccessor<HeadHunter> implements Listener {
+public final class HeadBlockManager extends BlockConfigAccessor implements Listener {
 	private static final List<Material> HEAD_MATERIALS = new ArrayList<>();
 	private static final List<String> HEAD_MATERIAL_NAMES = Arrays.asList(
 			"SKULL",
@@ -45,9 +45,12 @@ public final class HeadBlockManager extends BlockConfigAccessor<HeadHunter> impl
 			"CAVE_AIR",
 			"VOID_AIR"
 	);
+
+	private final HeadHunter plugin;
 	
 	public HeadBlockManager(HeadHunter plugin) {
 		super(plugin, "placed_heads.yml", "data");
+		this.plugin = plugin;
 		for(String materialName : HEAD_MATERIAL_NAMES) {
 			try {
 				Material headMaterial = Material.valueOf(materialName);

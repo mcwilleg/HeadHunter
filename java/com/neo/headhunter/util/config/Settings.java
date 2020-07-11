@@ -2,7 +2,7 @@ package com.neo.headhunter.util.config;
 
 import com.neo.headhunter.HeadHunter;
 
-public final class Settings extends ConfigAccessor<HeadHunter> {
+public final class Settings extends ConfigAccessor {
 	private static final String
 			STEAL_ON_SELL = "head.steal-on-sell",
 			BROADCAST_SELL = "head.broadcast-sell",

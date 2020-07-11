@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class WorldManager extends ConfigAccessor<HeadHunter> {
+public final class WorldManager extends ConfigAccessor {
 	private static final String
 			WORLDS_IGNORED = "worlds.ignored",
 			WORLDS_VALID = "worlds.valid";

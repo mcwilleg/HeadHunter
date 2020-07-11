@@ -6,13 +6,14 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MPlayer;
 import com.massivecraft.massivecore.ps.PS;
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.util.config.ConfigAccessor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public final class FactionsMassiveCoreHook extends ConfigAccessor<HeadHunter> implements FactionsHook {
+public final class FactionsMassiveCoreHook implements FactionsHook {
+	private final HeadHunter plugin;
+
 	public FactionsMassiveCoreHook(HeadHunter plugin) {
-		super(plugin, true, "config.yml");
+		this.plugin = plugin;
 	}
 	
 	@Override

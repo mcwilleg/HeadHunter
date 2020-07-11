@@ -13,15 +13,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class ConfigAccessor<T extends JavaPlugin> {
-	protected final T plugin;
+public class ConfigAccessor {
+	protected final JavaPlugin plugin;
 	private final boolean dynamic;
 	private final String fileName, ancestry;
 	
 	private File configFile;
 	protected FileConfiguration config;
 	
-	public ConfigAccessor(T plugin, boolean dynamic, String fileName, String... ancestry) {
+	public ConfigAccessor(JavaPlugin plugin, boolean dynamic, String fileName, String... ancestry) {
 		this.plugin = plugin;
 		this.dynamic = dynamic;
 		this.fileName = fileName.endsWith(".yml") ? fileName : (fileName + ".yml");
@@ -128,7 +128,7 @@ public class ConfigAccessor<T extends JavaPlugin> {
 	private InputStream getResource() {
 		return plugin.getResource(fileName);
 	}
-	
+
 	private void copyInputStreamToFile(InputStream inputStream, File file) throws IOException {
 		if(inputStream == null || file == null)
 			throw new IOException("input stream and file cannot be null");
@@ -139,7 +139,8 @@ public class ConfigAccessor<T extends JavaPlugin> {
 				throw new IOException("file " + file.getName() + " could not be created");
 		}
 		byte[] buffer = new byte[inputStream.available()];
-		if(inputStream.read(buffer) > 0)
+		if(inputStream.read(buffer) > 0) {
 			Files.write(buffer, file);
+		}
 	}
 }

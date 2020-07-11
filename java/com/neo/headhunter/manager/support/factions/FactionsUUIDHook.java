@@ -2,13 +2,14 @@ package com.neo.headhunter.manager.support.factions;
 
 import com.massivecraft.factions.*;
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.util.config.ConfigAccessor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public final class FactionsUUIDHook extends ConfigAccessor<HeadHunter> implements FactionsHook {
+public final class FactionsUUIDHook implements FactionsHook {
+	private final HeadHunter plugin;
+
 	public FactionsUUIDHook(HeadHunter plugin) {
-		super(plugin, true, "config.yml");
+		this.plugin = plugin;
 	}
 	
 	@Override

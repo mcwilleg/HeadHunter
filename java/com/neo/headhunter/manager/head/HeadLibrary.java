@@ -19,11 +19,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public final class HeadLibrary extends ConfigAccessor<HeadHunter> {
+public final class HeadLibrary extends ConfigAccessor {
+	private final HeadHunter plugin;
 	private Map<String, ItemStack> library;
 	
 	public HeadLibrary(HeadHunter plugin) {
 		super(plugin, true, "mobs.yml");
+		this.plugin = plugin;
 		initLibrary();
 	}
 	
