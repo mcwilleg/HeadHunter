@@ -258,6 +258,15 @@ PIGLIN:
     meta-type: SKULL
     display-name: Piglin Head
     internal: H4sIAAAAAAAAAE3PTVKDMBwF8L8dnanoYQIRtM64YMSxYUqQEj7CrqWpFJNaW3CansAjeBCvoe69ihuzdPXmzfttngVgwXn61Ev5sH1erqQ4gwFZAMDx4Dr9fivDr/eXz9+fDF9ZYBmyEdtuJXanMOzEvuu3YmcZfDSEk3wmewEfQoeoKhu0KENZa+KZzlIkY9JuLsk61/Nb4hFl9rHvTfTon3W7WeFKjsOmWif9XOVogqdSjKd2rbJXGtC2Yr6ODjWiToTjgLi8zfa8MOkkDlUZju/vdBREqAoaFbPHi5gR4xPNWYKqIrOpIth4mx9yRZlv8zQcLUt0Yx7AH7mIAwAKAQAA
+PIGLIN_BRUTE:
+  ==: org.bukkit.inventory.ItemStack
+  v: 2567
+  type: PLAYER_HEAD
+  meta:
+    ==: ItemMeta
+    meta-type: SKULL
+    display-name: Piglin Brute Head
+    internal: H4sIAAAAAAAAAE3PTVKDMBwF8L8dnanoYQIRtM64YMSxYUqQEj7CrqWpFJNaW3CansAjeBCvoe69ihuzdPXmzfttngVgwXn61Ev5sH1erqQ4gwFZAMDx4Dr9fivDr/eXz9+fDF9ZYBmyEdtuJXanMOzEvuu3YmcZfDSEk3wmewEfQoeoKhu0KENZa+KZzlIkY9JuLsk61/Nb4hFl9rHvTfTon3W7WeFKjsOmWif9XOVogqdSjKd2rbJXGtC2Yr6ODjWiToTjgLi8zfa8MOkkDlUZju/vdBREqAoaFbPHi5gR4xPNWYKqIrOpIth4mx9yRZlv8zQcLUt0Yx7AH7mIAwAKAQAA
 PILLAGER:
   ==: org.bukkit.inventory.ItemStack
   v: 2567

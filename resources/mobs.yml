@@ -85,6 +85,9 @@ PIG:
 PIGLIN:
   max-price: 50
   drop-chance: 1.0
+PIGLIN_BRUTE:
+  max-price: 350
+  drop-chance: 1.0
 PIG_ZOMBIE:
   max-price: 40
   drop-chance: 1.0
