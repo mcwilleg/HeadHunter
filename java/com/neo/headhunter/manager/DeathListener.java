@@ -1,12 +1,13 @@
 package com.neo.headhunter.manager;
 
 import com.neo.headhunter.HeadHunter;
-import com.neo.headhunter.manager.head.HeadDrop;
 import com.neo.headhunter.manager.block.HeadBlockManager;
+import com.neo.headhunter.manager.head.HeadDrop;
 import com.neo.headhunter.manager.support.factions.FactionsHook;
 import com.neo.headhunter.util.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -20,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.util.Random;
+import java.util.logging.Level;
 
 public final class DeathListener implements Listener {
 	private static final Random RANDOM = new Random(System.currentTimeMillis());
@@ -108,9 +110,20 @@ public final class DeathListener implements Listener {
 		// if worthless drops are disabled, assert the head is valuable
 		if(!plugin.getSettings().isDropWorthless() && headDrop.isWorthless())
 			return;
-		
+
+		double success = RANDOM.nextDouble();
+		if (HeadHunter.DEBUG) {
+			plugin.log(Level.INFO, String.format(
+					"%.1f%% chance to drop %s head: %s (%.1f%%)",
+					headDrop.getDropChance() * 100,
+					victim.getType().name(),
+					(success < headDrop.getDropChance()) ? "SUCCESS" : "FAILURE",
+					success * 100
+			));
+		}
+
 		// check drop chance
-		if(!(RANDOM.nextDouble() < headDrop.getDropChance()))
+		if(!(success < headDrop.getDropChance()))
 			return;
 		
 		Location dropLocation = victim.getEyeLocation();
@@ -143,7 +156,14 @@ public final class DeathListener implements Listener {
 			}
 		} else {
 			// manipulate drops if a mob died
-			event.getDrops().removeIf(HeadBlockManager::isHead);
+			for (ItemStack i : event.getDrops()) {
+				if (HeadBlockManager.isHead(i)) {
+					i.setType(Material.AIR);
+				} else {
+					victim.getWorld().dropItemNaturally(victim.getLocation(), i);
+				}
+			}
+			event.getDrops().clear();
 		}
 		
 		// drop head

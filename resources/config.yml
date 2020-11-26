@@ -21,7 +21,7 @@ bounty:
   broadcast-place: true
   broadcast-claim: true
 enchantments:
-  looting-effect: 0.08
+  looting-effect: 0.05
   smite-effect: 0.05
 factions:
   drop-in-wilderness: true

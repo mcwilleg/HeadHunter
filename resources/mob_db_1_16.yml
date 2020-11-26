@@ -468,12 +468,11 @@ WITHER:
 WITHER_SKELETON:
   ==: org.bukkit.inventory.ItemStack
   v: 2567
-  type: PLAYER_HEAD
+  type: WITHER_SKELETON_SKULL
   meta:
     ==: ItemMeta
     meta-type: SKULL
     display-name: Wither Skeleton Skull
-    internal: H4sIAAAAAAAAAE3OQU6DQBiG4V+jSUWXHmSgFNOFMabYdEgZhCIw7EqZhpZ/sKFQhTO40Z1x6QWMB/AonsVZunzzPYtPA9DgYlG2iPf143qD4hyOaQ4AJx/V9+fLO7t8zZLfn5u3TANNkZ2om43Yn8GgEc9NW4u9pvDRAE6jJbYCvkTnkDQpSJ44uOqopTpcEPTodndFq6jLJtSiUu2zW2vejf/ZUbOMR8iHTpFWfpvJiMyHAYpZoK/kw4H1pe4a1OA9N5ntm2mYI5OqJTdTSTvWs5L19Mk1ptvULtCNHXRDRM++I549RR77uhtzwuIAWYiFN3HG64Rcq/fwB3Cn8f4GAQAA
 WOLF:
   ==: org.bukkit.inventory.ItemStack
   v: 2567

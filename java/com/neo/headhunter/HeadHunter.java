@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public final class HeadHunter extends JavaPlugin implements Listener, CommandExecutor {
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	private static final int MAJOR_VER = 0, MINOR_VER = 1, PATCH_VER = 2;
 	
 	private final int[] version = new int[3];
@@ -89,8 +89,9 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		bountyExecutor = new BountyExecutor(this);
 		
 		// register listeners
-		if(DEBUG)
+		if(DEBUG) {
 			registerListener(this);
+		}
 		registerListener(dropManager);
 		registerListener(new DeathListener(this));
 		registerListener(entityManager);
@@ -98,8 +99,9 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		registerListener(signBlockManager);
 		
 		// register commands
-		if(DEBUG)
+		if(DEBUG) {
 			registerCommand("hhdebug", this);
+		}
 		registerCommand("hunter", new HunterExecutor(this));
 		registerCommand("sellhead", sellExecutor);
 		registerCommand("bounty", bountyExecutor);
@@ -125,6 +127,10 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		worldManager.reloadConfig();
 		bountyManager.reloadConfig();
 		headBlockManager.reloadConfig();
+	}
+
+	public void log(Level level, String msg) {
+		getLogger().log(level, msg);
 	}
 	
 	private Economy connectEconomy() {

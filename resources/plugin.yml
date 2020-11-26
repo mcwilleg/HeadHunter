@@ -1,5 +1,5 @@
 name: HeadHunter
-version: 2.8.2
+version: 2.8.3
 main: com.neo.headhunter.HeadHunter
 api-version: '1.13'
 prefix: HeadHunter
@@ -17,6 +17,8 @@ commands:
   sellhead:
     description: Sell a stack of heads from your inventory.
 permissions:
+  hhdebug:
+    default: op
   hunter.sellhead.hand:
     description: Allows selling a stack of heads from main hand
   hunter.sellhead.all:
