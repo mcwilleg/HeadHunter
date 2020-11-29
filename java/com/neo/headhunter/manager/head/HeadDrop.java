@@ -1,6 +1,7 @@
 package com.neo.headhunter.manager.head;
 
 import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.util.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.LivingEntity;
@@ -193,9 +194,6 @@ public final class HeadDrop {
 	}
 	
 	public static String formatMoney(HeadHunter plugin, double value) {
-		String currencySymbol = DEFAULT_CURRENCY;
-		if(plugin.getEssentialsHook() != null)
-			currencySymbol = plugin.getEssentialsHook().getCurrencySymbol();
-		return currencySymbol + DF_MONEY.format(value);
+		return Utils.getCurrencySymbol(plugin) + DF_MONEY.format(value);
 	}
 }

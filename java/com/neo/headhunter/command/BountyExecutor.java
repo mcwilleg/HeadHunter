@@ -29,7 +29,7 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
 		if(args.length < 1) {
-			sender.sendMessage(Usage.BOUNTY.toString());
+			Usage.BOUNTY.send(sender);
 			return false;
 		}
 		
@@ -38,13 +38,13 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 			
 			// permission
 			if(!sender.hasPermission("hunter.bounty.check")) {
-				sender.sendMessage(Message.PERMISSION.format("/bounty <TARGET>"));
+				Message.PERMISSION.send(plugin, sender, "/bounty <TARGET>");
 				return false;
 			}
 			
 			// assert command is exactly /bounty list
 			if(args.length != 1 && args.length != 2) {
-				sender.sendMessage(Usage.BOUNTY_LIST.toString());
+				Usage.BOUNTY_LIST.send(sender);
 				return false;
 			}
 			
@@ -52,13 +52,13 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 			int page = 1;
 			if(args.length == 2) {
 				if(!args[1].matches("\\d+")) {
-					sender.sendMessage(Message.BOUNTY_PAGE_INVALID.format(args[1]));
+					Message.BOUNTY_PAGE_INVALID.send(plugin, sender, args[1]);
 					return false;
 				}
 				
 				page = Integer.parseInt(args[1]);
 				if(page <= 0) {
-					sender.sendMessage(Message.BOUNTY_PAGE_INVALID.format(args[1]));
+					Message.BOUNTY_PAGE_INVALID.send(plugin, sender, args[1]);
 					return false;
 				}
 			}
@@ -66,13 +66,13 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 			// assert page number is within range of bounty list
 			List<BountyListEntry> bountyListPage = plugin.getBountyManager().getBountyListPage(page);
 			if(bountyListPage == null) {
-				sender.sendMessage(Message.BOUNTY_PAGE_EMPTY.format(page));
+				Message.BOUNTY_PAGE_EMPTY.send(plugin, sender, page);
 				return false;
 			}
 			
 			// assert bounty list is not empty
 			if(bountyListPage.isEmpty()) {
-				sender.sendMessage(Message.BOUNTY_LIST_EMPTY.format());
+				Message.BOUNTY_LIST_EMPTY.send(plugin, sender);
 				return true;
 			}
 			
@@ -83,26 +83,28 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 				
 				// get personal bounty
 				double hunterBounty = 0;
-				if(sender instanceof Player)
+				if(sender instanceof Player) {
 					hunterBounty = plugin.getBountyManager().getBounty((Player) sender, victim);
+				}
 				
 				// create message for personal bounty
-				String personal = "";
-				if(hunterBounty > 0)
-					personal = Message.BOUNTY_PERSONAL.format(hunterBounty);
-				sender.sendMessage(Message.BOUNTY_TOTAL.format(victim.getName(), totalBounty, personal));
+				if(hunterBounty > 0) {
+					Message.BOUNTY_TOTAL_OWNED.send(plugin, sender, victim.getName(), totalBounty, hunterBounty);
+				} else {
+					Message.BOUNTY_TOTAL.send(plugin, sender, victim.getName(), totalBounty);
+				}
 			}
 			return true;
 		} else {
 			if(!(sender instanceof Player)) {
-				sender.sendMessage(Message.PLAYERS_ONLY.format("/bounty <TARGET> [AMOUNT/remove]"));
+				Message.PLAYERS_ONLY.send(plugin, sender, "/bounty <TARGET> [AMOUNT/remove]");
 				return false;
 			}
 			
 			Player hunter = (Player) sender;
 			OfflinePlayer victim = getPlayer(args[0]);
 			if(victim == null) {
-				sender.sendMessage(Message.BOUNTY_TARGET_INVALID.format(args[0]));
+				Message.BOUNTY_TARGET_INVALID.send(plugin, sender, args[0]);
 				return false;
 			}
 			
@@ -112,7 +114,7 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 				
 				// permission
 				if(!sender.hasPermission("hunter.bounty.check")) {
-					sender.sendMessage(Message.PERMISSION.format("/bounty <TARGET>"));
+					Message.PERMISSION.send(plugin, sender, "/bounty <TARGET>");
 					return false;
 				}
 				
@@ -120,10 +122,11 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 				double hunterBounty = plugin.getBountyManager().getBounty(hunter, victim);
 				
 				// message for bounty check
-				String personal = "";
-				if(hunterBounty > 0)
-					personal = Message.BOUNTY_PERSONAL.format(hunterBounty);
-				sender.sendMessage(Message.BOUNTY_TOTAL.format(vName, totalBounty, personal));
+				if(hunterBounty > 0) {
+					Message.BOUNTY_TOTAL_OWNED.send(plugin, sender, victim.getName(), totalBounty, hunterBounty);
+				} else {
+					Message.BOUNTY_TOTAL.send(plugin, sender, victim.getName(), totalBounty);
+				}
 				return true;
 			} else if(args.length == 2) {
 				// set or remove bounty
@@ -134,23 +137,24 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 					
 					// permission
 					if(!sender.hasPermission("hunter.bounty.set")) {
-						sender.sendMessage(Message.PERMISSION.format("/bounty <TARGET> <remove>"));
+						Message.PERMISSION.send(plugin, sender, "/bounty <TARGET> <remove>");
 						return false;
 					}
 					
 					// assert bounty exists
 					double amount = plugin.getBountyManager().removeBounty(hunter, victim);
 					if(amount <= 0) {
-						sender.sendMessage(Message.BOUNTY_REMOVE_FAIL.format(vName));
+						Message.BOUNTY_REMOVE_FAIL.send(plugin, sender, vName);
 						return true;
 					}
 					
 					// refund money and message for bounty remove
 					plugin.getEconomy().depositPlayer(hunter, amount);
-					if(plugin.getSettings().isBroadcastPlace())
-						Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_REMOVE.format(hName, amount, vName));
-					else
-						sender.sendMessage(Message.BOUNTY_REMOVED.format(vName));
+					if(plugin.getSettings().isBroadcastPlace()) {
+						Message.BOUNTY_BROADCAST_REMOVE.broadcast(plugin, hName, amount, vName);
+					} else {
+						Message.BOUNTY_REMOVED.send(plugin, sender, vName);
+					}
 					plugin.getSignBlockManager().requestUpdate();
 					return true;
 				} else if(bountyString.matches("\\d+([.]\\d{0,2})?")){
@@ -158,27 +162,27 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 					
 					// permission
 					if(!sender.hasPermission("hunter.bounty.set")) {
-						sender.sendMessage(Message.PERMISSION.format("/bounty <TARGET> <AMOUNT>"));
+						Message.PERMISSION.send(plugin, sender, "/bounty <TARGET> <AMOUNT>");
 						return false;
 					}
 					
 					// assert bounty target is not the command sender
 					if(hunter.equals(victim) && !HeadHunter.DEBUG) {
-						sender.sendMessage(Message.BOUNTY_SET_SELF.format());
+						Message.BOUNTY_SET_SELF.send(plugin, sender);
 						return true;
 					}
 					
 					// assert hunter is off bounty cooldown
 					if(cooldownTimers.containsKey(hunter.getUniqueId().toString())) {
 						CooldownRunnable runnable = cooldownTimers.get(hunter.getUniqueId().toString());
-						sender.sendMessage(Message.BOUNTY_SET_COOLDOWN.format(formatTime(runnable.cooldown)));
+						Message.BOUNTY_SET_COOLDOWN.send(plugin, sender, formatTime(runnable.cooldown));
 						return false;
 					}
 					
 					// assert new bounty is above minimum threshold
 					double amount = Double.parseDouble(bountyString);
 					if(amount < plugin.getSettings().getMinimumBounty()) {
-						sender.sendMessage(Message.BOUNTY_AMOUNT_LOW.format(plugin.getSettings().getMinimumBounty()));
+						Message.BOUNTY_AMOUNT_LOW.send(plugin, sender, plugin.getSettings().getMinimumBounty());
 						return true;
 					}
 					
@@ -186,7 +190,7 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 					double current = plugin.getBountyManager().removeBounty(hunter, victim);
 					double balance = plugin.getEconomy().getBalance(hunter);
 					if(amount > balance + current) {
-						sender.sendMessage(Message.BOUNTY_SET_AFFORD.format(amount));
+						Message.BOUNTY_SET_AFFORD.send(plugin, sender, amount);
 						return true;
 					}
 					
@@ -194,10 +198,11 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 					plugin.getEconomy().depositPlayer(hunter, current);
 					plugin.getBountyManager().setBounty(hunter, victim, amount);
 					plugin.getEconomy().withdrawPlayer(hunter, amount);
-					if (plugin.getSettings().isBroadcastPlace())
-						Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_SET.format(hName, amount, vName));
-					else
-						sender.sendMessage(Message.BOUNTY_SET.format(vName, amount));
+					if (plugin.getSettings().isBroadcastPlace()) {
+						Message.BOUNTY_BROADCAST_SET.broadcast(plugin, hName, amount, vName);
+					} else {
+						Message.BOUNTY_SET.send(plugin, sender, vName, amount);
+					}
 					
 					// set bounty cooldown
 					long defCooldown = plugin.getSettings().getBountyCooldown();
@@ -211,11 +216,11 @@ public final class BountyExecutor implements CommandExecutor, TabCompleter {
 					plugin.getSignBlockManager().requestUpdate();
 					return true;
 				} else {
-					sender.sendMessage(Message.BOUNTY_AMOUNT_INVALID.format(bountyString));
+					Message.BOUNTY_AMOUNT_INVALID.send(plugin, sender, bountyString);
 					return false;
 				}
 			} else {
-				sender.sendMessage(Usage.BOUNTY.toString());
+				Usage.BOUNTY.send(sender);
 				return false;
 			}
 		}

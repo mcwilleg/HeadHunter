@@ -56,7 +56,7 @@ public final class SignBlockManager extends BlockConfigAccessor implements Liste
 		if(ownerUUID != null && block.getState() instanceof Sign) {
 			// check permission
 			if(!hunter.hasPermission("hunter.sellhead.sign")) {
-				hunter.sendMessage(Message.PERMISSION.format("selling at signs"));
+				Message.PERMISSION.send(plugin, hunter, "selling at signs");
 				return;
 			}
 			
@@ -74,7 +74,7 @@ public final class SignBlockManager extends BlockConfigAccessor implements Liste
 				return;
 			
 			signLinkMap.put(hunter, (Sign) block.getState());
-			hunter.sendMessage(Message.BOUNTY_SIGN_LINK.format());
+			Message.BOUNTY_SIGN_LINK.send(plugin, hunter);
 			return;
 		}
 		
@@ -86,10 +86,10 @@ public final class SignBlockManager extends BlockConfigAccessor implements Liste
 				String blockPath = getBlockPath(skullBlock.getBlock());
 				setBlockData("bounty", bountySign.getBlock(), "head", String.join(";", worldPath, blockPath));
 				saveConfig();
-				hunter.sendMessage(Message.BOUNTY_HEAD_LINK.format());
+				Message.BOUNTY_HEAD_LINK.send(plugin, hunter);
 				requestUpdate();
 			} else
-				hunter.sendMessage(Message.BOUNTY_LINK_ABORT.format());
+				Message.BOUNTY_LINK_ABORT.send(plugin, hunter);
 			signLinkMap.remove(hunter);
 		}
 	}
@@ -110,7 +110,7 @@ public final class SignBlockManager extends BlockConfigAccessor implements Liste
 		if(lines[0].equalsIgnoreCase("[sellhead]")) {
 			// check permission
 			if(!event.getPlayer().hasPermission("hunter.sign.sellhead")) {
-				event.getPlayer().sendMessage(Message.PERMISSION.format("creating head-selling signs"));
+				Message.PERMISSION.send(plugin, event.getPlayer(), "creating head-selling signs");
 				return;
 			}
 			
@@ -124,7 +124,7 @@ public final class SignBlockManager extends BlockConfigAccessor implements Liste
 		} else if(lines[0].equalsIgnoreCase("[bounty]")) {
 			// check permission
 			if(!event.getPlayer().hasPermission("hunter.sign.bounty")) {
-				event.getPlayer().sendMessage(Message.PERMISSION.format("creating bounty display signs"));
+				Message.PERMISSION.send(plugin, event.getPlayer(), "creating bounty display signs");
 				return;
 			}
 			

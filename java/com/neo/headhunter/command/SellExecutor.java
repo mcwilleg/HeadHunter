@@ -36,13 +36,13 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 		if(args.length == 0) {
 			// permission
 			if(!sender.hasPermission("hunter.sellhead.hand")) {
-				sender.sendMessage(Message.PERMISSION.format("/sellhead"));
+				Message.PERMISSION.send(plugin, sender, "/sellhead");
 				return false;
 			}
 			
 			// assert sender is a player
 			if(!(sender instanceof Player)) {
-				sender.sendMessage(Message.PLAYERS_ONLY.format("/sellhead"));
+				Message.PLAYERS_ONLY.send(plugin, sender, "/sellhead");
 				return false;
 			}
 			
@@ -52,21 +52,22 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 		} else if(args.length == 1 && args[0].equalsIgnoreCase("all")) {
 			// permission
 			if(!sender.hasPermission("hunter.sellhead.all")) {
-				sender.sendMessage(Message.PERMISSION.format("/sellhead all"));
+				Message.PERMISSION.send(plugin, sender, "/sellhead all");
 				return false;
 			}
 			
 			// assert sender is a player
 			if(!(sender instanceof Player)) {
-				sender.sendMessage(Message.PLAYERS_ONLY.format("/sellhead all"));
+				Message.PLAYERS_ONLY.send(plugin, sender, "/sellhead all");
 				return false;
 			}
 			
 			// sell all heads in inventory
 			sellAllStacks((Player) sender);
 			return true;
-		} else
-			sender.sendMessage(Usage.SELLHEAD.toString());
+		} else {
+			Usage.SELLHEAD.send(sender);
+		}
 		return false;
 	}
 	
@@ -88,13 +89,15 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 			if(current != null) {
 				double currentTotalValue = current.balanceValue + current.bountyValue;
 				if(currentTotalValue > 0) {
-					if (total == null)
+					if (total == null) {
 						total = current;
-					else
+					} else {
 						total.add(current);
+					}
 					
-					if (current.withdraw && current.headOwner != null && current.balanceValue > 0)
+					if (current.withdraw && current.headOwner != null && current.balanceValue > 0) {
 						plugin.getEconomy().withdrawPlayer(current.headOwner, current.balanceValue);
+					}
 					plugin.getEconomy().depositPlayer(hunter, currentTotalValue);
 					inv.clear(slot);
 				}
@@ -104,8 +107,9 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 		if(total != null) {
 			double totalValue = total.balanceValue + total.bountyValue;
 			sendSellMessage(hunter, total.stackName, total.totalAmount, totalValue);
-		} else
-			hunter.sendMessage(Message.SELL_FAIL.format());
+		} else {
+			Message.SELL_FAIL.send(plugin, hunter);
+		}
 	}
 	
 	public void sellHeldStack(Player hunter) {
@@ -121,22 +125,26 @@ public final class SellExecutor implements CommandExecutor, TabCompleter {
 				inv.clear(slot);
 				
 				sendSellMessage(hunter, value.stackName, value.individualAmount, totalValue);
-			} else
-				hunter.sendMessage(Message.SELL_FAIL.format());
-		} else
-			hunter.sendMessage(Message.SELL_FAIL.format());
+			} else {
+				Message.SELL_FAIL.send(plugin, hunter);
+			}
+		} else {
+			Message.SELL_FAIL.send(plugin, hunter);
+		}
 	}
 	
 	private void sendSellMessage(Player hunter, String itemName, int amount, double value) {
 		if(itemName != null) {
-			if (plugin.getSettings().isBroadcastSell())
-				hunter.sendMessage(Message.SELL_SINGLE_BROADCAST.format(hunter.getName(), itemName, amount, value));
-			else
-				hunter.sendMessage(Message.SELL_SINGLE.format(itemName, amount, value));
-		} else if(plugin.getSettings().isBroadcastSell())
-			hunter.sendMessage(Message.SELL_MULTIPLE_BROADCAST.format(hunter.getName(), amount, value));
-		else
-			hunter.sendMessage(Message.SELL_MULTIPLE.format(amount, value));
+			if (plugin.getSettings().isBroadcastSell()) {
+				Message.SELL_SINGLE_BROADCAST.send(plugin, hunter, hunter.getName(), itemName, amount, value);
+			} else {
+				Message.SELL_SINGLE.send(plugin, hunter, itemName, amount, value);
+			}
+		} else if (plugin.getSettings().isBroadcastSell()) {
+			Message.SELL_MULTIPLE_BROADCAST.send(plugin, hunter, hunter.getName(), amount, value);
+		} else {
+			Message.SELL_MULTIPLE.send(plugin, hunter, amount, value);
+		}
 	}
 	
 	private HeadStackValue getStackValue(PlayerInventory inv, int slot) {

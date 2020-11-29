@@ -1,7 +1,14 @@
 package com.neo.headhunter.util.message;
 
+import com.neo.headhunter.HeadHunter;
+import com.neo.headhunter.util.Utils;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 
+@RequiredArgsConstructor
 public enum Message {
 	RELOADED("&e%s &6v%s &ereloaded."),
 	PERMISSION("&cYou do not have permission for %s."),
@@ -15,8 +22,8 @@ public enum Message {
 	BOUNTY_BROADCAST_REMOVE("&6%s&e has removed their bounty of &6$%.2f &efrom &c%s&e."),
 	BOUNTY_BROADCAST_CLAIM("&6%s&e has claimed the &6$%.2f &ehead of &c%s&e!"),
 	BOUNTY_CLAIM("&eYou have claimed the bounty of &6$%.2f &eon &c%s&e!"),
-	BOUNTY_TOTAL("&c%s&e: &6$%.2f &e%s"),
-	BOUNTY_PERSONAL("&e(You own: &6$%.2f&e)"),
+	BOUNTY_TOTAL("&c%s&e: &6$%.2f"),
+	BOUNTY_TOTAL_OWNED("&c%s&e: &6$%.2f (You own: &6$%.2f&e)"),
 	BOUNTY_LIST_EMPTY("&cThere are no bounties."),
 	BOUNTY_PAGE_EMPTY("&cBounty list page %s is empty."),
 	BOUNTY_PAGE_INVALID("&c%s is an invalid bounty list page."),
@@ -37,14 +44,22 @@ public enum Message {
 	SELL_MULTIPLE("&eSold &6%d &eheads for a total of &6$%.2f&e."),
 	SELL_SINGLE_BROADCAST("&6%s &esold &3%s (&b%d&3) &efor &6$%.2f&e!"),
 	SELL_MULTIPLE_BROADCAST("&6%s &esold &6%d &eheads for a total of &6$%.2f&e!");
-	
+
+	@Getter
 	private final String message;
-	
-	Message(String message) {
-		this.message = message;
+
+	public void send(HeadHunter plugin, CommandSender sender, Object... parameters) {
+		sender.sendMessage(this.format(plugin, parameters));
+	}
+
+	public void broadcast(HeadHunter plugin, Object... parameters) {
+		Bukkit.broadcastMessage(this.format(plugin, parameters));
 	}
 	
-	public String format(Object...parameters) {
-		return ChatColor.translateAlternateColorCodes('&', String.format(message, parameters));
+	private String format(HeadHunter plugin, Object...parameters) {
+		return ChatColor.translateAlternateColorCodes(
+				'&',
+				String.format(message, parameters)
+		).replace("$", Utils.getCurrencySymbol(plugin));
 	}
 }

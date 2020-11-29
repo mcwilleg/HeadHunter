@@ -5,7 +5,6 @@ import com.neo.headhunter.manager.block.HeadBlockManager;
 import com.neo.headhunter.manager.head.HeadDrop;
 import com.neo.headhunter.manager.support.factions.FactionsHook;
 import com.neo.headhunter.util.message.Message;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -37,47 +36,50 @@ public final class DeathListener implements Listener {
 	public void onEntityDeath(EntityDeathEvent event) {
 		LivingEntity victim = event.getEntity();
 		
-		if(!plugin.getWorldManager().isValidWorld(victim.getWorld()))
+		if (!plugin.getWorldManager().isValidWorld(victim.getWorld())) {
 			return;
+		}
 		
-		if(plugin.getEntityManager().isFromSpawner(victim) && !plugin.getSettings().isDropSpawnerMobs())
+		if (plugin.getEntityManager().isFromSpawner(victim) && !plugin.getSettings().isDropSpawnerMobs()) {
 			return;
+		}
 		
 		Player hunter = null;
 		ItemStack weapon = null;
 		
 		EntityDamageEvent lastDamageCause = victim.getLastDamageCause();
-		if(lastDamageCause == null)
+		if (lastDamageCause == null)
 			return;
 		
-		if(lastDamageCause instanceof EntityDamageByEntityEvent) {
+		if (lastDamageCause instanceof EntityDamageByEntityEvent) {
 			// victim was killed by an entity
 			
 			EntityDamageByEntityEvent lastDamageEntityCause = (EntityDamageByEntityEvent) lastDamageCause;
-			if(lastDamageEntityCause.getDamager() instanceof Player) {
+			if (lastDamageEntityCause.getDamager() instanceof Player) {
 				// victim was killed by a player
 				
 				hunter = (Player) lastDamageEntityCause.getDamager();
 				PlayerInventory inv = hunter.getInventory();
 				weapon = inv.getItem(inv.getHeldItemSlot());
-			} else if(lastDamageEntityCause.getDamager() instanceof Projectile) {
+			} else if (lastDamageEntityCause.getDamager() instanceof Projectile) {
 				// victim was killed by a projectile
 				
 				// check drop-projectiles option
-				if(!plugin.getSettings().isDropProjectiles())
+				if (!plugin.getSettings().isDropProjectiles()) {
 					return;
+				}
 				
 				Projectile projectile = (Projectile) lastDamageEntityCause.getDamager();
-				if(projectile.getShooter() instanceof Player) {
+				if (projectile.getShooter() instanceof Player) {
 					// victim was killed by a projectile launched by a player
 					
 					hunter = (Player) projectile.getShooter();
 					weapon = plugin.getEntityManager().getProjectileWeapon(projectile);
 				}
 			}
-		} else if(lastDamageCause.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
+		} else if (lastDamageCause.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
 			// victim was killed by burning
-			if(plugin.getSettings().isDropFireDamage()) {
+			if (plugin.getSettings().isDropFireDamage()) {
 				// assign kill credit for killing with Flame or Fire Aspect
 				hunter = plugin.getEntityManager().getCombuster(victim);
 				weapon = plugin.getEntityManager().getCombusterWeapon(victim);
@@ -86,30 +88,36 @@ public final class DeathListener implements Listener {
 		}
 		
 		// check player-kills-only option
-		if(hunter == null && plugin.getSettings().isPlayerKillsOnly())
+		if (hunter == null && plugin.getSettings().isPlayerKillsOnly()) {
 			return;
+		}
 		
 		// check the factions plugin if there is one and the victim is a player
 		FactionsHook factionsHook = plugin.getFactionsHook();
-		if(factionsHook != null && victim instanceof Player) {
-			if(!factionsHook.isValidTerritory((Player) victim))
+		if (factionsHook != null && victim instanceof Player) {
+			if (!factionsHook.isValidTerritory((Player) victim)) {
 				return;
-			if(!factionsHook.isValidZone(victim.getLocation()))
+			}
+			if (!factionsHook.isValidZone(victim.getLocation())) {
 				return;
-			if(!factionsHook.isValidHunter(hunter, (Player) victim))
+			}
+			if (!factionsHook.isValidHunter(hunter, (Player) victim)) {
 				return;
+			}
 		}
 		
 		// perform drop rate check and drop
 		HeadDrop headDrop = HeadDrop.create(plugin, hunter, weapon, victim);
 		
 		// if base head is null
-		if(headDrop.getBaseHead() == null)
+		if (headDrop.getBaseHead() == null) {
 			return;
+		}
 		
 		// if worthless drops are disabled, assert the head is valuable
-		if(!plugin.getSettings().isDropWorthless() && headDrop.isWorthless())
+		if (!plugin.getSettings().isDropWorthless() && headDrop.isWorthless()) {
 			return;
+		}
 
 		double success = RANDOM.nextDouble();
 		if (HeadHunter.DEBUG) {
@@ -123,35 +131,39 @@ public final class DeathListener implements Listener {
 		}
 
 		// check drop chance
-		if(!(success < headDrop.getDropChance()))
+		if (!(success < headDrop.getDropChance())) {
 			return;
+		}
 		
 		Location dropLocation = victim.getEyeLocation();
 		
-		if(victim instanceof Player) {
+		if (victim instanceof Player) {
 			// manipulate money if a player died
-			if(!headDrop.isStealOnSell() && headDrop.getStolenValue() > 0)
+			if (!headDrop.isStealOnSell() && headDrop.getStolenValue() > 0) {
 				plugin.getEconomy().withdrawPlayer((Player) victim, headDrop.getStolenValue());
+			}
 			
 			// manipulate bounties if the killer is a player
-			if(hunter != null) {
+			if (hunter != null) {
 				double bounty = plugin.getBountyManager().removeTotalBounty((Player) victim);
 				plugin.getSignBlockManager().requestUpdate();
 				if (bounty > 0) {
 					// check drop location setting
 					OfflinePlayer topHunterOffline = headDrop.getTopHunter();
-					if(plugin.getSettings().isTopHunterMode() && topHunterOffline != null) {
+					if (plugin.getSettings().isTopHunterMode() && topHunterOffline != null) {
 						Player topHunter = topHunterOffline.getPlayer();
-						if(topHunter != null)
+						if (topHunter != null) {
 							dropLocation = topHunter.getEyeLocation();
+						}
 					}
 					
 					// check broadcast setting and message
 					String hName = hunter.getName(), vName = victim.getName();
-					if (plugin.getSettings().isBroadcastClaim())
-						Bukkit.broadcastMessage(Message.BOUNTY_BROADCAST_CLAIM.format(hName, bounty, vName));
-					else
-						hunter.sendMessage(Message.BOUNTY_CLAIM.format(bounty, vName));
+					if (plugin.getSettings().isBroadcastClaim()) {
+						Message.BOUNTY_BROADCAST_CLAIM.broadcast(plugin, hName, bounty, vName);
+					} else {
+						Message.BOUNTY_CLAIM.send(plugin, hunter, bounty, vName);
+					}
 				}
 			}
 		} else {

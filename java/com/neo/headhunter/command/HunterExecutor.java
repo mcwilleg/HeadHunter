@@ -25,78 +25,81 @@ public final class HunterExecutor implements CommandExecutor, TabCompleter {
 	
 	@Override
 	public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
-		if(args.length < 1) {
-			sender.sendMessage(Usage.HUNTER.toString());
+		if (args.length < 1) {
+			Usage.HUNTER.send(sender);
 			return false;
 		}
 		
-		if(args[0].equalsIgnoreCase("reload")) {
+		if (args[0].equalsIgnoreCase("reload")) {
 			// permission
-			if(!sender.hasPermission("hunter.reload")) {
-				sender.sendMessage(Message.PERMISSION.format("/hunter reload"));
+			if (!sender.hasPermission("hunter.reload")) {
+				Message.PERMISSION.send(plugin, sender, "/hunter reload");
 				return false;
 			}
 			
 			// assert command is exactly /hunter reload
-			if(args.length != 1) {
-				sender.sendMessage(Usage.HUNTER_RELOAD.toString());
+			if (args.length != 1) {
+				Usage.HUNTER_RELOAD.send(sender);
 				return false;
 			}
 			
 			// reload plugin
 			plugin.reloadAll();
-			sender.sendMessage(Message.RELOADED.format(plugin.getName(), plugin.getVersion()));
+			Message.RELOADED.send(plugin, sender, plugin.getName(), plugin.getVersion());
 			return true;
-		} else if(args[0].equalsIgnoreCase("world")) {
+		} else if (args[0].equalsIgnoreCase("world")) {
 			// permission
-			if(!sender.hasPermission("hunter.world")) {
-				sender.sendMessage(Message.PERMISSION.format("/hunter world [add/remove]"));
+			if (!sender.hasPermission("hunter.world")) {
+				Message.PERMISSION.send(plugin, sender, "/hunter world [add/remove]");
 				return false;
 			}
 			
 			// assert sender is a player
-			if(!(sender instanceof Player)) {
-				sender.sendMessage(Message.PLAYERS_ONLY.format("/hunter world ..."));
+			if (!(sender instanceof Player)) {
+				Message.PLAYERS_ONLY.send(plugin, sender, "/hunter world ...");
 				return false;
 			}
 			
 			// get world and check argument length
 			World world = ((Player) sender).getWorld();
-			if(args.length == 1) {
+			if (args.length == 1) {
 				
 				// message for world check
 				String status = "disabled";
-				if(plugin.getWorldManager().isValidWorld(world))
+				if (plugin.getWorldManager().isValidWorld(world)) {
 					status = "enabled";
-				sender.sendMessage(Message.WORLD_CHECK.format(status, world.getName()));
+				}
+				Message.WORLD_CHECK.send(plugin, sender, status, world.getName());
 				return true;
-			} else if(args.length == 2) {
-				if(args[1].equalsIgnoreCase("add")) {
+			} else if (args.length == 2) {
+				if (args[1].equalsIgnoreCase("add")) {
 					
 					// message for world add
-					if(plugin.getWorldManager().addValidWorld(world))
-						sender.sendMessage(Message.WORLD_ADDED.format(world.getName()));
-					else
-						sender.sendMessage(Message.WORLD_ADD_FAIL.format(world.getName()));
+					if (plugin.getWorldManager().addValidWorld(world)) {
+						Message.WORLD_ADDED.send(plugin, sender, world.getName());
+					} else {
+						Message.WORLD_ADD_FAIL.send(plugin, sender, world.getName());
+					}
 					return true;
-				} else if(args[1].equalsIgnoreCase("remove")) {
+				} else if (args[1].equalsIgnoreCase("remove")) {
 					
 					// message for world remove
-					if(plugin.getWorldManager().removeValidWorld(world))
-						sender.sendMessage(Message.WORLD_REMOVED.format(world.getName()));
-					else
-						sender.sendMessage(Message.WORLD_REMOVE_FAIL.format(world.getName()));
+					if (plugin.getWorldManager().removeValidWorld(world)) {
+						Message.WORLD_REMOVED.send(plugin, sender, world.getName());
+					} else {
+						Message.WORLD_REMOVE_FAIL.send(plugin, sender, world.getName());
+					}
 					return true;
 				} else {
-					sender.sendMessage(Usage.HUNTER_WORLD.toString());
+					Usage.HUNTER_WORLD.send(sender);
 					return false;
 				}
 			} else {
-				sender.sendMessage(Usage.HUNTER_WORLD.toString());
+				Usage.HUNTER_WORLD.send(sender);
 				return false;
 			}
 		} else {
-			sender.sendMessage(Usage.HUNTER.toString());
+			Usage.HUNTER.send(sender);
 			return false;
 		}
 	}
@@ -104,11 +107,11 @@ public final class HunterExecutor implements CommandExecutor, TabCompleter {
 	@Override
 	public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
 		final List<String> result = new ArrayList<>();
-		if(args.length == 1) {
+		if (args.length == 1) {
 			Iterable<String> completions = Arrays.asList("reload", "world");
 			StringUtil.copyPartialMatches(args[0], completions, result);
-		} else if(args.length == 2) {
-			if(args[0].equalsIgnoreCase("world")) {
+		} else if (args.length == 2) {
+			if (args[0].equalsIgnoreCase("world")) {
 				Iterable<String> completions = Arrays.asList("add", "remove");
 				StringUtil.copyPartialMatches(args[1], completions, result);
 			}
