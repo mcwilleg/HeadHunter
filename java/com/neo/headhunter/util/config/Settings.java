@@ -15,6 +15,7 @@ public final class Settings extends ConfigAccessor {
 			DROP_FIRE_DAMAGE = "head.drop-fire-damage";
 	
 	private static final String
+			FORMAT_HEAD_TITLE_COLOR = "head.format.head-title-color",
 			FORMAT_HEAD_VALUE = "head.format.value",
 			FORMAT_HEAD_BOUNTY = "head.format.bounty",
 			FORMAT_WORTHLESS = "head.format.worthless";
@@ -74,6 +75,10 @@ public final class Settings extends ConfigAccessor {
 	
 	public boolean isDropFireDamage() {
 		return config.getBoolean(DROP_FIRE_DAMAGE, true);
+	}
+
+	public String getHeadTitleColor() {
+		return config.getString(FORMAT_HEAD_TITLE_COLOR, "6");
 	}
 	
 	public String getHeadValueFormat() {

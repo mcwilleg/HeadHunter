@@ -15,7 +15,6 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public final class HeadDrop {
-	private static final String DEFAULT_CURRENCY = "$";
 	private static final DecimalFormat DF_MONEY = new DecimalFormat("0.00");
 	private static final DecimalFormat DF_PERCENT = new DecimalFormat("0.0");
 	
@@ -158,21 +157,21 @@ public final class HeadDrop {
 		if(baseHead != null) {
 			ItemMeta meta = baseHead.getItemMeta();
 			if (meta != null) {
-				meta.setDisplayName(ChatColor.DARK_AQUA + meta.getDisplayName());
+				ChatColor titleColor = ChatColor.getByChar(plugin.getSettings().getHeadTitleColor());
+				meta.setDisplayName((titleColor == null ? ChatColor.GOLD : titleColor) + meta.getDisplayName());
 				List<String> lore = new ArrayList<>();
 				
 				// currency symbol
-				String currencySymbol = DEFAULT_CURRENCY;
-				if(plugin.getEssentialsHook() != null)
-					currencySymbol = plugin.getEssentialsHook().getCurrencySymbol();
+				String currencySymbol = Utils.getCurrencySymbol(plugin);
 				
 				// balance value
 				String balanceValueLore = plugin.getSettings().getHeadValueFormat() + ": &6";
-				if (balanceString == null || balanceString.equals("0.00") || balanceString.equals("0.0%"))
+				if (balanceString == null || balanceString.equals("0.00") || balanceString.equals("0.0%")) {
 					balanceValueLore += plugin.getSettings().getWorthlessFormat();
-				else {
-					if (!balanceString.endsWith("%"))
+				} else {
+					if (!balanceString.endsWith("%")) {
 						balanceString = (currencySymbol + balanceString);
+					}
 					balanceValueLore += balanceString;
 				}
 				lore.add(ChatColor.translateAlternateColorCodes('&', balanceValueLore));

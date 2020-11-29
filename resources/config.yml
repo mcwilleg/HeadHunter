@@ -12,6 +12,7 @@ head:
   drop-projectiles: true
   drop-fire-damage: true
   format:
+    head-title-color: '6'
     value: '&eHead Value'
     bounty: '&eBounty'
     worthless: '&r&c&oWorthless'
