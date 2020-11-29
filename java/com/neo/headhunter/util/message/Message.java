@@ -40,9 +40,9 @@ public enum Message {
 	BOUNTY_LINK_ABORT("&cBounty sign link aborted."),
 	BOUNTY_HEAD_LINK("&eBounty sign successfully linked to head."),
 	SELL_FAIL("&cYou are not holding any valuable heads."),
-	SELL_SINGLE("&eSold &6%s &e(%d) for &6$%.2f&e."),
+	SELL_SINGLE("&eSold &6%s x%d &efor &6$%.2f&e."),
 	SELL_MULTIPLE("&eSold &6%d &eheads for a total of &6$%.2f&e."),
-	SELL_SINGLE_BROADCAST("&6%s &esold &6%s &e(%d) for &6$%.2f&e!"),
+	SELL_SINGLE_BROADCAST("&6%s &esold &6%s x%d &efor &6$%.2f&e!"),
 	SELL_MULTIPLE_BROADCAST("&6%s &esold &6%d &eheads for a total of &6$%.2f&e!");
 
 	@Getter
