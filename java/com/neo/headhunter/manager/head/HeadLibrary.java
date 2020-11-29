@@ -69,7 +69,7 @@ public final class HeadLibrary extends ConfigAccessor {
 		}
 		SkullMeta meta = (SkullMeta) head.getItemMeta();
 		if (meta != null) {
-			if(plugin.isVersionBefore(1, 13, 0)) {
+			if (plugin.isVersionBefore(1, 13, 0)) {
 				meta.setOwner(owner.getName());
 			} else {
 				meta.setOwningPlayer(owner);
@@ -132,7 +132,7 @@ public final class HeadLibrary extends ConfigAccessor {
 								break;
 							case "HORSE":
 							case "LLAMA":
-								if(plugin.isVersionBefore(1, 9, 0))
+								if (plugin.isVersionBefore(1, 9, 0))
 									variant = "CREAMY";
 								else
 									variant = ((Horse) victim).getColor().name();

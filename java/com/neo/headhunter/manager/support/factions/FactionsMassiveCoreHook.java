@@ -6,24 +6,23 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MPlayer;
 import com.massivecraft.massivecore.ps.PS;
 import com.neo.headhunter.HeadHunter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+@RequiredArgsConstructor
 public final class FactionsMassiveCoreHook implements FactionsHook {
 	private final HeadHunter plugin;
-
-	public FactionsMassiveCoreHook(HeadHunter plugin) {
-		this.plugin = plugin;
-	}
 	
 	@Override
 	public boolean isValidTerritory(Player victim) {
 		Faction faction = BoardColl.get().getFactionAt(PS.valueOf(victim.getLocation()));
 		MPlayer fPlayer = MPlayer.get(victim);
-		if(faction != null && fPlayer != null && fPlayer.hasFaction()) {
+		if (faction != null && fPlayer != null && fPlayer.hasFaction()) {
 			Faction ownedFaction = fPlayer.getFaction();
-			if(faction.equals(ownedFaction))
+			if (faction.equals(ownedFaction)) {
 				return plugin.getSettings().isFactionsDropHome();
+			}
 		}
 		return true;
 	}
@@ -31,13 +30,16 @@ public final class FactionsMassiveCoreHook implements FactionsHook {
 	@Override
 	public boolean isValidZone(Location location) {
 		Faction faction = BoardColl.get().getFactionAt(PS.valueOf(location));
-		if(faction != null) {
-			if(faction.getId().equals(Factions.ID_NONE))
+		if (faction != null) {
+			if (faction.getId().equals(Factions.ID_NONE)) {
 				return plugin.getSettings().isFactionsDropWilderness();
-			if(faction.getId().equals(Factions.ID_SAFEZONE))
+			}
+			if (faction.getId().equals(Factions.ID_SAFEZONE)) {
 				return plugin.getSettings().isFactionsDropSafezone();
-			if(faction.getId().equals(Factions.ID_WARZONE))
+			}
+			if (faction.getId().equals(Factions.ID_WARZONE)) {
 				return plugin.getSettings().isFactionsDropWarzone();
+			}
 		}
 		return true;
 	}
@@ -46,11 +48,12 @@ public final class FactionsMassiveCoreHook implements FactionsHook {
 	public boolean isValidHunter(Player hunter, Player victim) {
 		MPlayer hFPlayer = MPlayer.get(hunter);
 		MPlayer vFPlayer = MPlayer.get(victim);
-		if(hFPlayer != null && vFPlayer != null && hFPlayer.hasFaction() && vFPlayer.hasFaction()) {
+		if (hFPlayer != null && vFPlayer != null && hFPlayer.hasFaction() && vFPlayer.hasFaction()) {
 			Faction hunterFaction = hFPlayer.getFaction();
 			Faction victimFaction = vFPlayer.getFaction();
-			if(hunterFaction.equals(victimFaction))
+			if (hunterFaction.equals(victimFaction)) {
 				return plugin.getSettings().isFactionsDropFriendly();
+			}
 		}
 		return true;
 	}

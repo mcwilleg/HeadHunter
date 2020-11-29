@@ -5,6 +5,7 @@ import com.neo.headhunter.manager.block.HeadBlockManager;
 import com.neo.headhunter.manager.head.HeadDrop;
 import com.neo.headhunter.manager.support.factions.FactionsHook;
 import com.neo.headhunter.util.message.Message;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -22,14 +23,11 @@ import org.bukkit.inventory.PlayerInventory;
 import java.util.Random;
 import java.util.logging.Level;
 
+@RequiredArgsConstructor
 public final class DeathListener implements Listener {
 	private static final Random RANDOM = new Random(System.currentTimeMillis());
 	
 	private final HeadHunter plugin;
-	
-	public DeathListener(HeadHunter plugin) {
-		this.plugin = plugin;
-	}
 	
 	// Death listener for all entities
 	@EventHandler(ignoreCancelled = true)
@@ -48,8 +46,9 @@ public final class DeathListener implements Listener {
 		ItemStack weapon = null;
 		
 		EntityDamageEvent lastDamageCause = victim.getLastDamageCause();
-		if (lastDamageCause == null)
+		if (lastDamageCause == null) {
 			return;
+		}
 		
 		if (lastDamageCause instanceof EntityDamageByEntityEvent) {
 			// victim was killed by an entity

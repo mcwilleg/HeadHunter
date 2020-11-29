@@ -17,42 +17,50 @@ public class BlockConfigAccessor extends ConfigAccessor {
 	}
 	
 	protected void setBlockData(String prefix, Block block, String suffix, Object value) {
-		if(block == null)
+		if (block == null) {
 			throw new IllegalArgumentException("block cannot be null");
+		}
 		String worldPath = getWorldPath(block);
 		String blockPath = getBlockPath(block);
 		String mainPath = String.join(".", worldPath, blockPath);
 		
 		// add prefix and/or suffix
 		String path = mainPath;
-		if(prefix != null)
+		if (prefix != null) {
 			path = String.join(".", prefix, path);
-		if(suffix != null)
+		}
+		if (suffix != null) {
 			path = String.join(".", path, suffix);
+		}
 		
 		// set or remove value, clean up if necessary
-		if(value != null)
+		if (value != null) {
 			config.set(path, value);
-		else {
+		} else {
 			// remove the individual line of block data
 			config.set(path, null);
 			
 			// if there is no block data left, remove the section
 			path = mainPath;
-			if(prefix != null)
+			if (prefix != null) {
 				path = String.join(".", prefix, path);
+			}
 			ConfigurationSection blockSection = config.getConfigurationSection(path);
-			if(blockSection == null || blockSection.getKeys(false).isEmpty())
+			if (blockSection == null || blockSection.getKeys(false).isEmpty()) {
 				config.set(path, null);
-			else return;
+			} else {
+				return;
+			}
 			
 			// if there is no world data left, remove the section
 			path = worldPath;
-			if(prefix != null)
+			if (prefix != null) {
 				path = String.join(".", prefix, path);
+			}
 			ConfigurationSection worldSection = config.getConfigurationSection(path);
-			if(worldSection == null || worldSection.getKeys(false).isEmpty())
+			if (worldSection == null || worldSection.getKeys(false).isEmpty()) {
 				config.set(path, null);
+			}
 		}
 	}
 	
@@ -65,37 +73,44 @@ public class BlockConfigAccessor extends ConfigAccessor {
 	}
 	
 	protected Object getBlockData(String prefix, Block block, String suffix) {
-		if(block == null)
+		if (block == null) {
 			throw new IllegalArgumentException("block cannot be null");
+		}
 		
 		String worldPath = getWorldPath(block);
 		String blockPath = getBlockPath(block);
 		
 		String path = String.join(".", worldPath, blockPath);
-		if(prefix != null)
+		if (prefix != null) {
 			path = String.join(".", prefix, path);
-		if(suffix != null)
+		}
+		if (suffix != null) {
 			path = String.join(".", path, suffix);
+		}
 		return config.get(path);
 	}
 	
 	protected List<Block> getBlockKeys(String prefix) {
 		List<Block> result = new ArrayList<>();
 		ConfigurationSection worlds;
-		if(prefix != null)
+		if (prefix != null) {
 			worlds = config.getConfigurationSection(prefix);
-		else
+		} else {
 			worlds = config;
-		if(worlds == null)
+		}
+		if (worlds == null) {
 			return result;
-		for(String worldKey : worlds.getKeys(false)) {
+		}
+		for (String worldKey : worlds.getKeys(false)) {
 			ConfigurationSection blocks = worlds.getConfigurationSection(worldKey);
-			if(blocks == null)
+			if (blocks == null) {
 				continue;
-			for(String blockKey : blocks.getKeys(false)) {
+			}
+			for (String blockKey : blocks.getKeys(false)) {
 				Block block = getBlock(worldKey, blockKey);
-				if(block != null)
+				if (block != null) {
 					result.add(block);
+				}
 			}
 		}
 		return result;
@@ -103,7 +118,7 @@ public class BlockConfigAccessor extends ConfigAccessor {
 	
 	protected Block getBlock(String worldKey, String blockKey) {
 		World world = Bukkit.getWorld(UUID.fromString(worldKey));
-		if(world != null) {
+		if (world != null) {
 			String[] blockSplit = blockKey.split(";");
 			int blockX = Integer.parseInt(blockSplit[0]);
 			int blockZ = Integer.parseInt(blockSplit[1]);
@@ -116,8 +131,9 @@ public class BlockConfigAccessor extends ConfigAccessor {
 	}
 	
 	protected String getWorldPath(Block block) {
-		if(block == null)
+		if (block == null) {
 			throw new IllegalArgumentException("block cannot be null");
+		}
 		return block.getWorld().getUID().toString();
 	}
 	

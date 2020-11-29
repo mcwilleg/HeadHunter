@@ -39,7 +39,7 @@ public final class HeadDrop {
 	
 	private void initialize() {
 		double balance;
-		if(victim instanceof Player) {
+		if (victim instanceof Player) {
 			Player victimPlayer = (Player) victim;
 			baseHead = plugin.getHeadLibrary().getPlayerHead(victimPlayer);
 			balance = plugin.getEconomy().getBalance(victimPlayer);
@@ -62,18 +62,20 @@ public final class HeadDrop {
 	
 	// called when a head is dropped
 	public ItemStack getFormattedHead() {
-		if(baseHead != null) {
+		if (baseHead != null) {
 			ItemMeta meta = baseHead.getItemMeta();
-			if(meta != null) {
+			if (meta != null) {
 				String balanceString;
-				if (stealOnSell && victim instanceof Player)
+				if (stealOnSell && victim instanceof Player) {
 					balanceString = DF_PERCENT.format(stealBalance * 100) + "%";
-				else
+				} else {
 					balanceString = DF_MONEY.format(stolenValue);
+				}
 				
 				String bountyString = null;
-				if(hunter != null && bountyValue > 0)
+				if (hunter != null && bountyValue > 0) {
 					bountyString = DF_MONEY.format(bountyValue);
+				}
 				
 				return format(plugin, baseHead, balanceString, bountyString);
 			}
@@ -154,7 +156,7 @@ public final class HeadDrop {
 	}
 	
 	public static ItemStack format(HeadHunter plugin, ItemStack baseHead, String balanceString, String bountyString) {
-		if(baseHead != null) {
+		if (baseHead != null) {
 			ItemMeta meta = baseHead.getItemMeta();
 			if (meta != null) {
 				ChatColor titleColor = ChatColor.getByChar(plugin.getSettings().getHeadTitleColor());

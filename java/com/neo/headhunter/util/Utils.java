@@ -12,7 +12,7 @@ public class Utils {
     public static double valueOf(String valueString) {
         try {
             return localFormatter.parse(valueString).doubleValue();
-        } catch(ParseException ex) {
+        } catch (ParseException ex) {
             return 0;
         }
     }

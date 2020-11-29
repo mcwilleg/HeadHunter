@@ -68,7 +68,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		
 		// connections
 		economy = connectEconomy();
-		if(economy == null) {
+		if (economy == null) {
 			getLogger().log(Level.SEVERE, "Could not connect to Vault. Make sure Vault is installed for HeadHunter!");
 			return;
 		}
@@ -89,7 +89,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		bountyExecutor = new BountyExecutor(this);
 		
 		// register listeners
-		if(DEBUG) {
+		if (DEBUG) {
 			registerListener(this);
 		}
 		registerListener(dropManager);
@@ -99,7 +99,7 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 		registerListener(signBlockManager);
 		
 		// register commands
-		if(DEBUG) {
+		if (DEBUG) {
 			registerCommand("hhdebug", this);
 		}
 		registerCommand("hunter", new HunterExecutor(this));
@@ -113,12 +113,14 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	private void registerCommand(String name, CommandExecutor executor) {
 		PluginCommand command = getCommand(name);
-		if(command != null) {
+		if (command != null) {
 			command.setExecutor(executor);
-			if(executor instanceof TabCompleter)
+			if (executor instanceof TabCompleter) {
 				command.setTabCompleter((TabCompleter) executor);
-		} else
+			}
+		} else {
 			getLogger().log(Level.SEVERE, "Could not register command: /" + name);
+		}
 	}
 	
 	public void reloadAll() {
@@ -134,35 +136,39 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	}
 	
 	private Economy connectEconomy() {
-		if(!Bukkit.getPluginManager().isPluginEnabled("Vault"))
+		if (!Bukkit.getPluginManager().isPluginEnabled("Vault")) {
 			return null;
+		}
 		
 		RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-		if(rsp == null)
+		if (rsp == null) {
 			return null;
+		}
 		
 		return rsp.getProvider();
 	}
 	
 	private EssentialsHook connectEssentials() {
-		if(Bukkit.getPluginManager().isPluginEnabled("Essentials")) {
+		if (Bukkit.getPluginManager().isPluginEnabled("Essentials")) {
 			Essentials essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-			if(essentials != null)
+			if (essentials != null) {
 				return new EssentialsHook(essentials);
+			}
 		}
 		return null;
 	}
 	
 	private FactionsHook connectFactions() {
-		if(Bukkit.getPluginManager().isPluginEnabled("FactionsBlue"))
+		if (Bukkit.getPluginManager().isPluginEnabled("FactionsBlue")) {
 			return new FactionsBlueHook(this);
-		else if(Bukkit.getPluginManager().isPluginEnabled("Factions")) {
+		} else if (Bukkit.getPluginManager().isPluginEnabled("Factions")) {
 			Plugin factionsPlugin = Bukkit.getPluginManager().getPlugin("Factions");
-			if(factionsPlugin != null) {
-				if(factionsPlugin.getDescription().getDepend().contains("MassiveCore"))
+			if (factionsPlugin != null) {
+				if (factionsPlugin.getDescription().getDepend().contains("MassiveCore")) {
 					return new FactionsMassiveCoreHook(this);
-				else
+				} else {
 					return new FactionsUUIDHook(this);
+				}
 			}
 		}
 		return null;
@@ -170,28 +176,30 @@ public final class HeadHunter extends JavaPlugin implements Listener, CommandExe
 	
 	@Override
 	public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
-		if(sender instanceof Player && args.length == 2) {
+		if (sender instanceof Player && args.length == 2) {
 			Player p = (Player) sender;
-			if(args[0].equalsIgnoreCase("save")) {
+			if (args[0].equalsIgnoreCase("save")) {
 				PlayerInventory inv = p.getInventory();
 				ItemStack heldItem = inv.getItem(inv.getHeldItemSlot());
-				if(heldItem != null) {
+				if (heldItem != null) {
 					getConfig().set(args[1].toUpperCase(), heldItem.clone());
 					saveConfig();
 				}
-			} else if(args[0].equalsIgnoreCase("load")) {
+			} else if (args[0].equalsIgnoreCase("load")) {
 				ItemStack item = getConfig().getItemStack(args[1].toUpperCase());
-				if(item != null)
+				if (item != null) {
 					p.getWorld().dropItemNaturally(p.getLocation(), item);
-				else
+				} else {
 					p.sendMessage("Attempted item drop with null item.");
-			} else if(args[0].equalsIgnoreCase("ping")) {
+				}
+			} else if (args[0].equalsIgnoreCase("ping")) {
 				PlayerInventory inv = p.getInventory();
 				ItemStack heldItem = inv.getItem(inv.getHeldItemSlot());
-				if(heldItem != null) {
+				if (heldItem != null) {
 					Map<String, Object> s = heldItem.serialize();
-					for(Map.Entry<String, Object> entry : s.entrySet())
+					for (Map.Entry<String, Object> entry : s.entrySet()) {
 						System.out.println(entry.getKey() + " -> " + entry.getValue());
+					}
 				}
 			}
 		}

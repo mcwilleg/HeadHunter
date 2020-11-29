@@ -23,9 +23,10 @@ public final class BountyManager extends ConfigAccessor {
 	public double getTotalBounty(OfflinePlayer victim) {
 		double total = 0;
 		ConfigurationSection victimSection = config.getConfigurationSection(id(victim));
-		if(victimSection != null) {
-			for (String hunterKey : victimSection.getKeys(false))
+		if (victimSection != null) {
+			for (String hunterKey : victimSection.getKeys(false)) {
 				total += victimSection.getDouble(hunterKey);
+			}
 		}
 		return total;
 	}
@@ -54,8 +55,9 @@ public final class BountyManager extends ConfigAccessor {
 		double bounty = getBounty(hunter, victim);
 		config.set(bountyPath(hunter, victim), null);
 		ConfigurationSection victimSection = config.getConfigurationSection(id(victim));
-		if(victimSection == null || victimSection.getKeys(false).isEmpty())
+		if (victimSection == null || victimSection.getKeys(false).isEmpty()) {
 			config.set(id(victim), null);
+		}
 		saveConfig();
 		return bounty;
 	}
@@ -63,16 +65,16 @@ public final class BountyManager extends ConfigAccessor {
 	public BountyListEntry getListEntry(int index) {
 		try {
 			return bountyList.get(index);
-		} catch(IndexOutOfBoundsException ex) {
+		} catch (IndexOutOfBoundsException ex) {
 			return null;
 		}
 	}
 	
 	public List<BountyListEntry> getBountyListPage(int page) {
 		List<BountyListEntry> result = new ArrayList<>();
-		if(!bountyList.isEmpty()) {
+		if (!bountyList.isEmpty()) {
 			int totalPages = (bountyList.size() - 1) / LIST_PAGE_SIZE + 1;
-			if(page <= totalPages) {
+			if (page <= totalPages) {
 				int fromIndex = Math.max(0, (page - 1) * LIST_PAGE_SIZE);
 				int toIndex = Math.min(bountyList.size(), page * LIST_PAGE_SIZE);
 				result.addAll(bountyList.subList(fromIndex, toIndex));
@@ -88,17 +90,18 @@ public final class BountyManager extends ConfigAccessor {
 		ConfigurationSection hunterSection = config.getConfigurationSection(victimPath);
 		String topHunterPath = null;
 		double maxBounty = 0;
-		if(hunterSection != null) {
+		if (hunterSection != null) {
 			for (String hunterPath : hunterSection.getKeys(false)) {
 				double bounty = hunterSection.getDouble(hunterPath);
-				if(maxBounty < bounty || maxBounty == 0) {
+				if (maxBounty < bounty || maxBounty == 0) {
 					topHunterPath = hunterPath;
 					maxBounty = bounty;
 				}
 			}
 		}
-		if(topHunterPath != null)
+		if (topHunterPath != null) {
 			return Bukkit.getOfflinePlayer(UUID.fromString(topHunterPath));
+		}
 		return null;
 	}
 	
@@ -109,18 +112,20 @@ public final class BountyManager extends ConfigAccessor {
 	
 	// helper method to improve readability
 	private String id(OfflinePlayer player) {
-		if(player != null)
+		if (player != null) {
 			return player.getUniqueId().toString();
+		}
 		return null;
 	}
 	
 	private List<BountyListEntry> getBountyList() {
 		List<BountyListEntry> result = new ArrayList<>();
-		for(String victimIdString : config.getKeys(false)) {
+		for (String victimIdString : config.getKeys(false)) {
 			UUID victimId = UUID.fromString(victimIdString);
 			OfflinePlayer victim;
-			if((victim = Bukkit.getPlayer(victimId)) == null)
+			if ((victim = Bukkit.getPlayer(victimId)) == null) {
 				victim = Bukkit.getOfflinePlayer(victimId);
+			}
 			double amount = getTotalBounty(victim);
 			result.add(new BountyListEntry(victim, amount));
 		}

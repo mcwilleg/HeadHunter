@@ -35,7 +35,7 @@ public final class EntityManager implements Listener {
 	
 	Player getCombuster(LivingEntity burning) {
 		FireTickRunnable runnable = burningTimers.get(burning);
-		if(runnable != null) {
+		if (runnable != null) {
 			return runnable.combuster;
 		}
 		return null;
@@ -43,7 +43,7 @@ public final class EntityManager implements Listener {
 	
 	ItemStack getCombusterWeapon(LivingEntity burning) {
 		FireTickRunnable runnable = burningTimers.get(burning);
-		if(runnable != null) {
+		if (runnable != null) {
 			return runnable.weapon;
 		}
 		return null;
@@ -51,16 +51,16 @@ public final class EntityManager implements Listener {
 	
 	void stopFireTickTimer(LivingEntity victim) {
 		FireTickRunnable runnable = burningTimers.remove(victim);
-		if(runnable != null) {
+		if (runnable != null) {
 			runnable.cancel();
 		}
 	}
 	
 	ItemStack getProjectileWeapon(Projectile projectile) {
-		if(projectile.hasMetadata(WEAPON_META_KEY)) {
-			for(MetadataValue metaWeapon : projectile.getMetadata(WEAPON_META_KEY)) {
+		if (projectile.hasMetadata(WEAPON_META_KEY)) {
+			for (MetadataValue metaWeapon : projectile.getMetadata(WEAPON_META_KEY)) {
 				Object value = metaWeapon.value();
-				if(value instanceof ItemStack) {
+				if (value instanceof ItemStack) {
 					return (ItemStack) value;
 				}
 			}
@@ -69,10 +69,10 @@ public final class EntityManager implements Listener {
 	}
 	
 	boolean isFromSpawner(LivingEntity entity) {
-		if(entity.hasMetadata(SPAWNER_ENTITY)) {
-			for(MetadataValue metaEntity : entity.getMetadata(SPAWNER_ENTITY)) {
+		if (entity.hasMetadata(SPAWNER_ENTITY)) {
+			for (MetadataValue metaEntity : entity.getMetadata(SPAWNER_ENTITY)) {
 				Object value = metaEntity.value();
-				if(value instanceof Boolean) {
+				if (value instanceof Boolean) {
 					return (boolean) value;
 				}
 			}
@@ -85,7 +85,7 @@ public final class EntityManager implements Listener {
 	public void onProjectileLaunch(ProjectileLaunchEvent event) {
 		Projectile p = event.getEntity();
 		ProjectileSource s = p.getShooter();
-		if(s instanceof Player) {
+		if (s instanceof Player) {
 			Player hunter = (Player) s;
 			PlayerInventory inv = hunter.getInventory();
 			ItemStack projectileWeapon = inv.getItem(inv.getHeldItemSlot());
@@ -107,19 +107,19 @@ public final class EntityManager implements Listener {
 		Entity burning = event.getEntity();
 		
 		Entity combuster = event.getCombuster();
-		if(combuster instanceof Projectile) {
+		if (combuster instanceof Projectile) {
 			ProjectileSource source = ((Projectile) combuster).getShooter();
-			if(source instanceof Player) {
+			if (source instanceof Player) {
 				hunter = (Player) source;
 				weapon = getProjectileWeapon((Projectile) combuster);
 			}
-		} else if(combuster instanceof Player) {
+		} else if (combuster instanceof Player) {
 			hunter = (Player) combuster;
 			PlayerInventory inv = hunter.getInventory();
 			weapon = inv.getItem(inv.getHeldItemSlot());
 		}
 		
-		if(hunter != null && burning instanceof LivingEntity) {
+		if (hunter != null && burning instanceof LivingEntity) {
             stopFireTickTimer((LivingEntity) burning);
 			FireTickRunnable runnable = new FireTickRunnable(hunter, weapon, (LivingEntity) burning);
 			burningTimers.put((LivingEntity) burning, runnable);
@@ -148,11 +148,11 @@ public final class EntityManager implements Listener {
 		@Override
 		public void run() {
 		    runningTime++;
-			if(runningTime >= (RUN_FREQUENCY * MAX_SECONDS) || burning == null || burning.isDead()) {
+			if (runningTime >= (RUN_FREQUENCY * MAX_SECONDS) || burning == null || burning.isDead()) {
 				cancel();
 				return;
 			}
-			if(burning.getFireTicks() == 0) {
+			if (burning.getFireTicks() == 0) {
 				burningTimers.remove(burning);
 				cancel();
 			}

@@ -18,8 +18,9 @@ public final class WorldManager extends ConfigAccessor {
 	}
 	
 	public boolean isValidWorld(World world) {
-		if(!config.getBoolean(WORLDS_IGNORED, true))
+		if (!config.getBoolean(WORLDS_IGNORED, true)) {
 			return config.getStringList(WORLDS_VALID).contains(world.getUID().toString());
+		}
 		return true;
 	}
 	

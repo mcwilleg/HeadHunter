@@ -9,8 +9,9 @@ public final class BountyListEntry implements Comparable<BountyListEntry> {
 	private final double amount;
 	
 	BountyListEntry(OfflinePlayer victim, double amount) {
-		if(victim == null)
+		if (victim == null) {
 			throw new IllegalArgumentException("victim cannot be null");
+		}
 		this.victim = victim;
 		this.amount = amount;
 	}

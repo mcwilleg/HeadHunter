@@ -43,42 +43,44 @@ public final class SignBlockManager extends BlockConfigAccessor implements Liste
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if(event.getAction() != Action.RIGHT_CLICK_BLOCK)
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
 			return;
-		if(!plugin.isVersionBefore(1, 9, 0) && event.getHand() != EquipmentSlot.HAND)
+		if (!plugin.isVersionBefore(1, 9, 0) && event.getHand() != EquipmentSlot.HAND)
 			return;
 		Block block = event.getClickedBlock();
-		if(block == null)
+		if (block == null)
 			return;
 		Player hunter = event.getPlayer();
 		
 		String ownerUUID = (String) getBlockData("sell-head", block, "owner");
-		if(ownerUUID != null && block.getState() instanceof Sign) {
+		if (ownerUUID != null && block.getState() instanceof Sign) {
 			// check permission
-			if(!hunter.hasPermission("hunter.sellhead.sign")) {
+			if (!hunter.hasPermission("hunter.sellhead.sign")) {
 				Message.PERMISSION.send(plugin, hunter, "selling at signs");
 				return;
 			}
 			
-			if(hunter.isSneaking())
+			if (hunter.isSneaking()) {
 				plugin.getSellExecutor().sellAllStacks(hunter);
-			else
+			} else {
 				plugin.getSellExecutor().sellHeldStack(hunter);
+			}
 			return;
 		}
 		
 		Integer bountyIndex = (Integer) getBlockData("bounty", block, "index");
-		if(bountyIndex != null && block.getState() instanceof Sign) {
+		if (bountyIndex != null && block.getState() instanceof Sign) {
 			// check permission
-			if(!hunter.hasPermission("hunter.sign.bounty"))
+			if (!hunter.hasPermission("hunter.sign.bounty")) {
 				return;
+			}
 			
 			signLinkMap.put(hunter, (Sign) block.getState());
 			Message.BOUNTY_SIGN_LINK.send(plugin, hunter);
 			return;
 		}
 		
-		if(signLinkMap.containsKey(hunter)) {
+		if (signLinkMap.containsKey(hunter)) {
 			if (block.getState() instanceof Skull) {
 				Skull skullBlock = (Skull) block.getState();
 				Sign bountySign = signLinkMap.get(hunter);
@@ -88,28 +90,31 @@ public final class SignBlockManager extends BlockConfigAccessor implements Liste
 				saveConfig();
 				Message.BOUNTY_HEAD_LINK.send(plugin, hunter);
 				requestUpdate();
-			} else
+			} else {
 				Message.BOUNTY_LINK_ABORT.send(plugin, hunter);
+			}
 			signLinkMap.remove(hunter);
 		}
 	}
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if(HeadBlockManager.isHeadBlock(event.getBlockPlaced())) {
-			if(getBlockData("sell-head", event.getBlockAgainst(), null) != null)
+		if (HeadBlockManager.isHeadBlock(event.getBlockPlaced())) {
+			if (getBlockData("sell-head", event.getBlockAgainst(), null) != null) {
 				event.setCancelled(true);
+			}
 		}
 	}
 	
 	@EventHandler(ignoreCancelled = true)
 	public void onSignChange(SignChangeEvent event) {
 		String[] lines = event.getLines();
-		if(lines[0] == null)
+		if (lines[0] == null) {
 			return;
-		if(lines[0].equalsIgnoreCase("[sellhead]")) {
+		}
+		if (lines[0].equalsIgnoreCase("[sellhead]")) {
 			// check permission
-			if(!event.getPlayer().hasPermission("hunter.sign.sellhead")) {
+			if (!event.getPlayer().hasPermission("hunter.sign.sellhead")) {
 				Message.PERMISSION.send(plugin, event.getPlayer(), "creating head-selling signs");
 				return;
 			}
@@ -121,14 +126,14 @@ public final class SignBlockManager extends BlockConfigAccessor implements Liste
 			event.setLine(1, ChatColor.translateAlternateColorCodes('&', "&0Click to sell!"));
 			event.setLine(2, ChatColor.translateAlternateColorCodes('&', "&0Crouch and click"));
 			event.setLine(3, ChatColor.translateAlternateColorCodes('&', "&0to sell all."));
-		} else if(lines[0].equalsIgnoreCase("[bounty]")) {
+		} else if (lines[0].equalsIgnoreCase("[bounty]")) {
 			// check permission
-			if(!event.getPlayer().hasPermission("hunter.sign.bounty")) {
+			if (!event.getPlayer().hasPermission("hunter.sign.bounty")) {
 				Message.PERMISSION.send(plugin, event.getPlayer(), "creating bounty display signs");
 				return;
 			}
 			
-			if(lines[1] != null && lines[1].matches("[1-9]\\d*")) {
+			if (lines[1] != null && lines[1].matches("[1-9]\\d*")) {
 				int bountyListIndex = Integer.parseInt(lines[1]) - 1;
 				
 				setBlockData("bounty", event.getBlock(), "index", bountyListIndex);
@@ -149,16 +154,18 @@ public final class SignBlockManager extends BlockConfigAccessor implements Liste
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void onEntityExplode(EntityExplodeEvent event) {
-		for(Block block : event.blockList()) {
-			if(block != null && block.getState() instanceof Sign)
+		for (Block block : event.blockList()) {
+			if (block != null && block.getState() instanceof Sign) {
 				removeBlock(block);
+			}
 		}
 	}
 	
 	public void requestUpdate() {
-		for(Block bountySignBlock : getBlockKeys("bounty")) {
-			if(bountySignBlock.getState() instanceof Sign)
+		for (Block bountySignBlock : getBlockKeys("bounty")) {
+			if (bountySignBlock.getState() instanceof Sign) {
 				bountyRunnable.signs.add((Sign) bountySignBlock.getState());
+			}
 		}
 	}
 	
@@ -178,24 +185,28 @@ public final class SignBlockManager extends BlockConfigAccessor implements Liste
 		@SuppressWarnings("deprecation")
 		@Override
 		public void run() {
-			if(signs.isEmpty())
+			if (signs.isEmpty()) {
 				return;
+			}
 			
 			Iterator<Sign> iterator = signs.iterator();
 			while(iterator.hasNext()) {
 				Sign sign = iterator.next();
 				String signData = (String) getBlockData("bounty", sign.getBlock(), "head");
-				if(signData == null)
+				if (signData == null) {
 					continue;
+				}
 				
 				String[] signDataSplit = signData.split(";", 2);
 				BlockState blockState = getBlock(signDataSplit[0], signDataSplit[1]).getState();
 				Skull skull = null;
-				if(blockState instanceof Skull)
+				if (blockState instanceof Skull) {
 					skull = (Skull) blockState;
+				}
 				
-				if(!sign.getChunk().isLoaded() || (skull != null && !skull.getChunk().isLoaded()))
+				if (!sign.getChunk().isLoaded() || (skull != null && !skull.getChunk().isLoaded())) {
 					continue;
+				}
 				
 				int index = (int) getBlockData("bounty", sign.getBlock(), "index");
 				
@@ -203,17 +214,18 @@ public final class SignBlockManager extends BlockConfigAccessor implements Liste
 				String indexLine = "#" + (index + 1);
 				String victimLine = "No Bounty";
 				String amountLine = "";
-				if(bounty != null) {
+				if (bounty != null) {
 					victimLine = bounty.getVictim().getName();
 					amountLine = HeadDrop.formatMoney(plugin, bounty.getAmount());
-					if(skull != null) {
-						if (plugin.isVersionBefore(1, 13, 0))
+					if (skull != null) {
+						if (plugin.isVersionBefore(1, 13, 0)) {
 							skull.setOwner(bounty.getVictim().getName());
-						else
+						} else {
 							skull.setOwningPlayer(bounty.getVictim());
+						}
 						skull.update();
 					}
-				} else if(skull != null) {
+				} else if (skull != null) {
 					skull.setOwner("MHF_Question");
 					skull.update();
 				}

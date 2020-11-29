@@ -53,7 +53,7 @@ public final class HeadBlockManager extends BlockConfigAccessor implements Liste
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		ItemStack item = event.getItemInHand();
-		if(isHead(item) && event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+		if (isHead(item) && event.getPlayer().getGameMode() != GameMode.CREATIVE) {
 			String headDataString = (new HeadData(plugin, item)).getDataString();
 			setBlockData(event.getBlock(), headDataString);
 			saveConfig();
@@ -63,17 +63,18 @@ public final class HeadBlockManager extends BlockConfigAccessor implements Liste
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
-		if(isHeadBlock(block)) {
+		if (isHeadBlock(block)) {
 			String headDataString = (String) getBlockData(block);
-			if(headDataString != null) {
+			if (headDataString != null) {
 				block.setType(Material.AIR);
 				
 				ItemStack head = (new HeadData(plugin, headDataString)).getFormattedHead();
 				
-				if(head != null) {
-					if(plugin.isVersionBefore(1, 12, 0) || event.isDropItems()) {
-						if (event.getPlayer().getGameMode() != GameMode.CREATIVE)
+				if (head != null) {
+					if (plugin.isVersionBefore(1, 12, 0) || event.isDropItems()) {
+						if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
 							block.getWorld().dropItemNaturally(block.getLocation(), head);
+						}
 					}
 					setBlockData(block, null);
 					saveConfig();
@@ -83,7 +84,7 @@ public final class HeadBlockManager extends BlockConfigAccessor implements Liste
 	}
 	
 	public static boolean isHead(ItemStack head) {
-		if(head != null) {
+		if (head != null) {
 			Material type = head.getType();
 			return !AIR_MATERIALS.contains(type.name()) && HEAD_MATERIALS.contains(type.name());
 		}
@@ -91,7 +92,7 @@ public final class HeadBlockManager extends BlockConfigAccessor implements Liste
 	}
 	
 	public static boolean isHeadBlock(Block headBlock) {
-		if(headBlock != null) {
+		if (headBlock != null) {
 			Material type = headBlock.getType();
 			return !AIR_MATERIALS.contains(type.name()) && HEAD_MATERIALS.contains(type.name());
 		}

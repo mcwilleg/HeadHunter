@@ -1,12 +1,14 @@
 package com.neo.headhunter.manager;
 
 import com.neo.headhunter.HeadHunter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
+@RequiredArgsConstructor
 public final class DropManager implements Listener {
 	// chance of a hunter to collect the victim's head when killing
 	private static final String STEAL_CHANCE_PERM = "hunter.steal-chance";
@@ -25,10 +27,6 @@ public final class DropManager implements Listener {
 	private static final double DEFAULT_DROP_BALANCE = 1.0;
 	
 	private final HeadHunter plugin;
-	
-	public DropManager(HeadHunter plugin) {
-		this.plugin = plugin;
-	}
 	
 	// overall drop chance for PvP kills
 	public double getPlayerDropChance(Player hunter, ItemStack weapon, Player victim) {
@@ -62,7 +60,7 @@ public final class DropManager implements Listener {
 	
 	private double getLootingEffect(ItemStack weapon) {
 		// hunter's weapon's looting effect
-		if(weapon != null && weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
+		if (weapon != null && weapon.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
 			double lootingEffect = plugin.getSettings().getLootingEffect();
 			return lootingEffect * weapon.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
 		}
@@ -71,7 +69,7 @@ public final class DropManager implements Listener {
 	
 	private double getSmiteEffect(ItemStack weapon) {
 		// hunter's weapon's smite effect
-		if(weapon != null && weapon.containsEnchantment(Enchantment.DAMAGE_UNDEAD)) {
+		if (weapon != null && weapon.containsEnchantment(Enchantment.DAMAGE_UNDEAD)) {
 			double smiteEffect = plugin.getSettings().getSmiteEffect();
 			return smiteEffect * weapon.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD);
 		}
@@ -104,34 +102,37 @@ public final class DropManager implements Listener {
 	
 	// probability of the hunter causing this mob's head to drop
 	private double getBaseMobStealChance(Player hunter, String mobConfigPath) {
-		if(mobConfigPath != null) {
+		if (mobConfigPath != null) {
 			String stealChancePerm = String.join(".", STEAL_CHANCE_PERM, mobConfigPath.toLowerCase());
 			Double stealChance = getPermissionValue(hunter, stealChancePerm);
-			if(stealChance != null)
+			if (stealChance != null) {
 				return stealChance;
+			}
 		}
 		return plugin.getHeadLibrary().getDropChance(mobConfigPath);
 	}
 	
 	// proportion of the mob's "balance" the hunter can steal
 	private double getBaseMobStealBalance(Player hunter, String mobConfigPath) {
-		if(mobConfigPath != null) {
+		if (mobConfigPath != null) {
 			String stealBalancePerm = String.join(".", STEAL_BALANCE_PERM, mobConfigPath.toLowerCase());
 			Double stealBalance = getPermissionValue(hunter, stealBalancePerm);
-			if(stealBalance != null)
+			if (stealBalance != null) {
 				return stealBalance;
+			}
 		}
 		return DEFAULT_STEAL_BALANCE;
 	}
 	
 	// Generic method for checking permissions regardless of op
 	private Double getPermissionValue(Player p, String checkPermission) {
-		if(p != null) {
+		if (p != null) {
 			for (PermissionAttachmentInfo pai : p.getEffectivePermissions()) {
 				String regex = "\\Q" + checkPermission + ".\\E";
 				String permission = pai.getPermission().toLowerCase();
-				if (permission.matches(regex + "\\d+([.]\\d+)?"))
+				if (permission.matches(regex + "\\d+([.]\\d+)?")) {
 					return Double.valueOf(permission.replaceFirst(regex, ""));
+				}
 			}
 		}
 		return null;

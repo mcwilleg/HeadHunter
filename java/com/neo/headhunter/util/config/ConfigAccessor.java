@@ -38,8 +38,9 @@ public class ConfigAccessor {
 	protected void deleteConfigFile() {
 		// ignore if config file has not yet been initialized
 		// * this should never happen
-		if(configFile != null && !configFile.delete())
+		if (configFile != null && !configFile.delete()) {
 			plugin.getLogger().log(Level.SEVERE, "Could not delete " + configFile.getName());
+		}
 	}
 	
 	/**
@@ -48,12 +49,13 @@ public class ConfigAccessor {
 	protected void saveConfig() {
 		// ignore if config file or configuration have not yet been initialized
 		// * this should never happen
-		if(configFile == null || config == null)
+		if (configFile == null || config == null) {
 			return;
+		}
 		try {
 			// save configuration to file
 			config.save(configFile);
-		} catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -63,40 +65,46 @@ public class ConfigAccessor {
 	 */
 	public final void reloadConfig() {
 		// create plugin data folder and subfolders if they don't exist
-		if(!plugin.getDataFolder().exists()) {
-			if(!plugin.getDataFolder().mkdir())
+		if (!plugin.getDataFolder().exists()) {
+			if (!plugin.getDataFolder().mkdir()) {
 				throw new IllegalStateException("plugin data folder could not be created");
+			}
 		}
 		File subdirs = new File(plugin.getDataFolder(), ancestry);
-		if(!subdirs.exists()) {
-			if(!subdirs.mkdirs())
+		if (!subdirs.exists()) {
+			if (!subdirs.mkdirs()) {
 				throw new IllegalStateException("plugin subfolders could not be created");
+			}
 		}
 		
-		if(ancestry.isEmpty())
+		if (ancestry.isEmpty()) {
 			configFile = new File(plugin.getDataFolder(), fileName);
-		else
+		} else {
 			configFile = new File(plugin.getDataFolder() + File.separator + ancestry, fileName);
+		}
 		
 		try {
 			if (configFile.exists()) {
 				// if config file already exists, just load configuration
-				if (!dynamic)
+				if (!dynamic) {
 					copyInputStreamToFile(this.getResource(), configFile);
+				}
 				config = YamlConfiguration.loadConfiguration(configFile);
 				
-				if(dynamic && this.getResource() != null) {
+				if (dynamic && this.getResource() != null) {
 					// repair config in case parts were removed
 					Map<String, Object> previous = new HashMap<>();
 					for (String path : config.getKeys(true)) {
-						if (!config.isConfigurationSection(path))
+						if (!config.isConfigurationSection(path)) {
 							previous.put(path, config.get(path));
+						}
 					}
 					copyInputStreamToFile(this.getResource(), configFile);
 					config = YamlConfiguration.loadConfiguration(configFile);
-					for(Map.Entry<String, Object> entry : previous.entrySet()) {
-						if(config.contains(entry.getKey()))
+					for (Map.Entry<String, Object> entry : previous.entrySet()) {
+						if (config.contains(entry.getKey())) {
 							config.set(entry.getKey(), entry.getValue());
+						}
 					}
 					saveConfig();
 				}
@@ -110,15 +118,16 @@ public class ConfigAccessor {
 				} else {
 					// if config file does not have a default in the JAR
 					try {
-						if (!configFile.createNewFile())
+						if (!configFile.createNewFile()) {
 							plugin.getLogger().log(Level.SEVERE, "Could not create " + configFile.getName());
+						}
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
 					config = YamlConfiguration.loadConfiguration(configFile);
 				}
 			}
-		} catch(IOException ex) {
+		} catch (IOException ex) {
 			plugin.getLogger().log(Level.SEVERE, "Error getting input stream for file: \"" + fileName + "\"");
 			ex.printStackTrace();
 		}
@@ -130,16 +139,19 @@ public class ConfigAccessor {
 	}
 
 	private void copyInputStreamToFile(InputStream inputStream, File file) throws IOException {
-		if(inputStream == null || file == null)
+		if (inputStream == null || file == null) {
 			throw new IOException("input stream and file cannot be null");
-		if(file.isDirectory())
+		}
+		if (file.isDirectory()) {
 			throw new IOException("file " + file.getName() + " cannot be a directory");
-		if(!file.exists()) {
-			if(!file.createNewFile())
+		}
+		if (!file.exists()) {
+			if (!file.createNewFile()) {
 				throw new IOException("file " + file.getName() + " could not be created");
+			}
 		}
 		byte[] buffer = new byte[inputStream.available()];
-		if(inputStream.read(buffer) > 0) {
+		if (inputStream.read(buffer) > 0) {
 			Files.write(buffer, file);
 		}
 	}
